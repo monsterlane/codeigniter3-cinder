@@ -23,7 +23,7 @@ class MY_Router extends CI_Router {
 		}
 
 		$this->set_directory( $class );
-		$this->set_class( $class );
+		$this->set_class( 'controller' );
 		$this->set_method( $method );
 
 		// Assign routed segments, index starting from 1

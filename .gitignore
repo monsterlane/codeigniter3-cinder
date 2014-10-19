@@ -3,8 +3,13 @@ private/application/config/development/database.php
 private/application/config/testing/database.php
 private/application/config/production/database.php
 private/application/language
-private/system/*
+private/system/core/*
 !private/system/core/CodeIgniter.php
+private/system/database
+private/system/fonts
+private/system/helpers
+private/system/language
+private/system/libraries
 public/.htaccess
 
 # eclipse files

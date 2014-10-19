@@ -6,7 +6,11 @@ class Main_controller extends MY_Controller {
 	}
 
 	public function index( ) {
-		die('main->index');
+		$data = array(
+			'view' => $this->load->partial( 'body' ),
+		);
+
+		$this->load->page( $data );
 	}
 }
 

@@ -2,6 +2,7 @@
 private/application/config/development/database.php
 private/application/config/testing/database.php
 private/application/config/production/database.php
+private/application/language
 private/system
 public/.htaccess
 

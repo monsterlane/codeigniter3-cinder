@@ -2,7 +2,9 @@
 
 class Main_controller extends MY_Controller {
 	public function index( ) {
-		$this->load->partial( 'body' );
+		$this->load->partial(array(
+			'view' => 'body',
+		));
 	}
 }
 

@@ -11,6 +11,9 @@ private/system/helpers
 private/system/language
 private/system/libraries
 public/.htaccess
+public/files/*
+public/files/cache/*
+!public/files/cache/index.html
 
 # eclipse files
 .project

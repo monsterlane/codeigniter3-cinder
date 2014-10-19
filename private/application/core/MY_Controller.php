@@ -10,7 +10,8 @@ class MY_Controller extends CI_Controller {
 		parent::__construct( );
 
 		$this->data = array(
-			'views' => array( ),
+			'system' => array( ),
+			'pending' => array( ),
 		);
 
 		$this->_load_system( );
@@ -19,8 +20,7 @@ class MY_Controller extends CI_Controller {
 	/* internal methods */
 
 	private function _load_system( ) {
-		$this->load->partial(array(
-			'container' => 'system',
+		$this->set_view(array(
 			'view' => 'system/views/document.html',
 			'data' => array(
 				'title' => 'CI3-Cinder',
@@ -29,7 +29,6 @@ class MY_Controller extends CI_Controller {
 				'system/js/require.min.js',
 				'system/js/jquery.min.js',
 				'system/js/class.js',
-				'system/js/boot.js',
 				'system/js/module.js',
 			),
 		));
@@ -41,16 +40,23 @@ class MY_Controller extends CI_Controller {
 		return $this->data;
 	}
 
+	public function set_view( $data = array( ) ) {
+		$this->add_view( $data );
+
+		$this->data[ 'system' ] = array_pop( $this->data[ 'pending' ] );
+		unset( $this->data[ 'system' ][ 'container' ] );
+	}
+
 	public function add_view( $data = array( ) ) {
 		$data = merge_array(array(
-			'container' => 'body',
+			'container' => '#cinderBodyArea',
 			'view' => null,
 			'data' => array( ),
 			'css' => array( ),
 			'js' => array( ),
 		), $data );
 
-		$this->data[ 'views' ][ ] = $data;
+		$this->data[ 'pending' ][ ] = $data;
 
 		$dest = $this->config->item( 'cache_file_path' );
 		$copy = $this->config->item( 'cache_assets' );

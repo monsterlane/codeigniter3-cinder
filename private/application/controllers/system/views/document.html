@@ -6,9 +6,30 @@
 </head>
 <body>
 
+<div id="cinderBodyArea"></div>
 
+<script type="text/javascript" src="files/cache/system/js/require.min.js"></script>
+<script type="text/javascript">
 
-<script data-main="files/cache/system/js/boot" src="files/cache/system/js/require.min.js"></script>
+/**
+ * config
+ */
+
+require.config({
+	urlArgs: Date.now( )
+});
+
+/**
+ * boot
+ */
+
+require( [ 'files/cache/system/js/module', 'files/cache/system/js/class' ], function( aModule ) {
+	'use strict';
+
+	var module = new aModule( {pending} );
+});
+
+</script>
 
 </body>
 </html>

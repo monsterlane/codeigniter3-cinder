@@ -18,16 +18,33 @@
  *
  * @package		CodeIgniter
  * @author		EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
+ * @copyright	Copyright (c) 2008 - 2013, EllisLab, Inc. (http://ellislab.com/)
  * @license		http://opensource.org/licenses/AFL-3.0 Academic Free License (AFL 3.0)
  * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @since		Version 3.0
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
+?>
 
-echo "\nERROR: ",
-	$heading,
-	"\n\n",
-	$message,
-	"\n\n";
+A PHP Error was encountered
+
+Severity: <?php echo $severity;?>
+Message:  <?php echo $message;?>
+Filename: <?php echo $filepath;?>
+Line Number: <?php echo $line;?>
+
+<?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === TRUE): ?>
+
+Backtrace:
+	<?php foreach (debug_backtrace() as $error): ?>
+		<?php if (isset($error['file']) && strpos($error['file'], realpath(BASEPATH)) !== 0): ?>
+
+	File: <?php echo $error['file'];?>
+	Line: <?php echo $error['line'];?>
+	Function: <?php echo $error['function'];?>
+
+		<?php endif ?>
+
+	<?php endforeach ?>
+<?php endif ?>

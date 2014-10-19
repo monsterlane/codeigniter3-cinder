@@ -12,4 +12,6 @@ Thumbs.db
 
 # project files
 private/application/config/development/database.php
+private/application/config/testing/database.php
+private/application/config/production/database.php
 private/system

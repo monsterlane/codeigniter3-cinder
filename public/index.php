@@ -87,7 +87,7 @@ switch (ENVIRONMENT)
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-	$system_path = '../codeigniter/system';
+	$system_path = '../private/system';
 
 /*
  *---------------------------------------------------------------
@@ -102,7 +102,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '../codeigniter/application';
+	$application_folder = '../private/application';
 
 /*
  *---------------------------------------------------------------

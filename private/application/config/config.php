@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+$config['base_url'] = 'http' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 's' : '') . '://' . $_SERVER['SERVER_NAME'] . '/';
 
 /*
 |--------------------------------------------------------------------------
@@ -305,7 +305,7 @@ $config['error_views_path'] = '';
 | application/cache/ directory.  Use a full server path with trailing slash.
 |
 */
-$config['cache_path'] = '';
+$config['cache_path'] = 'files/cache/';
 
 /*
 |--------------------------------------------------------------------------
@@ -342,7 +342,7 @@ $config['encryption_key'] = '';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_driver']			= 'cookie';
+$config['sess_driver']			= 'native';
 $config['sess_valid_drivers']	= array();
 $config['sess_cookie_name']		= 'ci_session';
 $config['sess_expiration']		= 7200;
@@ -450,7 +450,7 @@ $config['compress_output'] = FALSE;
 | code less readable.
 |
 */
-$config['minify_output'] = FALSE;
+$config['minify_output'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

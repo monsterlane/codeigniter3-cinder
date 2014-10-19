@@ -37,6 +37,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
+$hook['post_controller'][] = array(
+	'function' => 'output',
+	'filename' => 'output.php',
+	'filepath' => 'hooks',
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

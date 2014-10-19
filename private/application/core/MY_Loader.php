@@ -5,8 +5,11 @@ class MY_Loader extends CI_Loader {
 		parent::__construct( );
 	}
 
-	public function page( $view, $data = array( ) ) {
-		$body = parent::view( 'system/views/document.html', $data );
+	public function page( ) {
+		$ci =& get_instance( );
+		$ci->load->library( 'parser' );
+
+		$ci->parser->parse( 'system/views/document.html', $ci->get_data( ) );
 	}
 
 	public function view( $view, $vars = array( ), $return = false ) {
@@ -23,7 +26,7 @@ class MY_Loader extends CI_Loader {
 		return $this->_ci_load( array( '_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array( $vars ), '_ci_return' => $return ) );
 	}
 
-	public function partial( $view ) {
+	public function partial( $view, $data = array( ), $container = 'body' ) {
 		$ci =& get_instance( );
 
 		if ( strpos( $view, '/' ) === false ) {
@@ -34,7 +37,7 @@ class MY_Loader extends CI_Loader {
 			$view .= '.html';
 		}
 
-		return $this->_ci_load( array( '_ci_path' => $view, '_ci_return' => true ) );
+		$ci->add_view( $this->_ci_load( array( '_ci_path' => $view, '_ci_return' => true ) ), $data, $container );
 	}
 }
 

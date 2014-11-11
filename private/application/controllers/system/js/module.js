@@ -1,5 +1,5 @@
 
-define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], function( aConduit ) {
+define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit ) {
 	'use strict';
 
 	/*

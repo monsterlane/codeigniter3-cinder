@@ -1,5 +1,5 @@
 
-define( [ 'system/js/module', 'system/js/jquery.min' ], function( aModule ) {
+define( [ 'system/js/module' ], function( aModule ) {
 	'use strict';
 
 	/*

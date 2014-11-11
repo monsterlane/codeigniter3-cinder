@@ -34,7 +34,7 @@ class MY_Controller extends CI_Controller {
 				'system/js/require.min.js',
 				'system/js/css.min.js',
 				'system/js/jquery.min.js',
-				'system/js/class.js',
+				'system/js/class.min.js',
 				'system/js/module.js',
 				'system/js/conduit.js',
 			),

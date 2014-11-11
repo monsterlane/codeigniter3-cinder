@@ -21,12 +21,18 @@ class MY_Controller extends CI_Controller {
 
 	private function _load_system( ) {
 		$this->set_view( array(
+			'title' => 'CI3-Cinder',
 			'view' => 'system/views/document.html',
-			'data' => array(
+			'json' => array(
 				'title' => 'CI3-Cinder',
+			),
+			'css' => array(
+				'system/css/reset.css',
+				'system/css/style.css',
 			),
 			'js' => array(
 				'system/js/require.min.js',
+				'system/js/css.min.js',
 				'system/js/jquery.min.js',
 				'system/js/class.js',
 				'system/js/module.js',
@@ -45,7 +51,7 @@ class MY_Controller extends CI_Controller {
 		$data = merge_array( array(
 			'container' => '#cinderBodyArea',
 			'view' => null,
-			'data' => array( ),
+			'json' => array( ),
 			'css' => array( ),
 			'js' => array( ),
 		), $data );
@@ -53,27 +59,31 @@ class MY_Controller extends CI_Controller {
 		$this->data[ $key ] = $data;
 
 		$dest = $this->config->item( 'cache_file_path' );
-		$copy = $this->config->item( 'cache_assets' );
+
+		foreach ( $data[ 'css' ] as &$style ) {
+			$path = VIEWPATH . $style;
+
+			if ( ENVIRONMENT == 'development' || file_exists( $dest . $style ) == false ) {
+				$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
+
+				if ( file_exists( $dir ) == false ) {
+					mkdir( $dir, 0755, true );
+				}
+
+				copy( $path, $dest . $style);
+			}
+		}
 
 		foreach ( $data[ 'js' ] as $script ) {
 			$path = VIEWPATH . $script;
 
-			if ( !file_exists( $dest . $script ) ) {
+			if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
 				$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
-				if ( !file_exists( $dir ) ) {
+				if ( file_exists( $dir ) == false ) {
 					mkdir( $dir, 0755, true );
 				}
 
-				if ( !file_exists( $dest . $script ) ) {
-					$copy = true;
-				}
-			}
-			else if ( $copy == false ) {
-				$copy = true;
-			}
-
-			if ( $copy == true ) {
 				copy( $path, $dest . $script );
 			}
 		}

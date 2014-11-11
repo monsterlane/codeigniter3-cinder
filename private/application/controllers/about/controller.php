@@ -3,7 +3,14 @@
 class About_controller extends MY_Controller {
 	public function index( ) {
 		$this->load->partial(array(
+			'title' => 'About',
 			'view' => 'main',
+			'css' => array(
+				'about/css/style.css',
+			),
+			'js' => array(
+				'about/js/module.js',
+			),
 		));
 	}
 }

@@ -17,9 +17,46 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 			var data = aData || { };
 
 			this._conduit = [ ];
-			this._data = { };
+
+			this._data = {
+				title: null,
+				container: null,
+				view: null,
+				json: { },
+				css: [ ],
+				js: [ ]
+			};
 
 			this.bindPendingData( data );
+		},
+
+		/**
+		 * Method: clearData
+		 */
+
+		clearData: function( ) {
+			var el, link, i, len;
+
+			jQuery( this._data.container ).empty( );
+
+			for ( i = 0, len = this._data.css.length; i < len; i++ ) {
+				link = this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+
+				el = jQuery( 'link[href^="files/cache/' + link + '.css"]' );
+
+				if ( el.length > 0 ) {
+					el.prop( 'disabled', true );
+					el.remove( );
+				}
+
+				requirejs.undef( 'css!' + link );
+			}
+
+			for ( i = 0, len = this._data.js.length; i < len; i++ ) {
+				link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+
+				requirejs.undef( link );
+			}
 		},
 
 		/**
@@ -29,16 +66,34 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 
 		bindPendingData: function( aData ) {
 			var data = aData || { },
-				el, i, len;
+				el, link, i, len;
+
+			this.clearData( );
 
 			this._data = jQuery.extend( true, {
 				title: null,
 				container: null,
 				view: null,
-				data: { },
+				json: { },
 				css: [ ],
 				js: [ ]
 			}, data );
+
+			for ( i = 0, len = this._data.css.length; i < len; i++ ) {
+				link = 'css!' + this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+
+				require( [ link ], function( ) { } );
+			}
+
+			for ( i = 0, len = this._data.js.length; i < len; i++ ) {
+				link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+
+				require( [ link ], function( aModule ) {
+					'use strict';
+
+					var module = new aModule( );
+				});
+			}
 
 			if ( this._data.title != null ) {
 				document.title = this._data.title;

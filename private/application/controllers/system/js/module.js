@@ -33,7 +33,7 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
 					link = this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
 
-					el = jQuery( 'link[href^="files/cache/' + link + '.css"]' );
+					el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
 					if ( el.length > 0 ) {
 						el.prop( 'disabled', true );

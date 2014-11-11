@@ -8,7 +8,7 @@
 $path = $this->config->item( 'cache_web_path' );
 
 foreach ( $system[ 'css' ] as $style ) {
-	?><link href="<?=base_url( $path . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	?><link href="<?=$path . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
 }
 ?>
 
@@ -25,7 +25,7 @@ foreach ( $system[ 'css' ] as $style ) {
  */
 
 require.config({
-	baseUrl: 'files/cache',
+	baseUrl: '/files/cache',
 	map: {
 		'*': {
 			'css': 'system/js/css.min'

@@ -33,7 +33,15 @@ function clean_array( $arr ) {
 	if ( !is_array( $arr ) ) $arr = array( );
 
 	foreach ( $arr as &$param ) {
-		if ( $param == 'null' || $param == '' ) $param = null;
+		if ( $param == 'null' || $param == '' ) {
+			$param = null;
+		}
+		else if ( $param == 'true' ) {
+			$param = true;
+		}
+		else if ( $param == 'false' ) {
+			$param = false;
+		}
 	}
 	unset( $param );
 

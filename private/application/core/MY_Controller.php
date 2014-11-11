@@ -20,7 +20,7 @@ class MY_Controller extends CI_Controller {
 	/* internal methods */
 
 	private function _load_system( ) {
-		$this->set_view(array(
+		$this->set_view( array(
 			'view' => 'system/views/document.html',
 			'data' => array(
 				'title' => 'CI3-Cinder',
@@ -30,8 +30,9 @@ class MY_Controller extends CI_Controller {
 				'system/js/jquery.min.js',
 				'system/js/class.js',
 				'system/js/module.js',
+				'system/js/conduit.js',
 			),
-		));
+		), 'system' );
 	}
 
 	/* public methods */
@@ -40,15 +41,8 @@ class MY_Controller extends CI_Controller {
 		return $this->data;
 	}
 
-	public function set_view( $data = array( ) ) {
-		$this->add_view( $data );
-
-		$this->data[ 'system' ] = array_pop( $this->data[ 'pending' ] );
-		unset( $this->data[ 'system' ][ 'container' ] );
-	}
-
-	public function add_view( $data = array( ) ) {
-		$data = merge_array(array(
+	public function set_view( $data = array( ), $key = 'pending' ) {
+		$data = merge_array( array(
 			'container' => '#cinderBodyArea',
 			'view' => null,
 			'data' => array( ),
@@ -56,7 +50,7 @@ class MY_Controller extends CI_Controller {
 			'js' => array( ),
 		), $data );
 
-		$this->data[ 'pending' ][ ] = $data;
+		$this->data[ $key ] = $data;
 
 		$dest = $this->config->item( 'cache_file_path' );
 		$copy = $this->config->item( 'cache_assets' );

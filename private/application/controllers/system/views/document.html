@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>{title}</title>
+	<title><?=$system[ 'data' ][ 'title' ]?></title>
 	<meta charset="utf-8" />
 </head>
 <body>
@@ -16,6 +16,15 @@
  */
 
 require.config({
+	baseUrl: 'files/cache',
+	map: {
+		'*': {
+			css: 'css.min'
+		}
+	},
+	paths: {
+		jquery: 'jquery.min'
+	},
 	urlArgs: Date.now( )
 });
 
@@ -23,7 +32,7 @@ require.config({
  * boot
  */
 
-require( [ 'files/cache/system/js/module', 'files/cache/system/js/class' ], function( aModule ) {
+require( [ 'system/js/module', 'system/js/class' ], function( aModule ) {
 	'use strict';
 
 	var module = new aModule( {pending} );

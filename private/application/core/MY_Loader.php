@@ -3,12 +3,21 @@
 class MY_Loader extends CI_Loader {
 	public function page( ) {
 		$ci =& get_instance( );
-		$ci->load->library( 'parser' );
 
 		$data = $ci->get_data( );
 		$data[ 'pending' ] = json_encode( $data[ 'pending'] );
 
-		$ci->parser->parse( $data[ 'system' ][ 'view' ], $data );
+		$post = $this->input->post( );
+		$post = clean_array( $post );
+
+		if ( array_key_exists( 'system', $post ) == true && $post[ 'system' ] == false ) {
+			$this->output->set_output( $data[ 'pending' ] );
+		}
+		else {
+			$ci->load->library( 'parser' );
+
+			$ci->parser->parse( $data[ 'system' ][ 'view' ], $data );
+		}
 	}
 
 	public function view( $view, $vars = array( ), $return = false ) {
@@ -38,7 +47,7 @@ class MY_Loader extends CI_Loader {
 
 		$data[ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ], '_ci_return' => true ) );
 
-		$ci->add_view( $data );
+		$ci->set_view( $data );
 	}
 }
 

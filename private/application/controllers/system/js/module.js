@@ -14,8 +14,21 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 		 */
 
 		init: function( ) {
+			var body = jQuery( 'body' ),
+				self = this;
+
 			this._conduit = [ ];
 			this._data = null;
+
+			if ( !body.hasClass( 'cinder-history' ) ) {
+				body.addClass( 'cinder-history' );
+
+				$( window ).on( 'popstate', function( aEvent ) {
+					if ( aEvent.originalEvent.state ) {
+						self.bindPendingData( aEvent.originalEvent.state );
+					}
+				});
+			}
 
 			return this;
 		},
@@ -95,9 +108,9 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 				if ( this._data.title != null ) {
 					document.title = this._data.title;
 				}
-			}
 
-			window.history.pushState( this._data, this._data.title, this._data.url );
+				window.history.pushState( this._data, '', this._data.url );
+			}
 
 			el = jQuery( this._data.container );
 

@@ -40,7 +40,7 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 						el.remove( );
 					}
 
-					requirejs.undef( 'css!' + link );
+					requirejs.undef( 'system/js/css.min!' + link );
 				}
 
 				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
@@ -96,8 +96,6 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 					document.title = this._data.title;
 				}
 			}
-
-console.log( this._data.url );
 
 			window.history.pushState( this._data, this._data.title, this._data.url );
 

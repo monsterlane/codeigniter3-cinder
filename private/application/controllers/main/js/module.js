@@ -13,9 +13,12 @@ define( [ 'system/js/module', 'system/js/jquery.min' ], function( aModule ) {
 		 * Method: init
 		 */
 
-		init: function( aData ) {
-			this._super( aData );
+		init: function( ) {
+			this._super( );
 
+			this.verbose( 'module loaded: main' );
+
+			return this;
 		},
 
 

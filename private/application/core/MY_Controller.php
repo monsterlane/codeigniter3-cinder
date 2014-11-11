@@ -50,6 +50,8 @@ class MY_Controller extends CI_Controller {
 	public function set_view( $data = array( ), $key = 'pending' ) {
 		$data = merge_array( array(
 			'container' => '#cinderBodyArea',
+			'url' => uri_string( ),
+			'module' => null,
 			'view' => null,
 			'json' => array( ),
 			'css' => array( ),
@@ -57,6 +59,10 @@ class MY_Controller extends CI_Controller {
 		), $data );
 
 		$this->data[ $key ] = $data;
+
+		if ( $this->data[ $key ][ 'module' ] == null ) {
+			$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
+		}
 
 		$dest = $this->config->item( 'cache_file_path' );
 

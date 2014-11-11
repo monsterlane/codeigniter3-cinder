@@ -41,10 +41,10 @@ require.config({
  * boot
  */
 
-require( [ 'system/js/module', 'system/js/class' ], function( aModule ) {
+require( [ "<?=$system[ 'module' ]?>" ], function( aModule ) {
 	'use strict';
 
-	var module = new aModule( {pending} );
+	var module = new aModule( ).bindPendingData( <?=$pending?> );
 });
 
 </script>

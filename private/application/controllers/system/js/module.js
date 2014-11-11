@@ -13,21 +13,11 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 		 * Method: init
 		 */
 
-		init: function( aData ) {
-			var data = aData || { };
-
+		init: function( ) {
 			this._conduit = [ ];
+			this._data = null;
 
-			this._data = {
-				title: null,
-				container: null,
-				view: null,
-				json: { },
-				css: [ ],
-				js: [ ]
-			};
-
-			this.bindPendingData( data );
+			return this;
 		},
 
 		/**
@@ -37,26 +27,30 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 		clearData: function( ) {
 			var el, link, i, len;
 
-			jQuery( this._data.container ).empty( );
+			if ( this._data != null ) {
+				jQuery( this._data.container ).empty( );
 
-			for ( i = 0, len = this._data.css.length; i < len; i++ ) {
-				link = this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
+					link = this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
 
-				el = jQuery( 'link[href^="files/cache/' + link + '.css"]' );
+					el = jQuery( 'link[href^="files/cache/' + link + '.css"]' );
 
-				if ( el.length > 0 ) {
-					el.prop( 'disabled', true );
-					el.remove( );
+					if ( el.length > 0 ) {
+						el.prop( 'disabled', true );
+						el.remove( );
+					}
+
+					requirejs.undef( 'css!' + link );
 				}
 
-				requirejs.undef( 'css!' + link );
+				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
+					link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+
+					requirejs.undef( link );
+				}
 			}
 
-			for ( i = 0, len = this._data.js.length; i < len; i++ ) {
-				link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
-
-				requirejs.undef( link );
-			}
+			return this;
 		},
 
 		/**
@@ -72,32 +66,40 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 
 			this._data = jQuery.extend( true, {
 				title: null,
+				url: '/',
 				container: null,
 				view: null,
 				json: { },
 				css: [ ],
-				js: [ ]
+				js: [ ],
+				system: false
 			}, data );
 
-			for ( i = 0, len = this._data.css.length; i < len; i++ ) {
-				link = 'css!' + this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+			if ( this._data.system == false ) {
+				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
+					link = 'css!' + this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
 
-				require( [ link ], function( ) { } );
+					require( [ link ], function( ) { } );
+				}
+
+				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
+					link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+
+					require( [ link ], function( aModule ) {
+						'use strict';
+
+						var module = new aModule( );
+					});
+				}
+
+				if ( this._data.title != null ) {
+					document.title = this._data.title;
+				}
 			}
 
-			for ( i = 0, len = this._data.js.length; i < len; i++ ) {
-				link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+console.log( this._data.url );
 
-				require( [ link ], function( aModule ) {
-					'use strict';
-
-					var module = new aModule( );
-				});
-			}
-
-			if ( this._data.title != null ) {
-				document.title = this._data.title;
-			}
+			window.history.pushState( this._data, this._data.title, this._data.url );
 
 			el = jQuery( this._data.container );
 
@@ -107,6 +109,8 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 				this.bindLinks( el );
 				this.bindForms( el );
 			}
+
+			return this;
 		},
 
 		/**
@@ -127,6 +131,8 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 					self.handleLinkClick( this );
 				});
 			}
+
+			return this;
 		},
 
 		/**
@@ -155,6 +161,8 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 					self.bindPendingData( response );
 				}
 			});
+
+			return this;
 		},
 
 		/**
@@ -164,6 +172,8 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 
 		bindForms: function( aContainer ) {
 			// TODO
+
+			return this;
 		},
 
 		/**
@@ -188,6 +198,19 @@ define( [ 'system/js/conduit', 'system/js/class', 'system/js/jquery.min' ], func
 
 		error: function( aMessage ) {
 			console.log( aMessage );
+
+			return this;
+		},
+
+		/**
+		 * Method: verbose
+		 * @param {Object} aMessage
+		 */
+
+		verbose: function( aMessage ) {
+			console.log( aMessage );
+
+			return this;
 		}
 	});
 

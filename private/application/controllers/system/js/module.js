@@ -22,7 +22,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 			this._data = null;
 			this._view = [ ];
 
-			if ( !body.hasClass( 'cinder' ) ) {
+			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
 
 				$( window ).on( 'popstate', function( aEvent ) {
@@ -46,20 +46,18 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 				jQuery( this._data.container ).empty( );
 
 				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
-					link = this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+					link = this._data.css[ i ].substr( 0, this._data.css[ i ].length - 4 );
 
 					el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
-					if ( el.length > 0 ) {
-						el.prop( 'disabled', true );
-						el.remove( );
-					}
+					el.prop( 'disabled', true );
+					el.remove( );
 
 					requirejs.undef( 'system/js/css.min!' + link );
 				}
 
 				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
-					link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+					link = this._data.js[ i ].substr( 0, this._data.js[ i ].length - 4 );
 
 					requirejs.undef( link );
 				}
@@ -90,7 +88,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 				system: false
 			}, data );
 
-			if ( this._data.system == false ) {
+			if ( this._data.system === false ) {
 				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
 					link = 'css!' + this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
 
@@ -213,7 +211,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		getConduit: function( aName ) {
 			var name = aName || Math.random( ).toString( 36 ).substr( 2 );
 
-			if ( this._conduit.hasOwnProperty( name ) == false ) {
+			if ( this._conduit.hasOwnProperty( name ) === false ) {
 				this._conduit[ name ] = new aConduit( this );
 			}
 
@@ -230,7 +228,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		compile: function( aName, aView, aData ) {
 			var str;
 
-			if ( this._view.hasOwnProperty( aName ) == false ) {
+			if ( this._view.hasOwnProperty( aName ) === false ) {
 				this._view[ aName ] = aParser.template( aView );
 			}
 

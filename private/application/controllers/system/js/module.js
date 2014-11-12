@@ -152,20 +152,14 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 		 */
 
 		handleLinkClick: function( aLink ) {
-			var link = aLink.href || '/',
-				data = { },
+			var link = aLink || document.createElement( 'a' ),
+				data = $( link ).data( ),
 				self = this;
-
-			//TODO collect data-attributes?
 
 			data.system = false;
 
-			if ( link.indexOf( '#' ) != -1 ) {
-				link = '/' + link.substr( link.indexOf( '#' ) + 1 );
-			}
-
-			this.getConduit( link ).ajax({
-				url: link,
+			this.getConduit( link.href ).ajax({
+				url: link.href,
 				type: 'post',
 				data: data,
 				success: function( response ) {

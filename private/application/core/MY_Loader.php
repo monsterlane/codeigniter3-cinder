@@ -33,7 +33,7 @@ class MY_Loader extends CI_Loader {
 		$ci =& get_instance( );
 
 		if ( strpos( $view, '/' ) === false ) {
-			$view = VIEWPATH . $ci->router->fetch_directory( ) . 'views/' . $view;
+			$view = VIEWPATH . $ci->router->directory . 'views/' . $view;
 		}
 
 		if ( strpos( $view, '.' ) === false ) {
@@ -46,8 +46,15 @@ class MY_Loader extends CI_Loader {
 	public function partial( $data = array( ) ) {
 		$ci =& get_instance( );
 
-		if ( strpos( $data[ 'view' ], '/' ) === false ) {
-			$data[ 'view' ] = $ci->router->fetch_directory( ) . 'views/' . $data[ 'view' ];
+		if ( array_key_exists( 'view', $data ) == false ) {
+			$view = $ci->router->directory . 'views/' . $ci->router->method . '.html';
+
+			if ( file_exists( VIEWPATH . $view ) == true && is_file( VIEWPATH . $view ) == true ) {
+				$data[ 'view' ] = $view;
+			}
+		}
+		else if ( strpos( $data[ 'view' ], '/' ) === false ) {
+			$data[ 'view' ] = $ci->router->directory . 'views/' . $data[ 'view' ];
 		}
 
 		if ( strpos( $data[ 'view' ], '.' ) === false ) {

@@ -117,7 +117,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 			el = jQuery( this._data.container );
 
 			if ( el.length > 0 ) {
-				el[ 0 ].innerHTML = this.compile( this._data.html, this._data.json );
+				el[ 0 ].innerHTML = this.compile( this._data.url, this._data.html, this._data.json );
 
 				this.bindLinks( el );
 				this.bindForms( el );
@@ -213,7 +213,7 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		getConduit: function( aName ) {
 			var name = aName || Math.random( ).toString( 36 ).substr( 2 );
 
-			if ( !this._conduit.hasOwnProperty( name ) ) {
+			if ( this._conduit.hasOwnProperty( name ) == false ) {
 				this._conduit[ name ] = new aConduit( this );
 			}
 
@@ -222,13 +222,19 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 
 		/**
 		 * Method: compile
+		 * @param {String} aName
 		 * @param {String} aView
 		 * @param {Object} aData
 		 */
 
-		compile: function( aView, aData ) {
-			var tpl = aParser.template( aView ),
-				str = tpl( aData );
+		compile: function( aName, aView, aData ) {
+			var str;
+
+			if ( this._view.hasOwnProperty( aName ) == false ) {
+				this._view[ aName ] = aParser.template( aView );
+			}
+
+			str = this._view[ aName ]( aData );
 
 			return str;
 		},

@@ -29,18 +29,8 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 				jsonp = false,
 				self = this;
 
-			if ( aData.hasOwnProperty( 'checkResponse' ) === false ) {
-				aData.checkResponse = true;
-			}
-
 			if ( aData.hasOwnProperty( 'dataType' ) === true && aData.dataType === 'jsonp' ) {
 				jsonp = true;
-			}
-
-			if ( aData.hasOwnProperty( 'form' ) === true && aData.form !== null ) {
-				aData.url = aData.form.action;
-				aData.type = aData.form.method;
-				aData.data = $( aData.form ).serialize( );
 			}
 
 			if ( aData.hasOwnProperty( 'success' ) === true ) {
@@ -52,7 +42,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 					if ( jsonp === true ) {
 						ocb( aResponse );
 					}
-					else if ( aData.checkResponse === false || ( r = self.parse( aResponse ) ) !== false ) {
+					else if ( ( r = self.parse( aResponse ) ) !== false ) {
 						ocb( r );
 					}
 					else {
@@ -66,13 +56,11 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 			}
 			else {
 				ncb = function( aResponse, aCode, aXhr ) {
-					if ( jsonp == false ) {
-						if ( aData.checkResponse === false || self.parse( aResponse ) === false ) {
-							self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
+					if ( jsonp === false && self.parse( aResponse ) === false ) {
+						self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
 
-							if ( aData.hasOwnProperty( 'error' ) === true ) {
-								aData.error( );
-							}
+						if ( aData.hasOwnProperty( 'error' ) === true ) {
+							aData.error( );
 						}
 					}
 				};
@@ -82,9 +70,9 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 
 			this.abort( );
 
-			this._xhr = $.ajax( aData );
+			this._xhr = jQuery.ajax( aData );
 
-			$.when( this._xhr ).then( function( ) {
+			jQuery.when( this._xhr ).then( function( ) {
 				self._xhr = null;
 			});
 		},
@@ -109,7 +97,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 			var r;
 
 			try {
-				r = $.parseJSON( aResponse );
+				r = jQuery.parseJSON( aResponse );
 			}
 			catch( err ) {
 				r = false;

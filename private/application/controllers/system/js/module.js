@@ -20,9 +20,10 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 
 			this._conduit = [ ];
 			this._data = null;
+			this._view = [ ];
 
-			if ( !body.hasClass( 'cinder-history' ) ) {
-				body.addClass( 'cinder-history' );
+			if ( !body.hasClass( 'cinder' ) ) {
+				body.addClass( 'cinder' );
 
 				$( window ).on( 'popstate', function( aEvent ) {
 					if ( aEvent.originalEvent.state ) {
@@ -131,18 +132,13 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		 */
 
 		bindLinks: function( aContainer ) {
-			var items, i,
+			var container = $( aContainer ),
 				self = this;
 
-			items = aContainer.find( 'a.cinder-link' );
-			i = items.length;
-
-			while ( i-- ) {
-				$( items[ i ] ).on( 'click', function( aEvent ) {
-					aEvent.preventDefault( );
-					self.handleLinkClick( this );
-				});
-			}
+			container.find( 'a.cinder' ).on( 'click', function( aEvent ) {
+				aEvent.preventDefault( );
+				self.handleLinkClick( this );
+			});
 
 			return this;
 		},
@@ -177,9 +173,36 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		 */
 
 		bindForms: function( aContainer ) {
-			// TODO
+			var container = $( aContainer ),
+				self = this;
+
+			container.find( 'form.cinder' ).on( 'submit', function( aEvent ) {
+				aEvent.preventDefault( );
+				self.handleFormSubmit( this );
+			});
 
 			return this;
+		},
+
+		/**
+		 * Method: handleFormSubmit
+		 * @param {DOMelement} aForm
+		 */
+
+		handleFormSubmit: function( aForm ) {
+			var data = $( aForm ).serialize( ),
+				self = this;
+
+			data += '&system=false';
+
+			this.getConduit( aForm.action ).ajax({
+				url: aForm.action,
+				type: aForm.method,
+				data: data,
+				success: function( response ) {
+					self.bindPendingData( response );
+				}
+			});
 		},
 
 		/**

@@ -9,6 +9,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 	*/
 
 	var Module = aModule.subClass({
+
 		/**
 		 * Method: init
 		 */
@@ -19,9 +20,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 			this.verbose( 'module loaded: main' );
 
 			return this;
-		},
-
-
+		}
 	});
 
 	return Module;

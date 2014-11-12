@@ -1,5 +1,5 @@
 
-define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit ) {
+define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aParser ) {
 	'use strict';
 
 	/*
@@ -9,6 +9,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 	*/
 
 	var Module = Object.subClass({
+
 		/**
 		 * Method: init
 		 */
@@ -115,7 +116,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 			el = jQuery( this._data.container );
 
 			if ( el.length > 0 ) {
-				el[ 0 ].innerHTML = this._data.html;
+				el[ 0 ].innerHTML = this.compile( this._data.html, this._data.json );
 
 				this.bindLinks( el );
 				this.bindForms( el );
@@ -126,7 +127,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 
 		/**
 		 * Method: bindLinks
-		 * @param {Object} aContainer
+		 * @param {DOMelement} aContainer
 		 */
 
 		bindLinks: function( aContainer ) {
@@ -172,7 +173,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 
 		/**
 		 * Method: bindForms
-		 * @param {Object} aContainer
+		 * @param {DOMelement} aContainer
 		 */
 
 		bindForms: function( aContainer ) {
@@ -183,7 +184,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 
 		/**
 		 * Method: getConduit
-		 * @param {Object} aName
+		 * @param {String} aName
 		 */
 
 		getConduit: function( aName ) {
@@ -197,8 +198,21 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 		},
 
 		/**
+		 * Method: compile
+		 * @param {String} aView
+		 * @param {Object} aData
+		 */
+
+		compile: function( aView, aData ) {
+			var tpl = aParser.template( aView ),
+				str = tpl( aData );
+
+			return str;
+		},
+
+		/**
 		 * Method: error
-		 * @param {Object} aMessage
+		 * @param {String} aMessage
 		 */
 
 		error: function( aMessage ) {
@@ -209,7 +223,7 @@ define( [ 'system/js/conduit', 'system/js/class.min', 'system/js/jquery.min' ], 
 
 		/**
 		 * Method: verbose
-		 * @param {Object} aMessage
+		 * @param {String} aMessage
 		 */
 
 		verbose: function( aMessage ) {

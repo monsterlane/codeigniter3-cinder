@@ -1,5 +1,5 @@
 
-define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aParser ) {
+define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aModel, aParser ) {
 	'use strict';
 
 	/*
@@ -19,8 +19,8 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 				self = this;
 
 			this._conduit = [ ];
-			this._data = null;
-			this._view = [ ];
+			this._model = new aModel( );
+			this._view = new aParser( );
 
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
@@ -40,13 +40,14 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 		 */
 
 		clearData: function( ) {
-			var el, link, i, len;
+			var data = this._model.getData( ),
+				el, link, i, len;
 
-			if ( this._data != null ) {
-				jQuery( this._data.container ).empty( );
+			if ( data.length > 0 ) {
+				jQuery( data.container ).empty( );
 
-				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
-					link = this._data.css[ i ].substr( 0, this._data.css[ i ].length - 4 );
+				for ( i = 0, len = data.css.length; i < len; i++ ) {
+					link = data.css[ i ].substr( 0, data.css[ i ].length - 4 );
 
 					el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
@@ -56,8 +57,8 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 					requirejs.undef( 'system/js/css.min!' + link );
 				}
 
-				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
-					link = this._data.js[ i ].substr( 0, this._data.js[ i ].length - 4 );
+				for ( i = 0, len = data.js.length; i < len; i++ ) {
+					link = data.js[ i ].substr( 0, data.js[ i ].length - 4 );
 
 					requirejs.undef( link );
 				}
@@ -73,11 +74,12 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 
 		bindPendingData: function( aData ) {
 			var data = aData || { },
-				el, link, i, len;
+				el, link, view,
+				i, len;
 
 			this.clearData( );
 
-			this._data = jQuery.extend( true, {
+			data = jQuery.extend( true, {
 				title: null,
 				url: '/',
 				container: null,
@@ -88,15 +90,17 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 				system: false
 			}, data );
 
-			if ( this._data.system === false ) {
-				for ( i = 0, len = this._data.css.length; i < len; i++ ) {
-					link = 'css!' + this._data.css[ i ].substr( 0, this._data.css[ i ].indexOf( '.' ) );
+			this._model.setData( data );
+
+			if ( data.system === false ) {
+				for ( i = 0, len = data.css.length; i < len; i++ ) {
+					link = 'css!' + data.css[ i ].substr( 0, data.css[ i ].indexOf( '.' ) );
 
 					require( [ link ], function( ) { } );
 				}
 
-				for ( i = 0, len = this._data.js.length; i < len; i++ ) {
-					link = this._data.js[ i ].substr( 0, this._data.js[ i ].indexOf( '.' ) );
+				for ( i = 0, len = data.js.length; i < len; i++ ) {
+					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
 
 					require( [ link ], function( aModule ) {
 						'use strict';
@@ -105,17 +109,23 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 					});
 				}
 
-				if ( this._data.title != null ) {
-					document.title = this._data.title;
+				if ( data.title != null ) {
+					document.title = data.title;
 				}
 
-				window.history.pushState( this._data, '', this._data.url );
+				window.history.pushState( data, '', data.url );
 			}
 
-			el = jQuery( this._data.container );
+			el = jQuery( data.container );
 
 			if ( el.length > 0 ) {
-				el[ 0 ].innerHTML = this.compile( this._data.url, this._data.html, this._data.json );
+				view = this._view.getView( data.url );
+
+				if ( view === false ) {
+					view = this._view.createView( data.url, data.html );
+				}
+
+				el[ 0 ].innerHTML = view( data.json );
 
 				this.bindLinks( el );
 				this.bindForms( el );
@@ -216,25 +226,6 @@ define( [ 'system/js/conduit', 'system/js/dot.min', 'system/js/class.min', 'syst
 			}
 
 			return this._conduit[ name ];
-		},
-
-		/**
-		 * Method: compile
-		 * @param {String} aName
-		 * @param {String} aView
-		 * @param {Object} aData
-		 */
-
-		compile: function( aName, aView, aData ) {
-			var str;
-
-			if ( this._view.hasOwnProperty( aName ) === false ) {
-				this._view[ aName ] = aParser.template( aView );
-			}
-
-			str = this._view[ aName ]( aData );
-
-			return str;
 		},
 
 		/**

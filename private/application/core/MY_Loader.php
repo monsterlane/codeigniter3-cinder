@@ -3,27 +3,17 @@
 class MY_Loader extends CI_Loader {
 	public function page( ) {
 		$ci =& get_instance( );
-
-		$post = clean_array( $ci->input->post( ) );
 		$data = $ci->get_data( );
 
-		if ( array_key_exists( 'system', $post ) == true && $post[ 'system' ] == false ) {
-			$system = false;
-		}
-		else {
-			$data[ 'system' ][ 'css' ] = array_merge( $data[ 'system' ][ 'css' ], $data[ 'pending' ][ 'css' ] );
+		if ( array_key_exists( 'system', $data ) == true ) {
+			$data[ 'pending' ][ 'system' ] = true;
 
-			$system = true;
-		}
-
-		$data[ 'pending' ][ 'system' ] = $system;
-		$data[ 'pending' ] = json_encode( $data[ 'pending'] );
-
-		if ( $system == false ) {
-			$ci->output->set_output( $data[ 'pending' ] );
-		}
-		else {
 			$ci->load->view( $data[ 'system' ][ 'view' ], $data );
+		}
+		else {
+			$data[ 'pending' ][ 'system' ] = false;
+
+			$ci->output->json( $data[ 'pending' ] );
 		}
 	}
 

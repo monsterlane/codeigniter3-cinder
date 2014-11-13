@@ -9,12 +9,11 @@ class MY_Controller extends CI_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
-		$this->data = array(
-			'system' => array( ),
-			'pending' => array( ),
-		);
+		$this->data = array( );
 
-		$this->_load_system( );
+		if ( $this->input->post( 'system' ) !== 'false' ) {
+			$this->_load_system( );
+		}
 	}
 
 	/* internal methods */

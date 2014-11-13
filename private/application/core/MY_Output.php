@@ -1,6 +1,10 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Output extends CI_Output {
+	public function json( $data = array( ) ) {
+		$this->set_output( json_encode( $data ) );
+	}
+
 	public function minify( $output, $type = 'text/html' ) {
 		if ( $type == 'text/html' ) {
 			if ( strlen( $output ) === 0 ) {

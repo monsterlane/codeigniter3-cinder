@@ -10,6 +10,10 @@ $path = $this->config->item( 'cache_web_path' );
 foreach ( $system[ 'css' ] as $style ) {
 	?><link href="<?=$path . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
 }
+
+foreach ( $pending[ 'css' ] as $style ) {
+	?><link href="<?=$path . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+}
 ?>
 
 </head>
@@ -44,7 +48,7 @@ require.config({
 require( [ "<?=$system[ 'module' ]?>" ], function( aModule ) {
 	'use strict';
 
-	var module = new aModule( ).bindPendingData( <?=$pending?> );
+	var module = new aModule( ).bindPendingData( <?=json_encode( $pending )?> );
 });
 
 </script>

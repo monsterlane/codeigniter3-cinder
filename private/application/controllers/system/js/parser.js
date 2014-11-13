@@ -19,23 +19,23 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
 		},
 
 		/**
-		 * Method: createView
+		 * Method: create
 		 * @param {String} aName
 		 * @param {String} aString
 		 */
 
-		createView: function( aName, aString ) {
+		create: function( aName, aString ) {
 			this._view[ aName ] = aEngine.template( aString );
 
 			return this._view[ aName ];
 		},
 
 		/**
-		 * Method: getView
+		 * Method: get
 		 * @param {Object} aName
 		 */
 
-		getView: function( aName ) {
+		get: function( aName ) {
 			if ( this._view[ aName ] ) {
 				return this._view[ aName ];
 			}

@@ -119,10 +119,10 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			el = jQuery( data.container );
 
 			if ( el.length > 0 ) {
-				view = this._view.getView( data.url );
+				view = this._view.get( data.url );
 
 				if ( view === false ) {
-					view = this._view.createView( data.url, data.html );
+					view = this._view.create( data.url, data.html );
 				}
 
 				el[ 0 ].innerHTML = view( data.json );
@@ -159,9 +159,16 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		handleLinkClick: function( aLink ) {
 			var link = aLink || document.createElement( 'a' ),
 				data = $( link ).data( ),
-				self = this;
+				view, self = this;
 
 			data.system = false;
+
+			view = link.href.replace( '//', '' );
+			view = view.substr( view.indexOf( '/' ) );
+
+			if ( this._view.get( view ) !== false ) {
+				data.view = false;
+			}
 
 			this.getConduit( link.href ).ajax({
 				url: link.href,

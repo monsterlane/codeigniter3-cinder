@@ -4,9 +4,7 @@ class MY_Loader extends CI_Loader {
 	public function page( ) {
 		$ci =& get_instance( );
 
-		$post = $this->input->post( );
-		$post = clean_array( $post );
-
+		$post = clean_array( $ci->input->post( ) );
 		$data = $ci->get_data( );
 
 		if ( array_key_exists( 'system', $post ) == true && $post[ 'system' ] == false ) {
@@ -22,7 +20,7 @@ class MY_Loader extends CI_Loader {
 		$data[ 'pending' ] = json_encode( $data[ 'pending'] );
 
 		if ( $system == false ) {
-			$this->output->set_output( $data[ 'pending' ] );
+			$ci->output->set_output( $data[ 'pending' ] );
 		}
 		else {
 			$ci->load->view( $data[ 'system' ][ 'view' ], $data );
@@ -46,22 +44,30 @@ class MY_Loader extends CI_Loader {
 	public function partial( $data = array( ) ) {
 		$ci =& get_instance( );
 
-		if ( array_key_exists( 'view', $data ) == false ) {
-			$view = $ci->router->directory . 'views/' . $ci->router->method . '.html';
+		$post = clean_array( $ci->input->post( ) );
+		$skip = ( array_key_exists( 'view', $post ) == true && $post[ 'view' ] === false ) ? true : false;
 
-			if ( file_exists( VIEWPATH . $view ) == true && is_file( VIEWPATH . $view ) == true ) {
-				$data[ 'view' ] = $view;
+		if ( $skip == true ) {
+			unset( $data[ 'view' ] );
+		}
+		else {
+			if ( array_key_exists( 'view', $data ) == false ) {
+				$view = $ci->router->directory . 'views/' . $ci->router->method . '.html';
+
+				if ( file_exists( VIEWPATH . $view ) == true && is_file( VIEWPATH . $view ) == true ) {
+					$data[ 'view' ] = $view;
+				}
 			}
-		}
-		else if ( strpos( $data[ 'view' ], '/' ) === false ) {
-			$data[ 'view' ] = $ci->router->directory . 'views/' . $data[ 'view' ];
-		}
+			else if ( strpos( $data[ 'view' ], '/' ) === false ) {
+				$data[ 'view' ] = $ci->router->directory . 'views/' . $data[ 'view' ];
+			}
 
-		if ( strpos( $data[ 'view' ], '.' ) === false ) {
-			$data[ 'view' ] .= '.html';
-		}
+			if ( strpos( $data[ 'view' ], '.' ) === false ) {
+				$data[ 'view' ] .= '.html';
+			}
 
-		$data[ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ], '_ci_return' => true ) );
+			$data[ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ], '_ci_return' => true ) );
+		}
 
 		$ci->set_view( $data );
 	}

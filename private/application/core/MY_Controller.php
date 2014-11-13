@@ -53,7 +53,7 @@ class MY_Controller extends CI_Controller {
 	public function set_view( $data = array( ), $key = 'pending' ) {
 		$data = merge_array( array(
 			'container' => '#cinderBodyArea',
-			'url' => uri_string( ),
+			'url' => '/' . uri_string( ),
 			'module' => null,
 			'view' => null,
 			'json' => array( ),

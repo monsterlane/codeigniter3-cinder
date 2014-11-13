@@ -2,6 +2,8 @@
 
 $config['maintenance_mode'] = false;
 
+$config['default_container'] = '#cinderBodyArea';
+
 $config['files_file_path'] = FCPATH . 'files/';
 $config['files_web_path'] = '/files/';
 

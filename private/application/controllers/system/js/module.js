@@ -43,7 +43,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			var data = this._model.getData( ),
 				el, link, i, len;
 
-			if ( data.length > 0 ) {
+			if ( jQuery.isEmptyObject( data ) === false ) {
 				jQuery( data.container ).empty( );
 
 				for ( i = 0, len = data.css.length; i < len; i++ ) {

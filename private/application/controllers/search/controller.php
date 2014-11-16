@@ -34,6 +34,7 @@ class Search_controller extends MY_Controller {
 
 		$this->load->partial(array(
 			'container' => '#cinderSearchResults',
+			'module' => false,
 			'view' => 'users.html',
 			'json' => $results,
 			'callback' => 'bindSearchResults',

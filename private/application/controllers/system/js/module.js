@@ -26,7 +26,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
 
-				$( window ).on( 'popstate', function( aEvent ) {
+				$( window ).on( 'popstate.cinder', function( aEvent ) {
 					if ( aEvent.originalEvent.state ) {
 						self.bindPendingData( aEvent.originalEvent.state );
 					}
@@ -76,12 +76,14 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		bindPendingData: function( aData ) {
 			var old = this.getData( ),
 				data = aData || { },
+				redir = false,
 				el, link, view,
 				i, len;
 
 			data = jQuery.extend( true, {
 				title: null,
 				url: '/',
+				module: null,
 				container: null,
 				view: null,
 				json: { },
@@ -91,6 +93,12 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			}, data );
 
 			if ( jQuery.isEmptyObject( old ) === false ) {
+				if ( data.module != null && data.module != '' ) {
+					jQuery( old.container ).empty( );
+
+					redir = true;
+				}
+
 				if ( data.css.length > 0 ) {
 					for ( i = 0, len = data.css.length; i < len; i++ ) {
 						link = data.css[ i ].substr( 0, data.css[ i ].length - 4 );
@@ -105,8 +113,6 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 				}
 
 				if ( data.js.length > 0 ) {
-					jQuery( old.container ).empty( );
-
 					for ( i = 0, len = data.js.length; i < len; i++ ) {
 						link = data.js[ i ].substr( 0, data.js[ i ].length - 4 );
 
@@ -137,11 +143,11 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 					});
 				}
 
-				if ( data.title != null ) {
-					document.title = data.title;
-				}
+				if ( redir == true ) {
+					if ( data.title != null ) {
+						document.title = data.title;
+					}
 
-				if ( data.js.length > 0 ) {
 					this.history( data.url, data );
 				}
 			}
@@ -177,7 +183,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			var container = $( aContainer ),
 				self = this;
 
-			container.find( 'a.cinder' ).on( 'click', function( aEvent ) {
+			container.find( 'a.cinder' ).on( 'click.cinder', function( aEvent ) {
 				aEvent.preventDefault( );
 				self.handleLinkClick( this );
 			});
@@ -225,7 +231,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			var container = $( aContainer ),
 				self = this;
 
-			container.find( 'form.cinder' ).on( 'submit', function( aEvent ) {
+			container.find( 'form.cinder' ).on( 'submit.cinder', function( aEvent ) {
 				aEvent.preventDefault( );
 				self.handleFormSubmit( this );
 			});

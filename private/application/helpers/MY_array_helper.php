@@ -2,7 +2,7 @@
 
 function trim_array( $arr ) {
 	foreach ( $arr as $k => $v ) {
-		if ( is_scalar( $v ) ) {
+		if ( is_scalar( $v ) && $v !== null ) {
 			$arr[ $k ] = trim( $v );
 		}
 		else if ( is_array( $v ) ) {

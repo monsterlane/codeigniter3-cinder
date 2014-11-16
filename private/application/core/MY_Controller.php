@@ -51,7 +51,7 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function set_view( $data = array( ), $key = 'pending' ) {
-		$data = merge_array( array(
+		$this->data[ $key ] = merge_array( array(
 			'container' => $this->config->item( 'default_container' ),
 			'url' => '/' . uri_string( ),
 			'module' => null,
@@ -60,9 +60,11 @@ class MY_Controller extends CI_Controller {
 			'js' => array( ),
 		), $data );
 
-		$this->data[ $key ] = $data;
+		if ( array_key_exists( 'module', $data ) == false ) {
+			$data[ 'module' ] = null;
+		}
 
-		if ( $this->data[ $key ][ 'module' ] == null ) {
+		if ( $this->data[ $key ][ 'module' ] == null && $data[ 'module' ] !== false ) {
 			$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
 		}
 

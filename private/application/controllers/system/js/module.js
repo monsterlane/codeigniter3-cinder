@@ -105,7 +105,9 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 					document.title = data.title;
 				}
 
-				window.history.pushState( data, '', data.url );
+				if ( data.js.length > 0 ) {
+					window.history.pushState( data, '', data.url );
+				}
 			}
 
 			el = jQuery( data.container );
@@ -198,9 +200,16 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 
 		handleFormSubmit: function( aForm ) {
 			var data = $( aForm ).serialize( ),
-				self = this;
+				view, self = this;
 
 			data += '&system=false';
+
+			view = aForm.action.replace( '//', '' );
+			view = view.substr( view.indexOf( '/' ) );
+
+			if ( this._view.get( view ) !== false ) {
+				data += '&view=false';
+			}
 
 			this.getConduit( aForm.action ).ajax({
 				url: aForm.action,

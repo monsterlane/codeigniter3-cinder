@@ -36,6 +36,7 @@ class Search_controller extends MY_Controller {
 			'container' => '#cinderSearchResults',
 			'view' => 'users.html',
 			'json' => $results,
+			'callback' => 'bindSearchResults',
 		));
 	}
 }

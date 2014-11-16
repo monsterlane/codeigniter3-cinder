@@ -36,12 +36,31 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		},
 
 		/**
+		 * Method: getData
+		 */
+
+		getData: function( ) {
+			return this._model.getData( );
+		},
+
+		/**
+		 * Method: setData
+		 * @param {Object} aData
+		 */
+
+		setData: function( aData ) {
+			this._model.setData( aData );
+
+			return this;
+		},
+
+		/**
 		 * Method: bindPendingData
 		 * @param {Object} aData
 		 */
 
 		bindPendingData: function( aData ) {
-			var old = this._model.getData( ),
+			var old = this.getData( ),
 				data = aData || { },
 				el, link, view,
 				i, len;
@@ -82,7 +101,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 				}
 			}
 
-			this._model.setData( data );
+			this.setData( data );
 
 			if ( data.system === false ) {
 				for ( i = 0, len = data.css.length; i < len; i++ ) {
@@ -113,16 +132,20 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			el = jQuery( data.container );
 
 			if ( el.length > 0 ) {
-				view = this._view.get( data.url );
+				view = this.getView( data.url );
 
 				if ( view === false ) {
-					view = this._view.create( data.url, data.html );
+					view = this.createView( data.url, data.html );
 				}
 
 				el[ 0 ].innerHTML = view( data.json );
 
 				this.bindLinks( el );
 				this.bindForms( el );
+			}
+
+			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' && jQuery.isFunction( this[ data.callback ] ) == true ) {
+				this[ data.callback ]( );
 			}
 
 			return this;
@@ -160,7 +183,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			view = link.href.replace( '//', '' );
 			view = view.substr( view.indexOf( '/' ) );
 
-			if ( this._view.get( view ) !== false ) {
+			if ( this.getView( view ) !== false ) {
 				data.view = false;
 			}
 
@@ -207,7 +230,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			view = aForm.action.replace( '//', '' );
 			view = view.substr( view.indexOf( '/' ) );
 
-			if ( this._view.get( view ) !== false ) {
+			if ( this.getView( view ) !== false ) {
 				data += '&view=false';
 			}
 
@@ -219,6 +242,25 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 					self.bindPendingData( response );
 				}
 			});
+		},
+
+		/**
+		 * Method: getView
+		 * @param {String} aView
+		 */
+
+		getView: function( aView ) {
+			return this._view.get( aView );
+		},
+
+		/**
+		 * Method: createView
+		 * @param {String} aName
+		 * @param {String} aContent
+		 */
+
+		createView: function( aName, aContent ) {
+			return this._view.create( aName, aContent );
 		},
 
 		/**

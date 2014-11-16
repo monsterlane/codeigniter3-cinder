@@ -4,7 +4,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 	/*
 	===============================================================================
-	Class: About
+	Class: Search
 	===============================================================================
 	*/
 
@@ -17,7 +17,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( ) {
 			this._super( );
 
-			this.verbose( 'module loaded: about' );
+			this.verbose( 'module loaded: search' );
 
 			return this;
 		}

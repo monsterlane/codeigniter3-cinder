@@ -8,10 +8,10 @@ class Main_controller extends MY_Controller {
 				'body' => 'Main Page',
 			),
 			'css' => array(
-				'main/css/style.css',
+				'style.css',
 			),
 			'js' => array(
-				'main/js/module.js',
+				'module.js',
 			),
 		));
 	}

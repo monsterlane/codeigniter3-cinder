@@ -36,48 +36,15 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		},
 
 		/**
-		 * Method: clearData
-		 */
-
-		clearData: function( ) {
-			var data = this._model.getData( ),
-				el, link, i, len;
-
-			if ( jQuery.isEmptyObject( data ) === false ) {
-				jQuery( data.container ).empty( );
-
-				for ( i = 0, len = data.css.length; i < len; i++ ) {
-					link = data.css[ i ].substr( 0, data.css[ i ].length - 4 );
-
-					el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
-
-					el.prop( 'disabled', true );
-					el.remove( );
-
-					requirejs.undef( 'system/js/css.min!' + link );
-				}
-
-				for ( i = 0, len = data.js.length; i < len; i++ ) {
-					link = data.js[ i ].substr( 0, data.js[ i ].length - 4 );
-
-					requirejs.undef( link );
-				}
-			}
-
-			return this;
-		},
-
-		/**
 		 * Method: bindPendingData
 		 * @param {Object} aData
 		 */
 
 		bindPendingData: function( aData ) {
-			var data = aData || { },
+			var old = this._model.getData( ),
+				data = aData || { },
 				el, link, view,
 				i, len;
-
-			this.clearData( );
 
 			data = jQuery.extend( true, {
 				title: null,
@@ -89,6 +56,31 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 				js: [ ],
 				system: false
 			}, data );
+
+			if ( jQuery.isEmptyObject( old ) === false ) {
+				if ( data.css.length > 0 ) {
+					for ( i = 0, len = data.css.length; i < len; i++ ) {
+						link = data.css[ i ].substr( 0, data.css[ i ].length - 4 );
+
+						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
+
+						el.prop( 'disabled', true );
+						el.remove( );
+
+						requirejs.undef( 'system/js/css.min!' + link );
+					}
+				}
+
+				if ( data.js.length > 0 ) {
+					jQuery( old.container ).empty( );
+
+					for ( i = 0, len = data.js.length; i < len; i++ ) {
+						link = data.js[ i ].substr( 0, data.js[ i ].length - 4 );
+
+						requirejs.undef( link );
+					}
+				}
+			}
 
 			this._model.setData( data );
 

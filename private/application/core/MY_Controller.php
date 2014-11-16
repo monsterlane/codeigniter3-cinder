@@ -67,7 +67,11 @@ class MY_Controller extends CI_Controller {
 
 		$dest = $this->config->item( 'cache_file_path' );
 
-		foreach ( $data[ 'css' ] as &$style ) {
+		foreach ( $this->data[ $key ][ 'css' ] as &$style ) {
+			if ( strpos( $style, '/' ) === false ) {
+				$style = $this->router->directory . 'css/' . $style;
+			}
+
 			$path = VIEWPATH . $style;
 
 			if ( ENVIRONMENT == 'development' || file_exists( $dest . $style ) == false ) {
@@ -80,8 +84,13 @@ class MY_Controller extends CI_Controller {
 				copy( $path, $dest . $style);
 			}
 		}
+		unset( $style );
 
-		foreach ( $data[ 'js' ] as $script ) {
+		foreach ( $this->data[ $key ][ 'js' ] as &$script ) {
+			if ( strpos( $script, '/' ) === false ) {
+				$script = $this->router->directory . 'js/' . $script;
+			}
+
 			$path = VIEWPATH . $script;
 
 			if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
@@ -94,6 +103,7 @@ class MY_Controller extends CI_Controller {
 				copy( $path, $dest . $script );
 			}
 		}
+		unset( $script );
 	}
 }
 

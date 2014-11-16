@@ -18,8 +18,6 @@ define( [ 'system/js/class' ], function( ) {
 		init: function( aParent ) {
 			this._parent = aParent;
 			this._storage = localStorage;
-
-			this.empty( );
 		},
 
 		/**

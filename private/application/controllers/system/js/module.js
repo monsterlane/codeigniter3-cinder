@@ -114,6 +114,9 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 					}
 				}
 			}
+			else {
+				this._cache.empty( );
+			}
 
 			this.setData( data );
 

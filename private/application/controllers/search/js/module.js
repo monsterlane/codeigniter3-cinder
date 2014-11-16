@@ -18,8 +18,6 @@ define( [ 'system/js/module' ], function( aModule ) {
 			this._super( );
 
 			this.verbose( 'module loaded: search' );
-
-			return this;
 		},
 
 		/**

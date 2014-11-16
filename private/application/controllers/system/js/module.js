@@ -139,7 +139,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 				}
 
 				if ( data.js.length > 0 ) {
-					window.history.pushState( data, '', data.url );
+					this.history( data.url, data );
 				}
 			}
 
@@ -310,6 +310,31 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			this._cache.set( aKey, aContent );
 
 			return this;
+		},
+
+		/**
+		 * Method: history
+		 * @param {String} aUrl
+		 * @param {String} aData
+		 */
+
+		history: function( aUrl, aData ) {
+			window.history.pushState( aData, '', aUrl );
+
+			return this;
+		},
+
+		/**
+		 * Method: redirect
+		 * @param {String} aUrl
+		 */
+
+		redirect: function( aUrl ) {
+			var a = document.createElement( 'a' );
+
+			a.setAttribute( 'href', aUrl );
+
+			this.handleLinkClick( a );
 		},
 
 		/**

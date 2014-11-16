@@ -12,11 +12,20 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 
 		/**
 		 * Method: init
+		 * @param {Object} aParent
 		 */
 
 		init: function( aParent ) {
 			this._parent = aParent;
 			this._xhr = null;
+		},
+
+		/**
+		 * Method: getParent
+		 */
+
+		getParent: function( ) {
+			return this._parent;
 		},
 
 		/**
@@ -121,10 +130,11 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 		 */
 
 		error: function( aMessage ) {
-			var message = jQuery.trim( aMessage );
+			var parent = this.getParent( ),
+				message = jQuery.trim( aMessage );
 
 			if ( message != '' ) {
-				this._parent.error( message );
+				parent.error( message );
 			}
 		}
 	});

@@ -12,12 +12,22 @@ define( [ 'system/js/class' ], function( ) {
 
 		/**
 		 * Method: init
+		 * @param {Object} aParent
 		 */
 
-		init: function( ) {
+		init: function( aParent ) {
+			this._parent = aParent;
 			this._storage = localStorage;
 
 			this.empty( );
+		},
+
+		/**
+		 * Method: getParent
+		 */
+
+		getParent: function( ) {
+			return this._parent;
 		},
 
 		/**
@@ -63,6 +73,8 @@ define( [ 'system/js/class' ], function( ) {
 			}
 
 			this.free( );
+
+			return this;
 		},
 
 		/**
@@ -70,7 +82,8 @@ define( [ 'system/js/class' ], function( ) {
 		 */
 
 		free: function( ) {
-			var total = 5,
+			var parent = this.getParent( ),
+				total = 5,
 				used = 0,
 				free, i;
 
@@ -80,8 +93,10 @@ define( [ 'system/js/class' ], function( ) {
 
 			free = total - used;
 
-			console.log( 'cache module: ' + used.toFixed( 2 ) + 'MB used' );
-			console.log( 'cache module: ' + free.toFixed( 2 ) + 'MB free' );
+			parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'MB used' );
+			parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'MB free' );
+
+			return this;
 		}
 	});
 

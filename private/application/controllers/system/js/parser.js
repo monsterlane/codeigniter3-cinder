@@ -12,10 +12,20 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
 
 		/**
 		 * Method: init
+		 * @param {Object} aParent
 		 */
 
-		init: function( ) {
+		init: function( aParent ) {
+			this._parent = aParent;
 			this._view = [ ];
+		},
+
+		/**
+		 * Method: getParent
+		 */
+
+		getParent: function( ) {
+			return this._parent;
 		},
 
 		/**

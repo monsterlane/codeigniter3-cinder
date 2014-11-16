@@ -12,12 +12,22 @@ define( [ 'system/js/class' ], function( ) {
 
 		/**
 		 * Method: init
+		 * @parma {Object} aParent
 		 */
 
-		init: function( ) {
+		init: function( aParent ) {
+			this._parent = aParent;
 			this._data = { };
 
 			return this;
+		},
+
+		/**
+		 * Method: getParent
+		 */
+
+		getParent: function( ) {
+			return this._parent;
 		},
 
 		/**

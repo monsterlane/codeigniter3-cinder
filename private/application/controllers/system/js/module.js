@@ -19,9 +19,9 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 				self = this;
 
 			this._conduit = [ ];
-			this._model = new aModel( );
-			this._view = new aParser( );
-			this._cache = new aCache( );
+			this._model = new aModel( this );
+			this._view = new aParser( this );
+			this._cache = new aCache( this );
 
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
@@ -32,8 +32,6 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 					}
 				});
 			}
-
-			return this;
 		},
 
 		/**

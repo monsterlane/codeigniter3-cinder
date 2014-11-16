@@ -1,5 +1,5 @@
 
-define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aModel, aParser ) {
+define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js/cache', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aModel, aParser, aCache ) {
 	'use strict';
 
 	/*
@@ -21,6 +21,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			this._conduit = [ ];
 			this._model = new aModel( );
 			this._view = new aParser( );
+			this._cache = new aCache( );
 
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
@@ -33,6 +34,21 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 			}
 
 			return this;
+		},
+
+		/**
+		 * Method: getConduit
+		 * @param {String} aName
+		 */
+
+		getConduit: function( aName ) {
+			var name = aName || Math.random( ).toString( 36 ).substr( 2 );
+
+			if ( this._conduit.hasOwnProperty( name ) === false ) {
+				this._conduit[ name ] = new aConduit( this );
+			}
+
+			return this._conduit[ name ];
 		},
 
 		/**
@@ -222,7 +238,8 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		 */
 
 		handleFormSubmit: function( aForm ) {
-			var data = $( aForm ).serialize( ),
+			var form = $( aForm ),
+				data = form.serialize( ),
 				view, self = this;
 
 			data += '&system=false';
@@ -250,32 +267,51 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		 */
 
 		getView: function( aView ) {
-			return this._view.get( aView );
+			var view = this._view.get( aView ),
+				cache;
+
+			if ( view === false ) {
+				cache = this.getCache( aView );
+
+				if ( cache !== false ) {
+					view = this._view.create( aView, cache );
+				}
+			}
+
+			return view;
 		},
 
 		/**
 		 * Method: createView
-		 * @param {String} aName
+		 * @param {String} aKey
 		 * @param {String} aContent
 		 */
 
-		createView: function( aName, aContent ) {
-			return this._view.create( aName, aContent );
+		createView: function( aKey, aContent ) {
+			this.setCache( aKey, aContent );
+
+			return this._view.create( aKey, aContent );
 		},
 
 		/**
-		 * Method: getConduit
-		 * @param {String} aName
+		 * Method: getCache
+		 * @param {String} aKey
 		 */
 
-		getConduit: function( aName ) {
-			var name = aName || Math.random( ).toString( 36 ).substr( 2 );
+		getCache: function( aKey ) {
+			return this._cache.get( aKey );
+		},
 
-			if ( this._conduit.hasOwnProperty( name ) === false ) {
-				this._conduit[ name ] = new aConduit( this );
-			}
+		/**
+		 * Method: setCache
+		 * @param {String} aKey
+		 * @param {String} aContent
+		 */
 
-			return this._conduit[ name ];
+		setCache: function( aKey, aContent ) {
+			this._cache.set( aKey, aContent );
+
+			return this;
 		},
 
 		/**

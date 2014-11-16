@@ -36,9 +36,10 @@ class MY_Controller extends CI_Controller {
 				'system/js/class.min.js',
 				'system/js/dot.min.js',
 				'system/js/module.js',
+				'system/js/conduit.js',
 				'system/js/model.js',
 				'system/js/parser.js',
-				'system/js/conduit.js',
+				'system/js/cache.js',
 			),
 		), 'system' );
 	}

@@ -1,14 +1,14 @@
 
-define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
+define( [ 'system/js/dot.min', 'system/js/class' ], function( aParser ) {
 	'use strict';
 
 	/*
 	===============================================================================
-	Class: Parser
+	Class: View
 	===============================================================================
 	*/
 
-	var Parser = Object.subClass({
+	var View = Object.subClass({
 
 		/**
 		 * Method: init
@@ -17,7 +17,7 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
 
 		init: function( aParent ) {
 			this._parent = aParent;
-			this._view = [ ];
+			this._data = [ ];
 		},
 
 		/**
@@ -35,9 +35,9 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
 		 */
 
 		create: function( aName, aString ) {
-			this._view[ aName ] = aEngine.template( aString );
+			this._data[ aName ] = aParser.template( aString );
 
-			return this._view[ aName ];
+			return this._data[ aName ];
 		},
 
 		/**
@@ -46,13 +46,13 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aEngine ) {
 		 */
 
 		get: function( aName ) {
-			if ( this._view[ aName ] ) {
-				return this._view[ aName ];
+			if ( this._data[ aName ] ) {
+				return this._data[ aName ];
 			}
 
 			return false;
 		}
 	});
 
-	return Parser;
+	return View;
 });

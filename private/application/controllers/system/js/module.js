@@ -1,5 +1,5 @@
 
-define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js/cache', 'system/js/class.min', 'system/js/jquery.min' ], function( aConduit, aModel, aParser, aCache ) {
+define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view', 'system/js/class.min', 'system/js/jquery.min' ], function( aCache, aConduit, aModel, aView ) {
 	'use strict';
 
 	/*
@@ -20,13 +20,13 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 
 			this._conduit = [ ];
 			this._model = new aModel( this );
-			this._view = new aParser( this );
+			this._view = new aView( this );
 			this._cache = new aCache( this );
 
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
 
-				$( window ).on( 'popstate.cinder', function( aEvent ) {
+				jQuery( window ).on( 'popstate.cinder', function( aEvent ) {
 					if ( aEvent.originalEvent.state ) {
 						self.bindPendingData( aEvent.originalEvent.state );
 					}
@@ -180,7 +180,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		 */
 
 		bindLinks: function( aContainer ) {
-			var container = $( aContainer ),
+			var container = jQuery( aContainer ),
 				self = this;
 
 			container.find( 'a.cinder' ).on( 'click.cinder', function( aEvent ) {
@@ -198,7 +198,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 
 		handleLinkClick: function( aLink ) {
 			var link = aLink || document.createElement( 'a' ),
-				data = $( link ).data( ),
+				data = jQuery( link ).data( ),
 				view, self = this;
 
 			data.system = false;
@@ -228,7 +228,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		 */
 
 		bindForms: function( aContainer ) {
-			var container = $( aContainer ),
+			var container = jQuery( aContainer ),
 				self = this;
 
 			container.find( 'form.cinder' ).on( 'submit.cinder', function( aEvent ) {
@@ -245,7 +245,7 @@ define( [ 'system/js/conduit', 'system/js/model', 'system/js/parser', 'system/js
 		 */
 
 		handleFormSubmit: function( aForm ) {
-			var form = $( aForm ),
+			var form = jQuery( aForm ),
 				data = form.serialize( ),
 				view, self = this;
 

@@ -19,6 +19,14 @@ define( [ 'system/js/module' ], function( aModule ) {
 			this._super( aOptions );
 
 			this.verbose( 'module loaded: main' );
+		},
+
+		/**
+		 * Method: test
+		 */
+
+		test: function( ) {
+			// TODO remove
 		}
 	});
 

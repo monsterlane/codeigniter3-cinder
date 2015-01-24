@@ -125,7 +125,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					for ( i = 0, len = old.css.length; i < len; i++ ) {
 						link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
 
-						this.verbose( 'module unloaded: ' + link );
+						this.verbose( 'module unload: ' + link );
 
 						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
@@ -140,7 +140,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					for ( i = 0, len = old.js.length; i < len; i++ ) {
 						link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
 
-						this.verbose( 'module unloaded: ' + link );
+						this.verbose( 'module unload: ' + link );
 
 						requirejs.undef( link );
 					}
@@ -194,8 +194,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				this.bindForms( el );
 			}
 
-			this._cache.free( );
-
 			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
 				if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
 					this.verbose( 'module callback: ' + data.callback );
@@ -203,15 +201,14 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					this[ data.callback ]( );
 				}
 				else {
+					// TODO bugfix
 					this.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
 
-					// TODO sometimes doesn't fire?
-					console.log( data.callback );
-					console.log( jQuery.isFunction( this[ data.callback ] ) );
-					console.log( this[ data.callback ] );
 					console.log( this );
 				}
 			}
+
+			this._cache.free( );
 
 			return this;
 		},
@@ -394,6 +391,15 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		},
 
 		/**
+		 * Method: emptyCache
+		 */
+
+		emptyCache: function( ) {
+			this._cache.empty( );
+			this._cache.free( );
+		},
+
+		/**
 		 * Method: history
 		 * @param {String} aUrl
 		 * @param {String} aData
@@ -427,6 +433,15 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			alert( aMessage );
 
 			return this;
+		},
+
+		/**
+		 * Method: dialog
+		 * @param {Object} aOptions
+		 */
+
+		dialog: function( aOptions ) {
+			// TODO
 		},
 
 		/**

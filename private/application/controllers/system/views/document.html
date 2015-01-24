@@ -46,7 +46,10 @@ require.config({
 require( [ "<?=$system[ 'module' ]?>" ], function( aModule ) {
 	'use strict';
 
-	var module = new aModule( <?=json_encode( $system[ 'options' ] )?> ).bindPendingData( <?=json_encode( $pending )?> );
+	var module = new aModule( <?=json_encode( $system[ 'options' ] )?> );
+
+	module.emptyCache( );
+	module.bindPendingData( <?=json_encode( $pending )?> );
 });
 
 </script>

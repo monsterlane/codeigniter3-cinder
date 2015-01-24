@@ -278,9 +278,16 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		getViews: function( aUrl ) {
-			var hash = this._view.hash( aUrl );
+			var views;
 
-			return this._view.hash( aUrl );
+			if ( this._model._data.hasOwnProperty( aUrl ) ) {
+				views = this._model._data[ aUrl ];
+			}
+			else {
+				views = [ ];
+			}
+
+			return views;
 		},
 
 		/**
@@ -297,7 +304,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				cache = this.getCache( aHash );
 
 				if ( cache !== false ) {
-					view = this._view.create( JSON.parse( cache ) );
+					view = this.createView( JSON.parse( cache ) );
 
 					this.verbose( 'view module: cache found' );
 				}
@@ -317,6 +324,12 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		createView: function( aView ) {
 			this.verbose( 'view module: creating view' );
 			this.verbose( aView );
+
+			if ( this._model._data.hasOwnProperty( aView.url ) === false ) {
+				this._model._data[ aView.url ] = [ ];
+			}
+
+			this._model._data[ aView.url ].push( aView.hash );
 
 			this.setCache( aView.hash, JSON.stringify( aView ) );
 

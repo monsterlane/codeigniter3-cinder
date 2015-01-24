@@ -55,24 +55,6 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aParser ) {
 			}
 
 			return false;
-		},
-
-		/**
-		 * Method: hash
-		 * @param {String} aUrl
-		 */
-
-		hash: function( aUrl ) {
-			var hash;
-
-			if ( this._data[ aUrl ] ) {
-				hash = this._data[ aUrl ];
-			}
-			else {
-				hash = [ ];
-			}
-
-			return hash;
 		}
 	});
 

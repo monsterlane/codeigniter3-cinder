@@ -60,17 +60,16 @@ class MY_Loader extends CI_Loader {
 		}
 
 		if ( array_key_exists( 'view', $data ) === true ) {
-			$hash = md5( $view . filemtime( VIEWPATH . $view ) );
+			$data[ 'hash' ] = md5( $view . filemtime( VIEWPATH . $view ) );
 
 			if ( array_key_exists( 'views', $post ) === true && is_array( $post[ 'views' ] ) === true && empty( $post[ 'views' ] ) === false ) {
-				if ( in_array( $hash, $data[ 'view' ] ) ) {
+				if ( in_array( $data[ 'hash' ], $post[ 'views' ] ) ) {
 					$skip = true;
 				}
 			}
 
 			if ( $skip === false ) {
 				$data[ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ], '_ci_return' => true ) );
-				$data[ 'hash' ] = $hash;
 			}
 		}
 

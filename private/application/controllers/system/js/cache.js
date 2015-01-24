@@ -67,7 +67,9 @@ define( [ 'system/js/class' ], function( ) {
 			var i;
 
 			for ( i in this._storage ) {
-				this._storage.removeItem( i );
+				if ( this._storage.hasOwnProperty( i ) ) {
+					this._storage.removeItem( i );
+				}
 			}
 
 			return this;
@@ -91,8 +93,23 @@ define( [ 'system/js/class' ], function( ) {
 			used = str ? 3 + ( ( str.length * 16 ) / ( 8 * 1024 ) ) : 0;
 			free = total - used;
 
-			parent.verbose( 'cache module: ' + used + 'KB used' );
-			parent.verbose( 'cache module: ' + free + 'KB free' );
+			if ( used > 1024 ) {
+				used = used / 1024;
+
+				parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'MB used' );
+			}
+			else {
+				parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'KB used' );
+			}
+
+			if ( free > 1024 ) {
+				free = free / 1024;
+
+				parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'MB free' );
+			}
+			else {
+				parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'KB free' );
+			}
 
 			return this;
 		}

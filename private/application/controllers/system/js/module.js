@@ -134,8 +134,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
 
 					require( [ link ], function( aModule ) {
-						'use strict';
-
 						var module = new aModule( );
 					});
 				}
@@ -327,7 +325,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		createView: function( aView ) {
 			this.verbose( 'view module: creating view' );
-			this.verbose( aView );
 
 			if ( this._model._data.hasOwnProperty( aView.url ) === false ) {
 				this._model._data[ aView.url ] = [ ];

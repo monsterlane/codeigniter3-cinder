@@ -121,7 +121,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 		 */
 
 		inProgress: function( ) {
-			return ( this._xhr != null ) ? true : false;
+			return ( this._xhr !== null ) ? true : false;
 		},
 
 		/**

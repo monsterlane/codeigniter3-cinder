@@ -204,21 +204,25 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				data = jQuery( link ).data( ),
 				url, self = this;
 
-			data.system = false;
+			if ( link.href != window.location.href ) {
+				url = link.href.replace( '//', '' );
+				url = url.substr( url.indexOf( '/' ) );
 
-			url = link.href.replace( '//', '' );
-			url = url.substr( url.indexOf( '/' ) );
+				data.views = this.getViews( url );
+				data.system = false;
 
-			data.views = this.getViews( url );
-
-			this.getConduit( link.href ).ajax({
-				url: link.href,
-				type: 'post',
-				data: data,
-				success: function( response ) {
-					self.bindPendingData( response );
-				}
-			});
+				this.getConduit( link.href ).ajax({
+					url: link.href,
+					type: 'post',
+					data: data,
+					success: function( response ) {
+						self.bindPendingData( response );
+					}
+				});
+			}
+			else {
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+			}
 
 			return this;
 		},

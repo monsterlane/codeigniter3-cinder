@@ -28,6 +28,7 @@ class MY_Loader extends CI_Loader {
 
 		if ( array_key_exists( 'system', $data ) === true ) {
 			$data[ 'pending' ][ 'system' ] = true;
+			$data[ 'system' ][ 'options' ][ 'url' ] = $data[ 'pending' ][ 'url' ];
 
 			$ci->load->view( $data[ 'system' ][ 'view' ], $data );
 		}

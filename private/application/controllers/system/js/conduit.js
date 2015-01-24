@@ -34,7 +34,8 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 		 */
 
 		ajax: function( aOptions ) {
-			var opt = aOptions || { },
+			var parent = this.getParent( ),
+				opt = aOptions || { },
 				jsonp = false,
 				ncb, ocb,
 				self = this;
@@ -76,7 +77,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 								self.error( r.message );
 							}
 							else {
-								self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
+								self.error( 'An error has occurred. '+ parent.getData( 'support_message' ) );
 							}
 
 							if ( opt.hasOwnProperty( 'error' ) === true ) {
@@ -88,7 +89,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 						}
 					}
 					else {
-						self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
+						self.error( 'An error has occurred. ' + parent.getData( 'support_message' ) );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {
 							opt.error( );
@@ -99,7 +100,7 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 			else {
 				ncb = function( aResponse, aCode, aXhr ) {
 					if ( jsonp === false && self.parse( aResponse ) === false ) {
-						self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
+						self.error( 'An error has occurred. '+ parent.getData( 'support_message' ) );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {
 							opt.error( );

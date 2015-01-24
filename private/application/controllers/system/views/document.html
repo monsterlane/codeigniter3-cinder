@@ -5,14 +5,12 @@
 	<meta charset="utf-8" />
 
 <?php
-$path = $this->config->item( 'cache_web_path' );
-
 foreach ( $system[ 'css' ] as $style ) {
-	?><link href="<?=$path . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
 }
 
 foreach ( $pending[ 'css' ] as $style ) {
-	?><link href="<?=$path . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
 }
 ?>
 
@@ -29,7 +27,7 @@ foreach ( $pending[ 'css' ] as $style ) {
  */
 
 require.config({
-	baseUrl: '/files/cache',
+	baseUrl: '<?=rtrim( $system[ 'json' ][ 'cache_path' ], '/' )?>',
 	map: {
 		'*': {
 			'css': 'system/js/css.min'
@@ -48,7 +46,7 @@ require.config({
 require( [ "<?=$system[ 'module' ]?>" ], function( aModule ) {
 	'use strict';
 
-	var module = new aModule( ).bindPendingData( <?=json_encode( $pending )?> );
+	var module = new aModule( <?=json_encode( $system[ 'options' ] )?> ).bindPendingData( <?=json_encode( $pending )?> );
 });
 
 </script>

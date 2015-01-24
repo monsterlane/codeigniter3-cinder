@@ -12,10 +12,11 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 		/**
 		 * Method: init
+		 * @param {Object} aOptions
 		 */
 
-		init: function( ) {
-			this._super( );
+		init: function( aOptions ) {
+			this._super( aOptions );
 
 			this.verbose( 'module loaded: search' );
 		},
@@ -43,12 +44,13 @@ define( [ 'system/js/module' ], function( aModule ) {
 		 */
 
 		handleDeleteButtonClick: function( aButton ) {
-			var container = jQuery( aButton ).closest( 'tr' ),
+			var data = this.getData( ),
+				container = jQuery( aButton ).closest( 'tr' ),
 				id = container[ 0 ].getAttribute( 'data-id' ),
 				self = this;
 
 			this.getConduit( 'delete' ).ajax({
-				url: '/search/user/delete/' + id,
+				url: this._url + '/user/delete/' + id,
 				success: function( response ) {
 					container.remove( );
 				}

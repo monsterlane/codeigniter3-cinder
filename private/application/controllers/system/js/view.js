@@ -34,6 +34,10 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aParser ) {
 		 */
 
 		create: function( aView ) {
+			var parent = this.getParent( );
+
+			parent.verbose( 'view module: creating view' );
+
 			if ( this._data.hasOwnProperty( aView.url ) === false ) {
 				this._data[ aView.url ] = [ ];
 			}

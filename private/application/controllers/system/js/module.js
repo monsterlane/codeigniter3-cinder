@@ -12,16 +12,28 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		/**
 		 * Method: init
+		 * @param {Object} aOptions
 		 */
 
-		init: function( ) {
-			var body = jQuery( 'body' ),
-				self = this;
+		init: function( aOptions ) {
+			var options = aOptions || { },
+				body = jQuery( 'body' ),
+				i, len, self = this;
 
+			this._cache = new aCache( this );
 			this._conduit = [ ];
+			this._url = '/';
+
 			this._model = new aModel( this );
 			this._view = new aView( this );
-			this._cache = new aCache( this );
+
+			if ( Object.keys( options ).length > 0 ) {
+				this.setData( options );
+
+				if ( options.hasOwnProperty( 'url' ) ) {
+					this._url = options.url;
+				}
+			}
 
 			if ( body.hasClass( 'cinder' ) === false ) {
 				body.addClass( 'cinder' );
@@ -53,17 +65,30 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 * Method: getData
 		 */
 
-		getData: function( ) {
-			return this._model.getData( );
+		getData: function( aKey ) {
+			var key = aKey || null,
+				data = this._model.getData( );
+
+			if ( key !== null ) {
+				if ( data.hasOwnProperty( aKey ) ) {
+					return data[ key ];
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return data;
+			}
 		},
 
 		/**
 		 * Method: setData
-		 * @param {Object} aData
+		 * @param {Mixed}
 		 */
 
-		setData: function( aData ) {
-			this._model.setData( aData );
+		setData: function( ) {
+			this._model.setData( arguments );
 
 			return this;
 		},
@@ -81,27 +106,26 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				i, len;
 
 			data = jQuery.extend( true, {
+				system: false,
 				title: null,
 				url: '/',
 				module: false,
-				container: null,
-				view: null,
-				json: { },
 				css: [ ],
 				js: [ ],
-				system: false
+				view: null,
+				container: null,
+				json: { }
 			}, data );
 
-			if ( jQuery.isEmptyObject( old ) === false ) {
-				if ( data.module !== false && data.module !== '' ) {
-					jQuery( old.container ).empty( );
+			if ( jQuery.isEmptyObject( old ) === false && old.hasOwnProperty( 'module' ) && old.module !== '' && data.module !== false && data.module !== '' ) {
+				jQuery( old.container ).empty( );
+				redir = true;
 
-					redir = true;
-				}
+				if ( old.css.length > 0 ) {
+					for ( i = 0, len = old.css.length; i < len; i++ ) {
+						link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
 
-				if ( data.css.length > 0 ) {
-					for ( i = 0, len = data.css.length; i < len; i++ ) {
-						link = data.css[ i ].substr( 0, data.css[ i ].length - 4 );
+						this.verbose( 'module unloaded: ' + link );
 
 						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
@@ -112,9 +136,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					}
 				}
 
-				if ( data.js.length > 0 ) {
-					for ( i = 0, len = data.js.length; i < len; i++ ) {
-						link = data.js[ i ].substr( 0, data.js[ i ].length - 4 );
+				if ( old.js.length > 0 ) {
+					for ( i = 0, len = old.js.length; i < len; i++ ) {
+						link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
+
+						this.verbose( 'module unloaded: ' + link );
 
 						requirejs.undef( link );
 					}
@@ -134,7 +160,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
 
 					require( [ link ], function( aModule ) {
-						var module = new aModule( );
+						var module = new aModule({
+							url: data.url
+						});
 					});
 				}
 
@@ -168,8 +196,21 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 			this._cache.free( );
 
-			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' && jQuery.isFunction( this[ data.callback ] ) == true ) {
-				this[ data.callback ]( );
+			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
+				if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
+					this.verbose( 'module callback: ' + data.callback );
+
+					this[ data.callback ]( );
+				}
+				else {
+					this.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
+
+					// TODO sometimes doesn't fire?
+					console.log( data.callback );
+					console.log( jQuery.isFunction( this[ data.callback ] ) );
+					console.log( this[ data.callback ] );
+					console.log( this );
+				}
 			}
 
 			return this;
@@ -304,7 +345,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				if ( cache !== false ) {
 					this.verbose( 'view module: cache found' );
 
-					view = this.createView( JSON.parse( cache ) );
+					view = this._view.create( JSON.parse( cache ) );
 				}
 			}
 			else {
@@ -320,8 +361,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		createView: function( aView ) {
-			this.verbose( 'view module: creating view' );
-
 			if ( this._model._data.hasOwnProperty( aView.url ) === false ) {
 				this._model._data[ aView.url ] = [ ];
 			}

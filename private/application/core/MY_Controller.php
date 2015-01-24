@@ -21,6 +21,7 @@ class MY_Controller extends CI_Controller {
 			'view' => 'system/views/document.html',
 			'json' => array(
 				'title' => 'CI3-Cinder',
+				'cache_path' => $this->config->item( 'cache_web_path' ),
 			),
 			'css' => array(
 				'system/css/reset.css',
@@ -37,6 +38,10 @@ class MY_Controller extends CI_Controller {
 				'system/js/conduit.js',
 				'system/js/model.js',
 				'system/js/view.js',
+			),
+			'options' => array(
+				'support_address' => $this->config->item( 'support_address' ),
+				'support_message' => $this->config->item( 'support_message' ),
 			),
 		), 'system' );
 	}
@@ -61,6 +66,7 @@ class MY_Controller extends CI_Controller {
 			'json' => array( ),
 			'css' => array( ),
 			'js' => array( ),
+			'options' => array( ),
 		), $data );
 
 		$data =& $this->set_data( $data, $key );

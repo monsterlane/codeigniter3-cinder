@@ -12,10 +12,11 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 		/**
 		 * Method: init
+		 * @param {Object} aOptions
 		 */
 
-		init: function( ) {
-			this._super( );
+		init: function( aOptions ) {
+			this._super( aOptions );
 
 			this.verbose( 'module loaded: main' );
 		}

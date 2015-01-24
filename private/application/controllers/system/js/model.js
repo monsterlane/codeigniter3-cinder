@@ -44,18 +44,17 @@ define( [ 'system/js/class' ], function( ) {
 		 */
 
 		setData: function( ) {
-			var arg = arguments || [ ],
-				i, len;
+			var parent = this.getParent( ),
+				arg = arguments[ 0 ] || [ ],
+				i;
 
-			if ( arg.length > 0 && arg[ 0 ] != null ) {
-				if ( arg.legnth === 2 ) {
-					this._data[ arg[ 0 ] ] = arg[ 1 ];
-				}
-				else if ( arg.length === 1 && typeof arg[ 0 ] === 'object' ) {
-					for ( i in arg[ 0 ] ) {
-						if ( arg[ 0 ].hasOwnProperty( i ) ) {
-							this._data[ i ] = arg[ 0 ][ i ];
-						}
+			if ( arg.length === 2 ) {
+				this._data[ arg[ 0 ] ] = arg[ 1 ];
+			}
+			else if ( arg.length === 1 && typeof arg === 'object' ) {
+				for ( i in arg[ 0 ] ) {
+					if ( arg[ 0 ].hasOwnProperty( i ) ) {
+						this._data[ i ] = arg[ 0 ][ i ];
 					}
 				}
 			}

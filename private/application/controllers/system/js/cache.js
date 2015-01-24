@@ -70,8 +70,6 @@ define( [ 'system/js/class' ], function( ) {
 				this._storage.removeItem( i );
 			}
 
-			this.free( );
-
 			return this;
 		},
 
@@ -81,18 +79,20 @@ define( [ 'system/js/class' ], function( ) {
 
 		free: function( ) {
 			var parent = this.getParent( ),
-				total = 5,
-				used = 0,
-				free, i;
+				str = '', total = 5120,
+				key, used, free;
 
-			for ( i in this._storage ) {
-				used += ( this._storage[ i ].length * 2 ) / 1024 / 1024;
+			for ( key in this._storage ) {
+				if ( this._storage.hasOwnProperty( key ) ) {
+					str += this._storage[ key ];
+				}
 			}
 
+			used = str ? 3 + ( ( str.length * 16 ) / ( 8 * 1024 ) ) : 0;
 			free = total - used;
 
-			parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'MB used' );
-			parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'MB free' );
+			parent.verbose( 'cache module: ' + used + 'KB used' );
+			parent.verbose( 'cache module: ' + free + 'KB free' );
 
 			return this;
 		}

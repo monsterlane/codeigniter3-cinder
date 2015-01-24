@@ -53,3 +53,9 @@ $hook['post_controller'][] = array(
 	'filename' => 'output.php',
 	'filepath' => 'hooks',
 );
+
+$hook['display_override'][] = array(
+	'function' => 'minify',
+	'filename' => 'minify.php',
+	'filepath' => 'hooks',
+);

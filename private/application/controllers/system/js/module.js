@@ -120,9 +120,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					}
 				}
 			}
-			else {
-				this._cache.empty( );
-			}
 
 			this.setData( data );
 
@@ -155,10 +152,14 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			el = jQuery( data.container );
 
 			if ( el.length > 0 ) {
-				view = this.getView( data.url );
+				view = this.getView( data.url, data.hash );
 
 				if ( view === false ) {
-					view = this.createView( data.url, data.html );
+					view = this.createView({
+						url: data.url,
+						hash: data.hash,
+						content: data.html
+					});
 				}
 
 				el[ 0 ].innerHTML = view( data.json );
@@ -166,6 +167,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				this.bindLinks( el );
 				this.bindForms( el );
 			}
+
+			this._cache.free( );
 
 			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' && jQuery.isFunction( this[ data.callback ] ) == true ) {
 				this[ data.callback ]( );
@@ -199,16 +202,14 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		handleLinkClick: function( aLink ) {
 			var link = aLink || document.createElement( 'a' ),
 				data = jQuery( link ).data( ),
-				view, self = this;
+				url, self = this;
 
 			data.system = false;
 
-			view = link.href.replace( '//', '' );
-			view = view.substr( view.indexOf( '/' ) );
+			url = link.href.replace( '//', '' );
+			url = url.substr( url.indexOf( '/' ) );
 
-			if ( this.getView( view ) !== false ) {
-				data.view = false;
-			}
+			data.views = this.getViews( url );
 
 			this.getConduit( link.href ).ajax({
 				url: link.href,
@@ -247,15 +248,18 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		handleFormSubmit: function( aForm ) {
 			var form = jQuery( aForm ),
 				data = form.serialize( ),
-				view, self = this;
+				url, views, i, len,
+				self = this;
 
 			data += '&system=false';
 
-			view = aForm.action.replace( '//', '' );
-			view = view.substr( view.indexOf( '/' ) );
+			url = aForm.action.replace( '//', '' );
+			url = url.substr( url.indexOf( '/' ) );
 
-			if ( this.getView( view ) !== false ) {
-				data += '&view=false';
+			views = this.getViews( url );
+
+			for ( i = 0, len = views.length; i < len; i++ ) {
+				url += '&views[]=' + encodeURIComponent( views[ i ] );
 			}
 
 			this.getConduit( aForm.action ).ajax({
@@ -269,20 +273,37 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		},
 
 		/**
-		 * Method: getView
-		 * @param {String} aView
+		 * Method: getViews
+		 * @param {String} aUrl
 		 */
 
-		getView: function( aView ) {
-			var view = this._view.get( aView ),
+		getViews: function( aUrl ) {
+			var hash = this._view.hash( aUrl );
+
+			return this._view.hash( aUrl );
+		},
+
+		/**
+		 * Method: getView
+		 * @param {String} aUrl
+		 * @param {String} aHash
+		 */
+
+		getView: function( aUrl, aHash ) {
+			var view = this._view.get( aUrl, aHash ),
 				cache;
 
 			if ( view === false ) {
-				cache = this.getCache( aView );
+				cache = this.getCache( aHash );
 
 				if ( cache !== false ) {
-					view = this._view.create( aView, cache );
+					view = this._view.create( JSON.parse( cache ) );
+
+					this.verbose( 'view module: cache found' );
 				}
+			}
+			else {
+				this.verbose( 'view module: file found' );
 			}
 
 			return view;
@@ -290,14 +311,16 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		/**
 		 * Method: createView
-		 * @param {String} aKey
-		 * @param {String} aContent
+		 * @param {Object} aView
 		 */
 
-		createView: function( aKey, aContent ) {
-			this.setCache( aKey, aContent );
+		createView: function( aView ) {
+			this.verbose( 'view module: creating view' );
+			this.verbose( aView );
 
-			return this._view.create( aKey, aContent );
+			this.setCache( aView.hash, JSON.stringify( aView ) );
+
+			return this._view.create( aView );
 		},
 
 		/**

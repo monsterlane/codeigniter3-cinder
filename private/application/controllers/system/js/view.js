@@ -30,27 +30,49 @@ define( [ 'system/js/dot.min', 'system/js/class' ], function( aParser ) {
 
 		/**
 		 * Method: create
-		 * @param {String} aName
-		 * @param {String} aString
+		 * @param {Object} aView
 		 */
 
-		create: function( aName, aString ) {
-			this._data[ aName ] = aParser.template( aString );
+		create: function( aView ) {
+			if ( this._data.hasOwnProperty( aView.url ) === false ) {
+				this._data[ aView.url ] = [ ];
+			}
 
-			return this._data[ aName ];
+			this._data[ aView.url ][ aView.hash ] = aParser.template( aView.content );
+
+			return this._data[ aView.url ][ aView.hash ];
 		},
 
 		/**
 		 * Method: get
-		 * @param {Object} aName
+		 * @param {String} aUrl
+		 * @param {String} aHash
 		 */
 
-		get: function( aName ) {
-			if ( this._data[ aName ] ) {
-				return this._data[ aName ];
+		get: function( aUrl, aHash ) {
+			if ( this._data[ aUrl ] && this._data[ aUrl ][ aHash ] ) {
+				return this._data[ aUrl ][ aHash ];
 			}
 
 			return false;
+		},
+
+		/**
+		 * Method: hash
+		 * @param {String} aUrl
+		 */
+
+		hash: function( aUrl ) {
+			var hash;
+
+			if ( this._data[ aUrl ] ) {
+				hash = this._data[ aUrl ];
+			}
+			else {
+				hash = [ ];
+			}
+
+			return hash;
 		}
 	});
 

@@ -259,7 +259,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			views = this.getViews( url );
 
 			for ( i = 0, len = views.length; i < len; i++ ) {
-				url += '&views[]=' + encodeURIComponent( views[ i ] );
+				data += '&views[]=' + encodeURIComponent( views[ i ] );
 			}
 
 			this.getConduit( aForm.action ).ajax({
@@ -304,9 +304,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				cache = this.getCache( aHash );
 
 				if ( cache !== false ) {
-					view = this.createView( JSON.parse( cache ) );
-
 					this.verbose( 'view module: cache found' );
+
+					view = this.createView( JSON.parse( cache ) );
 				}
 			}
 			else {

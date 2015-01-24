@@ -1,9 +1,30 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Loader extends CI_Loader {
-	public function page( ) {
+	/* internal methods */
+
+	private function _compress( $arr ) {
+		if ( !is_array( $arr ) ) $arr = array( );
+
+		unset( $arr[ 'view' ] );
+
+		foreach ( $arr as $key => $val ) {
+			if ( is_array( $val ) && empty( $val ) ) {
+				unset( $arr[ $key ] );
+			}
+			else if ( is_string( $val ) && strlen( $val ) === 0 ) {
+				unset( $arr[ $key ] );
+			}
+		}
+
+		return $arr;
+	}
+
+	/* public methods */
+
+	public function response( ) {
 		$ci =& get_instance( );
-		$data = $ci->get_data( );
+		$data =& $ci->get_data( );
 
 		if ( array_key_exists( 'system', $data ) === true ) {
 			$data[ 'pending' ][ 'system' ] = true;
@@ -13,7 +34,7 @@ class MY_Loader extends CI_Loader {
 		else {
 			$data[ 'pending' ][ 'system' ] = false;
 
-			$ci->output->json( $data[ 'pending' ] );
+			$ci->output->json( $this->_compress( $data[ 'pending' ] ) );
 		}
 	}
 

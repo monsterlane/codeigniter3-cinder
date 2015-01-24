@@ -33,12 +33,23 @@ class Search_controller extends MY_Controller {
 		);
 
 		$this->load->partial(array(
-			'container' => '#cinderSearchResults',
 			'module' => false,
+			'container' => '#cinderSearchResults',
 			'view' => 'users.html',
 			'json' => $results,
 			'callback' => 'bindSearchResults',
 		));
+	}
+
+	public function user( $action = null ) {
+		if ( $action == 'delete' ) {
+			$result = array(
+				'status' => (bool)rand( 0, 1 ),
+				'message' => 'Error deleting record. ' . $this->config->item( 'support_message' ),
+			);
+
+			$this->set_data( $result );
+		}
 	}
 }
 

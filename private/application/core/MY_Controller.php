@@ -43,12 +43,18 @@ class MY_Controller extends CI_Controller {
 
 	/* public methods */
 
-	public function get_data( ) {
+	public function &get_data( ) {
 		return $this->data;
 	}
 
+	public function &set_data( $data = array( ), $key = 'pending' ) {
+		$this->data[ $key ] = $data;
+
+		return $this->data[ $key ];
+	}
+
 	public function set_view( $data = array( ), $key = 'pending' ) {
-		$this->data[ $key ] = merge_array( array(
+		$data = merge_array( array(
 			'container' => $this->config->item( 'default_container' ),
 			'url' => '/' . uri_string( ),
 			'module' => null,
@@ -57,11 +63,9 @@ class MY_Controller extends CI_Controller {
 			'js' => array( ),
 		), $data );
 
-		if ( array_key_exists( 'module', $data ) == false ) {
-			$data[ 'module' ] = null;
-		}
+		$data =& $this->set_data( $data, $key );
 
-		if ( $this->data[ $key ][ 'module' ] == null && $data[ 'module' ] !== false ) {
+		if ( $data[ 'module' ] !== false ) {
 			$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
 		}
 

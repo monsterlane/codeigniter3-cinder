@@ -83,7 +83,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			data = jQuery.extend( true, {
 				title: null,
 				url: '/',
-				module: null,
+				module: false,
 				container: null,
 				view: null,
 				json: { },
@@ -93,7 +93,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			}, data );
 
 			if ( jQuery.isEmptyObject( old ) === false ) {
-				if ( data.module != null && data.module != '' ) {
+				if ( data.module !== false && data.module !== '' ) {
 					jQuery( old.container ).empty( );
 
 					redir = true;
@@ -207,11 +207,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				url = url.substr( url.indexOf( '/' ) );
 
 				data.views = this.getViews( url );
-				data.system = false;
 
 				this.getConduit( link.href ).ajax({
 					url: link.href,
-					type: 'post',
 					data: data,
 					success: function( response ) {
 						self.bindPendingData( response );
@@ -252,8 +250,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				data = form.serialize( ),
 				url, views, i, len,
 				self = this;
-
-			data += '&system=false';
 
 			url = aForm.action.replace( '//', '' );
 			url = url.substr( url.indexOf( '/' ) );
@@ -389,7 +385,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		error: function( aMessage ) {
-			console.log( aMessage );
+			alert( aMessage );
 
 			return this;
 		},

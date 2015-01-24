@@ -30,20 +30,39 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 
 		/**
 		 * Method: ajax
-		 * @param {Object} aData
+		 * @param {Object} aOptions
 		 */
 
-		ajax: function( aData ) {
-			var ncb, ocb,
+		ajax: function( aOptions ) {
+			var opt = aOptions || { },
 				jsonp = false,
+				ncb, ocb,
 				self = this;
 
-			if ( aData.hasOwnProperty( 'dataType' ) === true && aData.dataType === 'jsonp' ) {
+			opt = jQuery.extend( true, {
+				type: 'post'
+			}, opt );
+
+			if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
+				if ( typeof opt.data === 'object' ) {
+					opt.data.system = false;
+				}
+				else if ( typeof opt.data === 'string' ) {
+					opt.data += '&system=false';
+				}
+			}
+			else {
+				opt.data = {
+					system: false
+				};
+			}
+
+			if ( opt.hasOwnProperty( 'dataType' ) === true && opt.dataType === 'jsonp' ) {
 				jsonp = true;
 			}
 
-			if ( aData.hasOwnProperty( 'success' ) === true ) {
-				ocb = aData.success;
+			if ( opt.hasOwnProperty( 'success' ) === true ) {
+				ocb = opt.success;
 
 				ncb = function( aResponse, aCode, aXhr ) {
 					var r;
@@ -52,13 +71,27 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 						ocb( aResponse );
 					}
 					else if ( ( r = self.parse( aResponse ) ) !== false ) {
-						ocb( r );
+						if ( r.hasOwnProperty( 'status' ) && r.status === false ) {
+							if ( r.hasOwnProperty( 'message' ) ) {
+								self.error( r.message );
+							}
+							else {
+								self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
+							}
+
+							if ( opt.hasOwnProperty( 'error' ) === true ) {
+								opt.error( );
+							}
+						}
+						else {
+							ocb( r );
+						}
 					}
 					else {
 						self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
 
-						if ( aData.hasOwnProperty( 'error' ) === true ) {
-							aData.error( );
+						if ( opt.hasOwnProperty( 'error' ) === true ) {
+							opt.error( );
 						}
 					}
 				};
@@ -68,18 +101,18 @@ define( [ 'system/js/class', 'system/js/jquery.min' ], function( ) {
 					if ( jsonp === false && self.parse( aResponse ) === false ) {
 						self.error( 'An error has occurred. Please refresh the page, if the problem persists please contact <a href="#">support</a>.' );
 
-						if ( aData.hasOwnProperty( 'error' ) === true ) {
-							aData.error( );
+						if ( opt.hasOwnProperty( 'error' ) === true ) {
+							opt.error( );
 						}
 					}
 				};
 			}
 
-			aData.success = ncb;
+			opt.success = ncb;
 
 			this.abort( );
 
-			this._xhr = jQuery.ajax( aData );
+			this._xhr = jQuery.ajax( opt );
 
 			jQuery.when( this._xhr ).then( function( ) {
 				self._xhr = null;

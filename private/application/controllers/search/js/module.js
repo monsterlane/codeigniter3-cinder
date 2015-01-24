@@ -26,14 +26,32 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 		bindSearchResults: function( ) {
 			var data = this.getData( ),
-				container = jQuery( data.container );
+				container = jQuery( data.container ),
+				self = this;
 
 			this.verbose( 'module binding: search' );
 
 			container.find( 'a.purpose-delete' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );
+				self.handleDeleteButtonClick( this );
+			});
+		},
 
-				$( this ).closest( 'tr' ).remove( );
+		/**
+		 * Method: handleDeleteButtonClick
+		 * @param {DOMelement} aButton
+		 */
+
+		handleDeleteButtonClick: function( aButton ) {
+			var container = jQuery( aButton ).closest( 'tr' ),
+				id = container[ 0 ].getAttribute( 'data-id' ),
+				self = this;
+
+			this.getConduit( 'delete' ).ajax({
+				url: '/search/user/delete/' + id,
+				success: function( response ) {
+					container.remove( );
+				}
 			});
 		}
 	});

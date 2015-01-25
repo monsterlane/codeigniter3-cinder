@@ -6,9 +6,24 @@ class MY_Controller extends CI_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
-		$this->data = array( );
+		$post = clean_array( $this->input->post( ) );
+		if ( array_key_exists( 'system', $post ) === false ) {
+			$post[ 'system' ] = true;
+		}
 
-		if ( $this->input->post( 'system' ) !== 'false' ) {
+		$this->data = array(
+			'post' => $post,
+			'system' => array( ),
+			'pending' => array(
+				'system' => false,
+				'redirect' => false,
+			),
+		);
+
+		if ( $this->config->item( 'maintenance_mode' ) === true && $this->router->directory !== 'maintenance/' ) {
+			$this->redirect( 'maintenance' );
+		}
+		else if ( $this->data[ 'post' ][ 'system' ] !== false ) {
 			$this->_load_system( );
 		}
 	}
@@ -18,7 +33,7 @@ class MY_Controller extends CI_Controller {
 	private function _load_system( ) {
 		$this->set_view( array(
 			'title' => 'CI3-Cinder',
-			'view' => 'system/views/document.html',
+			'view' => 'system/views/index.html',
 			'json' => array(
 				'title' => 'CI3-Cinder',
 				'cache_path' => $this->config->item( 'cache_web_path' ),
@@ -45,76 +60,110 @@ class MY_Controller extends CI_Controller {
 				'support_message' => $this->config->item( 'support_message' ),
 			),
 		), 'system' );
+
+		$this->set_data(array(
+			'system' => true,
+		), 'pending' );
 	}
 
 	/* public methods */
 
-	public function &get_data( ) {
+	public function &get_data( $key = null ) {
+		if ( $key !== null ) {
+			if ( array_key_exists( $key, $this->data ) ) {
+				return $this->data[ $key ];
+			}
+		}
+
 		return $this->data;
 	}
 
 	public function &set_data( $data = array( ), $key = 'pending' ) {
-		$this->data[ $key ] = $data;
+		if ( array_key_exists( $key, $this->data ) === false ) {
+			$this->data[ $key ] = array( );
+		}
+
+		foreach ( $data as $k => $v ) {
+			$this->data[ $key ][ $k ] = $v;
+		}
 
 		return $this->data[ $key ];
 	}
 
 	public function set_view( $data = array( ), $key = 'pending' ) {
-		$data = merge_array( array(
-			'container' => $this->config->item( 'default_container' ),
-			'url' => '/' . uri_string( ),
-			'module' => null,
-			'json' => array( ),
-			'css' => array( ),
-			'js' => array( ),
-			'options' => array( ),
-		), $data );
+		$redirect = false;
 
-		$data =& $this->set_data( $data, $key );
+		if ( $key === 'pending' ) {
+			$pending = $this->get_data( 'pending' );
 
-		if ( $data[ 'module' ] !== false ) {
-			$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
+			if ( is_string( $pending[ 'redirect' ] ) === true ) {
+				$redirect = true;
+			}
 		}
 
-		$dest = $this->config->item( 'cache_file_path' );
+		if ( $redirect === false ) {
+			$data = merge_array( array(
+				'container' => $this->config->item( 'default_container' ),
+				'url' => '/' . uri_string( ),
+				'module' => null,
+				'json' => array( ),
+				'css' => array( ),
+				'js' => array( ),
+				'options' => array( ),
+			), $data );
 
-		foreach ( $this->data[ $key ][ 'css' ] as &$style ) {
-			if ( strpos( $style, '/' ) === false ) {
-				$style = $this->router->directory . 'css/' . $style;
+			$data =& $this->set_data( $data, $key );
+
+			if ( $data[ 'module' ] !== false ) {
+				$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
 			}
 
-			$path = VIEWPATH . $style;
+			$dest = $this->config->item( 'cache_file_path' );
 
-			if ( ENVIRONMENT == 'development' || file_exists( $dest . $style ) == false ) {
-				$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
-
-				if ( file_exists( $dir ) == false ) {
-					mkdir( $dir, 0755, true );
+			foreach ( $this->data[ $key ][ 'css' ] as &$style ) {
+				if ( strpos( $style, '/' ) === false ) {
+					$style = $this->router->directory . 'css/' . $style;
 				}
 
-				copy( $path, $dest . $style);
+				$path = VIEWPATH . $style;
+
+				if ( ENVIRONMENT == 'development' || file_exists( $dest . $style ) == false ) {
+					$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
+
+					if ( file_exists( $dir ) == false ) {
+						mkdir( $dir, 0755, true );
+					}
+
+					copy( $path, $dest . $style);
+				}
 			}
-		}
-		unset( $style );
+			unset( $style );
 
-		foreach ( $this->data[ $key ][ 'js' ] as &$script ) {
-			if ( strpos( $script, '/' ) === false ) {
-				$script = $this->router->directory . 'js/' . $script;
-			}
-
-			$path = VIEWPATH . $script;
-
-			if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
-				$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
-
-				if ( file_exists( $dir ) == false ) {
-					mkdir( $dir, 0755, true );
+			foreach ( $this->data[ $key ][ 'js' ] as &$script ) {
+				if ( strpos( $script, '/' ) === false ) {
+					$script = $this->router->directory . 'js/' . $script;
 				}
 
-				copy( $path, $dest . $script );
+				$path = VIEWPATH . $script;
+
+				if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
+					$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
+
+					if ( file_exists( $dir ) == false ) {
+						mkdir( $dir, 0755, true );
+					}
+
+					copy( $path, $dest . $script );
+				}
 			}
+			unset( $script );
 		}
-		unset( $script );
+	}
+
+	public function redirect( $aUrl ) {
+		$this->set_data( array(
+			'redirect' => base_url( $aUrl ),
+		) );
 	}
 }
 

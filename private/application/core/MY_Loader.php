@@ -1,6 +1,7 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Loader extends CI_Loader {
+
 	/* internal methods */
 
 	private function _compress( $arr ) {
@@ -26,15 +27,15 @@ class MY_Loader extends CI_Loader {
 		$ci =& get_instance( );
 		$data =& $ci->get_data( );
 
-		if ( array_key_exists( 'system', $data ) === true ) {
-			$data[ 'pending' ][ 'system' ] = true;
+		if ( is_string( $data[ 'pending' ][ 'redirect' ] ) === true ) {
+			redirect( $data[ 'pending' ][ 'redirect' ] );
+		}
+		else if ( empty( $data[ 'system' ] ) === false ) {
 			$data[ 'system' ][ 'options' ][ 'url' ] = $data[ 'pending' ][ 'url' ];
 
 			$ci->load->view( $data[ 'system' ][ 'view' ], $data );
 		}
 		else {
-			$data[ 'pending' ][ 'system' ] = false;
-
 			$ci->output->json( $this->_compress( $data[ 'pending' ] ) );
 		}
 	}
@@ -55,9 +56,6 @@ class MY_Loader extends CI_Loader {
 
 	public function partial( $data = array( ) ) {
 		$ci =& get_instance( );
-
-		$post = clean_array( $ci->input->post( ) );
-		$skip = false;
 
 		if ( array_key_exists( 'view', $data ) === false ) {
 			$view = $ci->router->directory . 'views/' . $ci->router->method . '.html';
@@ -83,6 +81,8 @@ class MY_Loader extends CI_Loader {
 
 		if ( array_key_exists( 'view', $data ) === true ) {
 			$data[ 'hash' ] = md5( $view . filemtime( VIEWPATH . $view ) );
+			$post = $ci->get_data( 'post' );
+			$skip = false;
 
 			if ( array_key_exists( 'views', $post ) === true && is_array( $post[ 'views' ] ) === true && empty( $post[ 'views' ] ) === false ) {
 				if ( in_array( $data[ 'hash' ], $post[ 'views' ] ) ) {

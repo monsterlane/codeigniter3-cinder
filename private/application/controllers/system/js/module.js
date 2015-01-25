@@ -108,51 +108,55 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindPendingData: function( aData ) {
-			var parent = this.getParent( ),
-				data = aData || { },
+			var data = aData || { },
 				el, view;
 
-			this.setData( data );
-
-			if ( data.hasOwnProperty( 'redirect' ) && data.redirect === true ) {
-				if ( data.title != null ) {
-					document.title = data.title;
-				}
-
-				this.history( data.url, data );
+			if ( typeof data.redirect === 'string' ) {
+				this.redirect( data.redirect );
 			}
+			else {
+				this.setData( data );
 
-			el = jQuery( data.container );
+				if ( data.redirect === true ) {
+					if ( data.title != null ) {
+						document.title = data.title;
+					}
 
-			if ( el.length > 0 ) {
-				view = this.getView( data.url, data.hash );
-
-				if ( view === false ) {
-					view = this.createView({
-						url: data.url,
-						hash: data.hash,
-						content: data.html
-					});
+					this.history( data.url, data );
 				}
 
-				el[ 0 ].innerHTML = view( data.json );
+				el = jQuery( data.container );
 
-				this.bindLinks( el );
-				this.bindForms( el );
+				if ( el.length > 0 ) {
+					view = this.getView( data.url, data.hash );
+
+					if ( view === false ) {
+						view = this.createView({
+							url: data.url,
+							hash: data.hash,
+							content: data.html
+						});
+					}
+
+					el[ 0 ].innerHTML = view( data.json );
+
+					this.bindLinks( el );
+					this.bindForms( el );
+				}
+
+				if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
+					if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
+						this.verbose( 'calling ' + data.callback );
+
+						this[ data.callback ]( );
+					}
+					else {
+						this.verbose( 'callback ' + data.callback + ' skipped (not found)' );
+					}
+				}
+
+				this._cache.free( );
 			}
-
-			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
-				if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
-					parent.verbose( 'module callback: ' + data.callback );
-
-					this[ data.callback ]( );
-				}
-				else {
-					parent.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
-				}
-			}
-
-			this._cache.free( );
 
 			return this;
 		},
@@ -283,21 +287,20 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		getView: function( aUrl, aHash ) {
-			var parent = this.getParent( ),
-				view = this._view.get( aUrl, aHash ),
+			var view = this._view.get( aUrl, aHash ),
 				cache;
 
 			if ( view === false ) {
 				cache = this.getCache( aHash );
 
 				if ( cache !== false ) {
-					parent.verbose( 'view module: cache found' );
+					this.verbose( 'view cache found' );
 
 					view = this._view.create( JSON.parse( cache ) );
 				}
 			}
 			else {
-				parent.verbose( 'view module: file found' );
+				this.verbose( 'view file found' );
 			}
 
 			return view;
@@ -309,6 +312,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		createView: function( aView ) {
+			this.verbose( 'creating view' );
+
 			if ( this._model._data.hasOwnProperty( aView.url ) === false ) {
 				this._model._data[ aView.url ] = [ ];
 			}
@@ -393,6 +398,17 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		dialog: function( aOptions ) {
 			// TODO
+		},
+
+		/**
+		 * Method: verbose
+		 * @param {String} aMessage
+		 */
+
+		verbose: function( aMessage ) {
+			console.log( 'module: ' + aMessage );
+
+			return this;
 		}
 	});
 

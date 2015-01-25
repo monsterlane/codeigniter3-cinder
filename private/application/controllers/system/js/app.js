@@ -60,7 +60,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 					for ( i = 0, len = old.css.length; i < len; i++ ) {
 						link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
 
-						this.verbose( 'module unload: ' + link );
+						this.verbose( 'unload ' + link );
 
 						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
@@ -75,7 +75,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 					for ( i = 0, len = old.js.length; i < len; i++ ) {
 						link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
 
-						this.verbose( 'module unload: ' + link );
+						this.verbose( 'unload ' + link );
 
 						requirejs.undef( link );
 					}
@@ -84,6 +84,8 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 			for ( i = 0, len = data.css.length; i < len; i++ ) {
 				link = 'css!' + data.css[ i ].substr( 0, data.css[ i ].indexOf( '.' ) );
+
+				this.verbose( 'load ' + link );
 
 				require( [ link ], function( ) { } );
 			}
@@ -95,6 +97,8 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 				for ( i = 0, len = data.js.length; i < len; i++ ) {
 					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
+
+					this.verbose( 'load ' + link );
 
 					require( [ link ], function( aModule ) {
 						var module = new aModule( options );
@@ -116,7 +120,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 		 */
 
 		verbose: function( aMessage ) {
-			console.log( aMessage );
+			console.log( 'app: ' + aMessage );
 
 			return this;
 		}

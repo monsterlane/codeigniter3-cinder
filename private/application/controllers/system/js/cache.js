@@ -25,7 +25,7 @@ define( [ 'system/js/class.min' ], function( ) {
 		 */
 
 		getParent: function( ) {
-			return this._parent.getParent( );
+			return this._parent;
 		},
 
 		/**
@@ -96,19 +96,19 @@ define( [ 'system/js/class.min' ], function( ) {
 			if ( used > 1024 ) {
 				used = used / 1024;
 
-				parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'MB used' );
+				parent.verbose( used.toFixed( 2 ) + 'MB cache used' );
 			}
 			else {
-				parent.verbose( 'cache module: ' + used.toFixed( 2 ) + 'KB used' );
+				parent.verbose( used.toFixed( 2 ) + 'KB cache used' );
 			}
 
 			if ( free > 1024 ) {
 				free = free / 1024;
 
-				parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'MB free' );
+				parent.verbose( free.toFixed( 2 ) + 'MB cache free' );
 			}
 			else {
-				parent.verbose( 'cache module: ' + free.toFixed( 2 ) + 'KB free' );
+				parent.verbose( free.toFixed( 2 ) + 'KB cache free' );
 			}
 
 			return this;

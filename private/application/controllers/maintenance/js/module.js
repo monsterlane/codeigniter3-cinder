@@ -4,7 +4,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 	/*
 	===============================================================================
-	Class: Main
+	Class: Maintenance
 	===============================================================================
 	*/
 
@@ -18,7 +18,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( aOptions ) {
 			this._super( aOptions );
 
-			this.verbose( 'main' );
+			this.verbose( 'maintenance' );
 		}
 	});
 

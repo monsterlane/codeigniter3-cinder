@@ -84,6 +84,9 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 								opt.error( );
 							}
 						}
+						else if ( typeof r.redirect === 'string' ) {
+							self.getParent( ).redirect( r.redirect );
+						}
 						else {
 							ocb( r );
 						}

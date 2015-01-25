@@ -18,9 +18,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( aOptions ) {
 			this._super( aOptions );
 
-			var parent = this.getParent( );
-
-			parent.verbose( 'module loaded: search' );
+			this.verbose( 'search' );
 		},
 
 		/**
@@ -28,12 +26,11 @@ define( [ 'system/js/module' ], function( aModule ) {
 		 */
 
 		bindSearchResults: function( ) {
-			var parent = this.getParent( ),
-				data = this.getData( ),
+			var data = this.getData( ),
 				container = jQuery( data.container ),
 				self = this;
 
-			parent.verbose( 'module binding: search' );
+			this.verbose( 'bindSearchResults' );
 
 			container.find( 'a.purpose-delete' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );

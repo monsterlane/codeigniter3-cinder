@@ -1,0 +1,64 @@
+
+app.model = array(
+	'system' => array( ),
+	'module' => array( ),
+)
+
+app
+	bindEventListeners - history events
+	load - unload previous, load new module
+	history
+
+module
+	getParent - app
+	getConduit - ajax threads
+
+	getData ?
+	setData ?
+	bindPendingData ?
+
+	bindLinks
+	handleLinkClick
+	bindForms
+	handleFormSubmit
+
+	getView
+	createView
+
+	getCache
+	setCache
+	emptyCache
+
+	redirect
+
+	error
+	dialog
+	verbose
+
+model
+	getParent
+	get
+	set
+
+view
+	getParent
+	create
+	get
+	remove
+
+cache
+	getParent
+	get
+	set
+	remove
+	empty
+	free
+
+conduit
+	getParent
+	getViews
+	ajax
+	abort
+	parse
+	inProgress
+	error

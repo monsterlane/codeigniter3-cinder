@@ -16,6 +16,26 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 		init: function( ) {
 			this._module = null;
+
+			this.bindEventListeners( );
+		},
+
+		/**
+		 * Method: bindEventListeners
+		 */
+
+		bindEventListeners: function( ) {
+			var self = this;
+
+			jQuery( 'body' ).addClass( 'cinder' );
+
+			jQuery( window ).on( 'popstate.cinder', function( aEvent ) {
+				if ( aEvent.originalEvent.state ) {
+					aEvent.originalEvent.state.history = true;
+
+					self.load( aEvent.originalEvent.state );
+				}
+			});
 		},
 
 		/**
@@ -23,16 +43,17 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 		 * @param {Object} aData
 		 */
 
-		loadModule: function( aOptions, aData ) {
-			var options = aOptions || { },
-				data = aData || { },
+		load: function( aData ) {
+			var data = aData || { },
 				old, link, el, i, len,
+				options = { },
 				redir = false,
 				self = this;
 
 			data = jQuery.extend( true, {
 				system: false,
 				redirect: false,
+				history: false,
 				title: null,
 				url: '/',
 				module: false,
@@ -45,39 +66,36 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 			if ( this._module !== null ) {
 				old = this._module.getData( );
-			}
-			else {
-				old = { };
-			}
 
-			if ( jQuery.isEmptyObject( old ) === false && old.hasOwnProperty( 'module' ) && old.module !== '' && data.module !== false && data.module !== '' ) {
-				this._module = null;
+				if ( old.hasOwnProperty( 'module' ) && old.module !== false && data.hasOwnProperty( 'module' ) && data.module !== false ) {
+					this._module = null;
 
-				jQuery( old.container ).empty( );
-				redir = true;
+					jQuery( old.container ).empty( );
+					redir = true;
 
-				if ( old.css.length > 0 ) {
-					for ( i = 0, len = old.css.length; i < len; i++ ) {
-						link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
+					if ( old.css.length > 0 ) {
+						for ( i = 0, len = old.css.length; i < len; i++ ) {
+							link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
 
-						this.verbose( 'unload ' + link );
+							this.verbose( 'unload ' + link );
 
-						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
+							el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
 
-						el.prop( 'disabled', true );
-						el.remove( );
+							el.prop( 'disabled', true );
+							el.remove( );
 
-						requirejs.undef( 'system/js/css.min!' + link );
+							requirejs.undef( 'system/js/css.min!' + link );
+						}
 					}
-				}
 
-				if ( old.js.length > 0 ) {
-					for ( i = 0, len = old.js.length; i < len; i++ ) {
-						link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
+					if ( old.js.length > 0 ) {
+						for ( i = 0, len = old.js.length; i < len; i++ ) {
+							link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
 
-						this.verbose( 'unload ' + link );
+							this.verbose( 'unload ' + link );
 
-						requirejs.undef( link );
+							requirejs.undef( link );
+						}
 					}
 				}
 			}
@@ -91,8 +109,9 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 			}
 
 			if ( data.js.length > 0 ) {
-				options.url = data.url;
 				options.parent = this;
+				options.url = data.url;
+
 				data.redirect = redir;
 
 				for ( i = 0, len = data.js.length; i < len; i++ ) {
@@ -103,15 +122,27 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 					require( [ link ], function( aModule ) {
 						var module = new aModule( options );
 
-						module.bindPendingData( data );
-
-						self._module = module;
+						self._module = module.bindPendingData( data );
 					});
 				}
 			}
 			else {
 				this._module.bindPendingData( data );
 			}
+		},
+
+		/**
+		 * Method: history
+		 * @param {String} aUrl
+		 * @param {String} aData
+		 */
+
+		history: function( aTitle, aUrl, aData ) {
+			document.title = aTitle;
+
+			window.history.pushState( aData, aTitle, aUrl );
+
+			return this;
 		},
 
 		/**

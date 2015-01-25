@@ -30,8 +30,6 @@ define( [ 'system/js/module' ], function( aModule ) {
 				container = jQuery( data.container ),
 				self = this;
 
-			this.verbose( 'bindSearchResults' );
-
 			container.find( 'a.purpose-delete' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );
 				self.handleDeleteButtonClick( this );

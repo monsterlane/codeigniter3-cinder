@@ -41,6 +41,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 				jQuery( window ).on( 'popstate.cinder', function( aEvent ) {
 					if ( aEvent.originalEvent.state ) {
+						aEvent.originalEvent.state.history = false;
+
 						self.bindPendingData( aEvent.originalEvent.state );
 					}
 				});
@@ -108,7 +110,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindPendingData: function( aData ) {
-			var data = aData || { },
+			var parent = this.getParent( ),
+				data = aData || { },
 				el, view;
 
 			if ( typeof data.redirect === 'string' ) {
@@ -117,12 +120,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			else {
 				this.setData( data );
 
-				if ( data.redirect === true ) {
-					if ( data.title != null ) {
-						document.title = data.title;
-					}
-
-					this.history( data.url, data );
+				if ( data.history === true ) {
+					document.title = data.title;
+				}
+				else if ( data.redirect === true ) {
+					parent.history( data.title, data.url, data );
 				}
 
 				el = jQuery( data.container );
@@ -146,7 +148,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 				if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
 					if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
-						this.verbose( 'calling ' + data.callback );
+						this.verbose( 'callback ' + data.callback );
 
 						this[ data.callback ]( );
 					}
@@ -195,13 +197,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 				data.views = this.getViews( url );
 
-				this.getConduit( link.href ).ajax({
-					url: link.href,
+				this.getConduit( url ).ajax({
+					url: url,
 					data: data,
 					success: function( response ) {
-						parent.loadModule( {
-							url: url
-						}, response );
+						parent.load( response );
 					}
 				});
 			}
@@ -252,12 +252,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 			this.getConduit( aForm.action ).ajax({
 				url: aForm.action,
-				type: aForm.method,
 				data: data,
 				success: function( response ) {
-					parent.loadModule( {
-						url: aForm.action
-					}, response );
+					parent.load( response );
 				}
 			});
 		},
@@ -353,18 +350,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		emptyCache: function( ) {
 			this._cache.empty( );
 			this._cache.free( );
-		},
-
-		/**
-		 * Method: history
-		 * @param {String} aUrl
-		 * @param {String} aData
-		 */
-
-		history: function( aUrl, aData ) {
-			window.history.pushState( aData, '', aUrl );
-
-			return this;
 		},
 
 		/**

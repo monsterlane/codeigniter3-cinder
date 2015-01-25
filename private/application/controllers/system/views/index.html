@@ -46,9 +46,9 @@ require.config({
 require( [ 'system/js/app' ], function( aApp ) {
 	'use strict';
 
-	var app = new aApp( );
+	var app = new aApp( <?=json_encode( $system[ 'options' ] )?> );
 
-	app.loadModule( <?=json_encode( $system[ 'options' ] )?>, <?=json_encode( $pending )?> );
+	app.load( <?=json_encode( $pending )?> );
 });
 
 </script>

@@ -27,13 +27,15 @@ class MY_Loader extends CI_Loader {
 		$ci =& get_instance( );
 		$data =& $ci->get_data( );
 
-		if ( is_string( $data[ 'pending' ][ 'redirect' ] ) === true ) {
-			redirect( $data[ 'pending' ][ 'redirect' ] );
-		}
-		else if ( empty( $data[ 'system' ] ) === false ) {
-			$data[ 'system' ][ 'options' ][ 'url' ] = $data[ 'pending' ][ 'url' ];
+		if ( $data[ 'post' ][ 'system' ] !== false ) {
+			if ( is_string( $data[ 'pending' ][ 'redirect' ] ) === true ) {
+				redirect( $data[ 'pending' ][ 'redirect' ] );
+			}
+			else {
+				$data[ 'system' ][ 'options' ][ 'url' ] = $data[ 'pending' ][ 'url' ];
 
-			$ci->load->view( $data[ 'system' ][ 'view' ], $data );
+				$ci->load->view( $data[ 'system' ][ 'view' ], $data );
+			}
 		}
 		else {
 			$ci->output->json( $this->_compress( $data[ 'pending' ] ) );

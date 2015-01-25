@@ -40,9 +40,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 				ncb, ocb,
 				self = this;
 
-			opt = jQuery.extend( true, {
-				type: 'post'
-			}, opt );
+			opt.type = 'post';
 
 			if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
 				if ( typeof opt.data === 'object' ) {
@@ -143,7 +141,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 			var r;
 
 			try {
-				r = jQuery.parseJSON( aResponse );
+				r = JSON.parse( aResponse );
 			}
 			catch( err ) {
 				r = false;
@@ -168,7 +166,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 		error: function( aMessage ) {
 			var parent = this.getParent( ),
-				message = jQuery.trim( aMessage );
+				message = aMessage.trim( );
 
 			if ( message != '' ) {
 				parent.error( message );

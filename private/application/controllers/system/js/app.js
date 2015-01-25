@@ -32,6 +32,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 
 			data = jQuery.extend( true, {
 				system: false,
+				redirect: false,
 				title: null,
 				url: '/',
 				module: false,
@@ -90,6 +91,7 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 			if ( data.js.length > 0 ) {
 				options.url = data.url;
 				options.parent = this;
+				data.redirect = redir;
 
 				for ( i = 0, len = data.js.length; i < len; i++ ) {
 					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );

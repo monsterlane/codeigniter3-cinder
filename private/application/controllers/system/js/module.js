@@ -114,6 +114,14 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 			this.setData( data );
 
+			if ( data.hasOwnProperty( 'redirect' ) && data.redirect === true ) {
+				if ( data.title != null ) {
+					document.title = data.title;
+				}
+
+				this.history( data.url, data );
+			}
+
 			el = jQuery( data.container );
 
 			if ( el.length > 0 ) {
@@ -140,10 +148,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					this[ data.callback ]( );
 				}
 				else {
-					// TODO bugfix
 					parent.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
-
-					console.log( this );
 				}
 			}
 

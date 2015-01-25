@@ -120,7 +120,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			else {
 				this.setData( data );
 
-				if ( data.history === true ) {
+				if ( data.system === true || data.history === true ) {
 					document.title = data.title;
 				}
 				else if ( data.redirect === true ) {

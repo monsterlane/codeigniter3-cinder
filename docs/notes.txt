@@ -7,15 +7,15 @@ app.model = array(
 app
 	bindEventListeners - history events
 	load - unload previous, load new module
-	history
+	history - title and popstates
 
 module
 	getParent - app
 	getConduit - ajax threads
 
-	getData ?
-	setData ?
-	bindPendingData ?
+	getData
+	setData
+	bindPendingData
 
 	bindLinks
 	handleLinkClick

@@ -3,17 +3,17 @@
 <head>
 	<title><?=$system[ 'json' ][ 'title' ]?></title>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<?php
-foreach ( $system[ 'css' ] as $style ) {
-	?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
-}
+	<?php
+	foreach ( $system[ 'css' ] as $style ) {
+		?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	}
 
-foreach ( $pending[ 'css' ] as $style ) {
-	?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
-}
-?>
-
+	foreach ( $pending[ 'css' ] as $style ) {
+		?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	}
+	?>
 </head>
 <body>
 
@@ -21,7 +21,6 @@ foreach ( $pending[ 'css' ] as $style ) {
 
 <script type="text/javascript" src="files/cache/system/js/require.min.js"></script>
 <script type="text/javascript">
-
 /**
  * config
  */
@@ -50,7 +49,6 @@ require( [ 'system/js/app' ], function( aApp ) {
 
 	app.load( <?=json_encode( $pending )?> );
 });
-
 </script>
 
 </body>

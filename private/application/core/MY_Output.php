@@ -16,8 +16,8 @@ class MY_Output extends CI_Output {
 			$json = json_decode( $output );
 
 			if ( json_last_error( ) == JSON_ERROR_NONE ) {
-				if ( is_object( $json ) && property_exists( $json, 'view' ) ) {
-					$json->view = preg_replace( '/(?:(?<=\>)|(?<=\/\>))(\s+)(?=\<\/?)/', '', $json->view );
+				if ( is_object( $json ) && property_exists( $json, 'html' ) ) {
+					$json->html = preg_replace( '/(?:(?<=\>)|(?<=\/\>))(\s+)(?=\<\/?)/', '', $json->html );
 				}
 
 				$output = json_encode( $json );

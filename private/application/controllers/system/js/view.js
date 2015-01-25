@@ -25,7 +25,7 @@ define( [ 'system/js/dot.min', 'system/js/class.min' ], function( aParser ) {
 		 */
 
 		getParent: function( ) {
-			return this._parent;
+			return this._parent.getParent( );
 		},
 
 		/**

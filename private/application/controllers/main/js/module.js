@@ -18,15 +18,9 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( aOptions ) {
 			this._super( aOptions );
 
-			this.verbose( 'module loaded: main' );
-		},
+			var parent = this.getParent( );
 
-		/**
-		 * Method: test
-		 */
-
-		test: function( ) {
-			// TODO remove
+			parent.verbose( 'module loaded: main' );
 		}
 	});
 

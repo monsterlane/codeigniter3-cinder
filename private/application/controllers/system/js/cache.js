@@ -25,7 +25,7 @@ define( [ 'system/js/class.min' ], function( ) {
 		 */
 
 		getParent: function( ) {
-			return this._parent;
+			return this._parent.getParent( );
 		},
 
 		/**

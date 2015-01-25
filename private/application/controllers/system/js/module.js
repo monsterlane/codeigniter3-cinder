@@ -20,6 +20,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				body = jQuery( 'body' ),
 				i, len, self = this;
 
+			this._parent = aOptions.parent;
 			this._cache = new aCache( this );
 			this._conduit = [ ];
 			this._url = '/';
@@ -44,6 +45,14 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					}
 				});
 			}
+		},
+
+		/**
+		 * Method: getParent
+		 */
+
+		getParent: function( ) {
+			return this._parent;
 		},
 
 		/**
@@ -99,81 +108,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindPendingData: function( aData ) {
-			var old = this.getData( ),
+			var parent = this.getParent( ),
 				data = aData || { },
-				redir = false,
-				el, link, view,
-				i, len;
-
-			data = jQuery.extend( true, {
-				system: false,
-				title: null,
-				url: '/',
-				module: false,
-				css: [ ],
-				js: [ ],
-				view: null,
-				container: null,
-				json: { }
-			}, data );
-
-			if ( jQuery.isEmptyObject( old ) === false && old.hasOwnProperty( 'module' ) && old.module !== '' && data.module !== false && data.module !== '' ) {
-				jQuery( old.container ).empty( );
-				redir = true;
-
-				if ( old.css.length > 0 ) {
-					for ( i = 0, len = old.css.length; i < len; i++ ) {
-						link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
-
-						this.verbose( 'module unload: ' + link );
-
-						el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
-
-						el.prop( 'disabled', true );
-						el.remove( );
-
-						requirejs.undef( 'system/js/css.min!' + link );
-					}
-				}
-
-				if ( old.js.length > 0 ) {
-					for ( i = 0, len = old.js.length; i < len; i++ ) {
-						link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
-
-						this.verbose( 'module unload: ' + link );
-
-						requirejs.undef( link );
-					}
-				}
-			}
+				el, view;
 
 			this.setData( data );
-
-			if ( data.system === false ) {
-				for ( i = 0, len = data.css.length; i < len; i++ ) {
-					link = 'css!' + data.css[ i ].substr( 0, data.css[ i ].indexOf( '.' ) );
-
-					require( [ link ], function( ) { } );
-				}
-
-				for ( i = 0, len = data.js.length; i < len; i++ ) {
-					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
-
-					require( [ link ], function( aModule ) {
-						var module = new aModule({
-							url: data.url
-						});
-					});
-				}
-
-				if ( redir == true ) {
-					if ( data.title != null ) {
-						document.title = data.title;
-					}
-
-					this.history( data.url, data );
-				}
-			}
 
 			el = jQuery( data.container );
 
@@ -196,13 +135,13 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 			if ( data.hasOwnProperty( 'callback' ) == true && data.callback != '' && data.callback != 'init' ) {
 				if ( jQuery.isFunction( this[ data.callback ] ) == true ) {
-					this.verbose( 'module callback: ' + data.callback );
+					parent.verbose( 'module callback: ' + data.callback );
 
 					this[ data.callback ]( );
 				}
 				else {
 					// TODO bugfix
-					this.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
+					parent.verbose( 'module callback: ' + data.callback + ' skipped (not found)' );
 
 					console.log( this );
 				}
@@ -236,7 +175,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		handleLinkClick: function( aLink ) {
-			var link = aLink || document.createElement( 'a' ),
+			var parent = this.getParent( ),
+				link = aLink || document.createElement( 'a' ),
 				data = jQuery( link ).data( ),
 				url, self = this;
 
@@ -250,7 +190,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					url: link.href,
 					data: data,
 					success: function( response ) {
-						self.bindPendingData( response );
+						parent.loadModule( {
+							url: url
+						}, response );
 					}
 				});
 			}
@@ -284,7 +226,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		handleFormSubmit: function( aForm ) {
-			var form = jQuery( aForm ),
+			var parent = this.getParent( ),
+				form = jQuery( aForm ),
 				data = form.serialize( ),
 				url, views, i, len,
 				self = this;
@@ -303,7 +246,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				type: aForm.method,
 				data: data,
 				success: function( response ) {
-					self.bindPendingData( response );
+					parent.loadModule( {
+						url: aForm.action
+					}, response );
 				}
 			});
 		},
@@ -333,20 +278,21 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		getView: function( aUrl, aHash ) {
-			var view = this._view.get( aUrl, aHash ),
+			var parent = this.getParent( ),
+				view = this._view.get( aUrl, aHash ),
 				cache;
 
 			if ( view === false ) {
 				cache = this.getCache( aHash );
 
 				if ( cache !== false ) {
-					this.verbose( 'view module: cache found' );
+					parent.verbose( 'view module: cache found' );
 
 					view = this._view.create( JSON.parse( cache ) );
 				}
 			}
 			else {
-				this.verbose( 'view module: file found' );
+				parent.verbose( 'view module: file found' );
 			}
 
 			return view;
@@ -442,17 +388,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		dialog: function( aOptions ) {
 			// TODO
-		},
-
-		/**
-		 * Method: verbose
-		 * @param {String} aMessage
-		 */
-
-		verbose: function( aMessage ) {
-			console.log( aMessage );
-
-			return this;
 		}
 	});
 

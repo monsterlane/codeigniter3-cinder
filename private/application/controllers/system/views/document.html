@@ -43,13 +43,12 @@ require.config({
  * boot
  */
 
-require( [ "<?=$system[ 'module' ]?>" ], function( aModule ) {
+require( [ 'system/js/app' ], function( aApp ) {
 	'use strict';
 
-	var module = new aModule( <?=json_encode( $system[ 'options' ] )?> );
+	var app = new aApp( );
 
-	module.emptyCache( );
-	module.bindPendingData( <?=json_encode( $pending )?> );
+	app.loadModule( <?=json_encode( $system[ 'options' ] )?>, <?=json_encode( $pending )?> );
 });
 
 </script>

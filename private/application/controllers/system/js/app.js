@@ -132,20 +132,6 @@ define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
 		},
 
 		/**
-		 * Method: history
-		 * @param {String} aUrl
-		 * @param {String} aData
-		 */
-
-		history: function( aTitle, aUrl, aData ) {
-			document.title = aTitle;
-
-			window.history.pushState( aData, aTitle, aUrl );
-
-			return this;
-		},
-
-		/**
 		 * Method: verbose
 		 * @param {String} aMessage
 		 */

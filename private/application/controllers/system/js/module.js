@@ -35,18 +35,6 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					this._url = options.url;
 				}
 			}
-
-			if ( body.hasClass( 'cinder' ) === false ) {
-				body.addClass( 'cinder' );
-
-				jQuery( window ).on( 'popstate.cinder', function( aEvent ) {
-					if ( aEvent.originalEvent.state ) {
-						aEvent.originalEvent.state.history = false;
-
-						self.bindPendingData( aEvent.originalEvent.state );
-					}
-				});
-			}
 		},
 
 		/**
@@ -110,8 +98,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindPendingData: function( aData ) {
-			var parent = this.getParent( ),
-				data = aData || { },
+			var data = aData || { },
 				el, view;
 
 			if ( typeof data.redirect === 'string' ) {
@@ -124,7 +111,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					document.title = data.title;
 				}
 				else if ( data.redirect === true ) {
-					parent.history( data.title, data.url, data );
+					this.history( data.title, data.url, data );
 				}
 
 				el = jQuery( data.container );
@@ -363,6 +350,20 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			a.setAttribute( 'href', aUrl );
 
 			this.handleLinkClick( a );
+		},
+
+		/**
+		 * Method: history
+		 * @param {String} aUrl
+		 * @param {String} aData
+		 */
+
+		history: function( aTitle, aUrl, aData ) {
+			document.title = aTitle;
+
+			window.history.pushState( aData, aTitle, aUrl );
+
+			return this;
 		},
 
 		/**

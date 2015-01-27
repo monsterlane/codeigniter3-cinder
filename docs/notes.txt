@@ -1,20 +1,54 @@
 
 app.model = array(
 	'system' => array(
-		'options' => array( ),
-		'data' => array( ),
-		'messages' => array( ),
-		'verbose' => true,
+		'options' => array(
+			'support_address' => $this->config->item( 'support_address' ),
+			'support_message' => $this->config->item( 'support_message' ),
+			'verbose' => true,
+		),
+		'data' => array(
+			'support_address' => option,
+			'support_message' => option,
+			'verbose' => option,
+		),
+		'messages' => array(
+			array(
+				'type' => error || warning || alert,
+				'title' => string || false,
+				'body' => string,
+			),
+		),
+		'verbose' => false,
 	),
 	'module' => array(
-		'options' => array( ),
-		'data' => array( ),
+		'options' => array(
+			'base_url' => link,
+		),
+		'data' => array(
+			'system' => true || false,
+			'redirect' => link || false,
+			'history' => true || false,
+			'title' => string || false,
+			'url' => link || false,
+			'module' => link || false,
+			'view' => array(
+				'css' => array( ),
+				'container' => selector || null,
+				'name' => path,
+				'hash' => timestamp,
+				'data' => array( ),
+			) || false,
+		),
+		'base_url' => '/',
 	),
 )
 
 localstorage = array(
 	'views' => array(
-		'url' => array( ),
+		'url' => array(
+			'hash1' => template,
+			'hash2' => template,
+		),
 	),
 )
 

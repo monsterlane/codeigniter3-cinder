@@ -1,64 +1,113 @@
 
 app.model = array(
-	'system' => array( ),
-	'module' => array( ),
+	'system' => array(
+		'options' => array( ),
+		'data' => array( ),
+		'messages' => array( ),
+		'verbose' => true,
+	),
+	'module' => array(
+		'options' => array( ),
+		'data' => array( ),
+	),
 )
 
-app
+localstorage = array(
+	'views' => array(
+		'url' => array( ),
+	),
+)
+
+app ( cache, conduit, model, view )
+	this._cache = null;
+	this._conduit = null;
+	this._model = null;
+	this._view = null;
+
 	bindEventListeners - history events
-	load - unload previous, load new module
 	history - title and popstates
+	redirect - soft redirect
+	verbose - console.log
+
+	load - unload previous, load new module
+	bindPendingData - call module method after init
+
+	getData - get model data
+	setData - set model data
+
+	getView - get view
+	getViews - get view hashes by url
+	createView - create view
+
+	getCache - get cache data
+	setCache - set cache data
+	emptyCache - clear all cached data
+
+	bindLinks - autobind a.cinder
+	handleLinkClick - handle a.cinder click
+	bindForms - autobind form.cinder
+	handleFormSubmit - handle form.cinder submit
 
 module
+	this._parent
+	this._baseUrl
+
 	getParent - app
-	getConduit - ajax threads
+	getConduit - wrapper to parent
 
-	getData
-	setData
-	bindPendingData
+	getData - wrapper to parent
+	setData - wrapper to parent
+	bindPendingData - bind module data from server
 
-	bindLinks
-	handleLinkClick
-	bindForms
-	handleFormSubmit
+	getView - wrapper to parent
 
-	getView
-	createView
+	getCache - wrapper to parent
+	setCache - wrapper to parent
 
-	getCache
-	setCache
-	emptyCache
-
-	redirect
-
-	error
-	dialog
-	verbose
+	error - extend point
+	dialog - extend point
+	verbose - wrapper to parent
 
 model
-	getParent
+	this._parent
+	this._data
+
+	getParent - app
 	get
 	set
+	verbose
 
 view
-	getParent
+	this._parent
+	this._data
+
+	getParent - app
 	create
 	get
 	remove
+	verbose
 
 cache
-	getParent
+	this._parent
+	this._data
+
+	getParent - app
 	get
 	set
 	remove
 	empty
 	free
+	verbose
 
 conduit
-	getParent
+	this._parent
+	this._xhr
+
+	getParent - app
 	getViews
 	ajax
 	abort
 	parse
 	inProgress
 	error
+	verbose

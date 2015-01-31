@@ -4,7 +4,7 @@ class Maintenance_controller extends MY_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
-		if ( $this->config->item( 'maintenance_mode' ) === false ) {
+		if ( $this->config->item( 'maintenance' ) === false ) {
 			$this->redirect( '/' );
 		}
 	}

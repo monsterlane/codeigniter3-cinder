@@ -20,7 +20,7 @@ class MY_Controller extends CI_Controller {
 			),
 		);
 
-		if ( $this->config->item( 'maintenance_mode' ) === true && $this->router->directory !== 'maintenance/' ) {
+		if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
 			$this->redirect( 'maintenance' );
 		}
 		else if ( $this->data[ 'post' ][ 'system' ] !== false ) {
@@ -56,7 +56,7 @@ class MY_Controller extends CI_Controller {
 				'system/js/view.js',
 			),
 			'options' => array(
-				'verbose' => true,
+				'verbose' => $this->config->item( 'verbose' ),
 				'support_address' => $this->config->item( 'support_address' ),
 				'support_message' => $this->config->item( 'support_message' ),
 			),

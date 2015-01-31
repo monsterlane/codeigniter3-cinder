@@ -1,6 +1,7 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
-$config['maintenance_mode'] = false;
+$config['maintenance'] = false;
+$config['verbose'] = true;
 
 $config['default_container'] = '#cinderBodyArea';
 

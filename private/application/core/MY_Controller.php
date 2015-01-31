@@ -56,12 +56,13 @@ class MY_Controller extends CI_Controller {
 				'system/js/view.js',
 			),
 			'options' => array(
+				'verbose' => true,
 				'support_address' => $this->config->item( 'support_address' ),
 				'support_message' => $this->config->item( 'support_message' ),
 			),
 		), 'system' );
 
-		$this->set_data(array(
+		$this->set_data( array(
 			'system' => true,
 		), 'pending' );
 	}

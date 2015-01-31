@@ -1,5 +1,5 @@
 
-define( [ 'system/js/class.min', 'system/js/jquery.min' ], function( ) {
+define( [ 'class', 'jquery' ], function( ) {
 	'use strict';
 
 	/*

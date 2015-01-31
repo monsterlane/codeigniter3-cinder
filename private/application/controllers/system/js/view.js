@@ -1,5 +1,5 @@
 
-define( [ 'system/js/dot.min', 'system/js/class.min' ], function( aParser ) {
+define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
 	'use strict';
 
 	/*

@@ -1,5 +1,5 @@
 
-define( [ 'system/js/class.min' ], function( ) {
+define( [ 'class' ], function( ) {
 	'use strict';
 
 	/*
@@ -96,19 +96,19 @@ define( [ 'system/js/class.min' ], function( ) {
 			if ( used > 1024 ) {
 				used = used / 1024;
 
-				parent.verbose( used.toFixed( 2 ) + 'MB cache used' );
+				parent.verbose( 'cache: ' + used.toFixed( 2 ) + 'MB used' );
 			}
 			else {
-				parent.verbose( used.toFixed( 2 ) + 'KB cache used' );
+				parent.verbose( 'cache: ' + used.toFixed( 2 ) + 'KB used' );
 			}
 
 			if ( free > 1024 ) {
 				free = free / 1024;
 
-				parent.verbose( free.toFixed( 2 ) + 'MB cache free' );
+				parent.verbose( 'cache: ' + free.toFixed( 2 ) + 'MB free' );
 			}
 			else {
-				parent.verbose( free.toFixed( 2 ) + 'KB cache free' );
+				parent.verbose( 'cache: ' + free.toFixed( 2 ) + 'KB free' );
 			}
 
 			return this;

@@ -18,7 +18,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( aOptions ) {
 			this._super( aOptions );
 
-			this.verbose( 'search' );
+			this.verbose( 'module: search' );
 		},
 
 		/**
@@ -26,7 +26,8 @@ define( [ 'system/js/module' ], function( aModule ) {
 		 */
 
 		bindSearchResults: function( ) {
-			var data = this.getData( ),
+			var parent = this.getParent( ),
+				data = parent.getData( ),
 				container = jQuery( data.container ),
 				self = this;
 
@@ -42,12 +43,11 @@ define( [ 'system/js/module' ], function( aModule ) {
 		 */
 
 		handleDeleteButtonClick: function( aButton ) {
-			var data = this.getData( ),
+			var parent = this.getParent( ),
 				container = jQuery( aButton ).closest( 'tr' ),
-				id = container[ 0 ].getAttribute( 'data-id' ),
-				self = this;
+				id = container[ 0 ].getAttribute( 'data-id' );
 
-			this.getConduit( 'delete' ).ajax({
+			parent.getConduit( 'delete' ).ajax({
 				url: this._url + '/user/delete/' + id,
 				success: function( response ) {
 					container.remove( );

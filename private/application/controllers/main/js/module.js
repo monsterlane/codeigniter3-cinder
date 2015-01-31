@@ -18,7 +18,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		init: function( aOptions ) {
 			this._super( aOptions );
 
-			this.verbose( 'main' );
+			this.verbose( 'module: main' );
 		}
 	});
 

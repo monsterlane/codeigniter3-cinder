@@ -62,6 +62,7 @@ app ( cache, conduit, model, view )
 	history - title and popstates
 	redirect - soft redirect
 	verbose - console.log
+	error
 
 	load - unload previous, load new module
 	bindPendingData - call module method after init
@@ -77,6 +78,8 @@ app ( cache, conduit, model, view )
 	setCache - set cache data
 	emptyCache - clear all cached data
 
+	getConduit - ajax call
+
 	bindLinks - autobind a.cinder
 	handleLinkClick - handle a.cinder click
 	bindForms - autobind form.cinder
@@ -87,20 +90,11 @@ module
 	this._baseUrl
 
 	getParent - app
-	getConduit - wrapper to parent
 
-	getData - wrapper to parent
-	setData - wrapper to parent
-	bindPendingData - bind module data from server
-
-	getView - wrapper to parent
-
-	getCache - wrapper to parent
-	setCache - wrapper to parent
+	verbose - wrapper to parent
 
 	error - extend point
 	dialog - extend point
-	verbose - wrapper to parent
 
 model
 	this._parent

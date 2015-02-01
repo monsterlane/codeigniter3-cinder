@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?=$system[ 'json' ][ 'title' ]?></title>
+	<title><?=$system[ 'data' ][ 'title' ]?></title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<?php
-	foreach ( $system[ 'css' ] as $style ) {
-		?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	foreach ( $system[ 'data' ][ 'view' ][ 'css' ] as $style ) {
+		?><link href="<?=base_url( $system[ 'options' ][ 'cache_path' ] . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
 	}
 
-	foreach ( $pending[ 'css' ] as $style ) {
-		?><link href="<?=$system[ 'json' ][ 'cache_path' ] . $style?>" type="text/css" rel="stylesheet" media="screen" /><?php
+	foreach ( $pending[ 'data' ][ 'view' ][ 'css' ] as $style ) {
+		?><link href="<?=base_url( $system[ 'options' ][ 'cache_path' ] . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
 	}
 	?>
 </head>
@@ -26,7 +26,7 @@
  */
 
 require.config({
-	baseUrl: '<?=rtrim( $system[ 'json' ][ 'cache_path' ], '/' )?>',
+	baseUrl: '<?=rtrim( $system[ 'options' ][ 'cache_path' ], '/' )?>',
 	map: {
 		'*': {
 			'css': 'system/js/css.min'
@@ -48,7 +48,7 @@ require( [ 'system/js/app' ], function( aApp ) {
 
 	var app = new aApp( <?=json_encode( $system[ 'options' ] )?> );
 
-	app.load( <?=json_encode( $pending )?> );
+	app.load( <?=json_encode( $pending[ 'data' ] )?> );
 });
 </script>
 

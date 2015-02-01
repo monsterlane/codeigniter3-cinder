@@ -2,19 +2,19 @@
 
 class Search_controller extends MY_Controller {
 	public function index( ) {
-		$this->load->partial(array(
+		$this->load->partial( array(
 			'title' => 'Search',
-			'css' => array(
-				'style.css',
+			'module' => 'module.js',
+			'view' => array(
+				'css' => array(
+					'style.css',
+				),
 			),
-			'js' => array(
-				'module.js',
-			),
-		));
+		) );
 	}
 
 	public function users( ) {
-		$results = array(
+		$data = array(
 			array(
 				'id' => 1,
 				'first_name' => 'Mr.',
@@ -32,23 +32,25 @@ class Search_controller extends MY_Controller {
 			),
 		);
 
-		$this->load->partial(array(
+		$this->load->partial( array(
 			'module' => false,
-			'container' => '#cinderSearchResults',
-			'view' => 'users.html',
-			'json' => $results,
+			'view' => array(
+				'path' => 'users.html',
+				'container' => '#cinderSearchResults',
+				'data' => $data,
+			),
 			'callback' => 'bindSearchResults',
-		));
+		) );
 	}
 
 	public function user( $action = null ) {
 		if ( $action == 'delete' ) {
-			$result = array(
+			$data = array(
 				'status' => (bool)rand( 0, 1 ),
 				'message' => 'Error deleting record. ' . $this->config->item( 'support_message' ),
 			);
 
-			$this->set_data( $result );
+			$this->set_data( 'pending.data', $data );
 		}
 	}
 }

@@ -28,8 +28,10 @@ define( [ 'system/js/module' ], function( aModule ) {
 		bindSearchResults: function( ) {
 			var parent = this.getParent( ),
 				data = parent.getData( ),
-				container = jQuery( data.container ),
+				container = jQuery( data.view.container ),
 				self = this;
+
+			this.verbose( 'module: bindSearchResults' );
 
 			container.find( 'a.purpose-delete' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );

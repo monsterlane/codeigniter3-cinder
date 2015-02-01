@@ -12,15 +12,15 @@ class MY_Output extends CI_Output {
 
 		$size_before = strlen( $output );
 
-		if ( $output[ 0 ] == '{' || $output[ 0 ] == '[' ) {
+		if ( $output[ 0 ] === '{' || $output[ 0 ] === '[' ) {
 			$json = json_decode( $output );
 
-			if ( json_last_error( ) == JSON_ERROR_NONE ) {
-				if ( is_object( $json ) && property_exists( $json, 'html' ) ) {
-					$json->html = preg_replace( '/(?:(?<=\>)|(?<=\/\>))(\s+)(?=\<\/?)/', '', $json->html );
-				}
+			if ( json_last_error( ) === JSON_ERROR_NONE && is_object( $json ) === true ) {
+				if ( property_exists( $json, 'data' ) === true && is_object( $json->data ) === true && property_exists( $json->data, 'view' ) === true && is_object( $json->data->view ) === true && property_exists( $json->data->view, 'html' ) === true && is_string( $json->data->view->html ) === true ) {
+					$json->data->view->html = preg_replace( '/(?:(?<=\>)|(?<=\/\>))(\s+)(?=\<\/?)/', '', $json->data->view->html );
 
-				$output = json_encode( $json );
+					$output = json_encode( $json );
+				}
 			}
 			else {
 				$output = preg_replace( '/(?:(?<=\>)|(?<=\/\>))(\s+)(?=\<\/?)/', '', $output );

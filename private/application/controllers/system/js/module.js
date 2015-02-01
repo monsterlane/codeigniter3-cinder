@@ -51,13 +51,36 @@ define( [ 'class', 'jquery' ], function( ) {
 
 		/**
 		 * Method: error
-		 * @param {String} aMessage
+		 * @param {Object} aOptions
 		 */
 
-		error: function( aMessage ) {
-			var msg = aMessage || 'An error has occured.';
+		error: function( aOptions ) {
+			var options = aOptions || { };
 
-			alert( msg );
+			options = jQuery.extend( true, {
+				title: 'Error',
+				body: 'An error has occured.'
+			}, options );
+
+			alert( options.body );
+
+			return this;
+		},
+
+		/**
+		 * Method: notification
+		 * @param {Object} aOptions
+		 */
+
+		notification: function( aOptions ) {
+			var options = aOptions || { };
+
+			options = jQuery.extend( true, {
+				title: 'Notification',
+				body: 'An event has occured.'
+			}, options );
+
+			alert( options.body );
 
 			return this;
 		},
@@ -68,7 +91,13 @@ define( [ 'class', 'jquery' ], function( ) {
 		 */
 
 		dialog: function( aOptions ) {
-			// TODO
+			var options = aOptions || { };
+
+			options = jQuery.extend( true, {
+				title: 'Dialog'
+			}, options );
+
+			return this;
 		}
 	});
 

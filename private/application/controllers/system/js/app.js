@@ -93,26 +93,26 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		/**
 		 * Method: error
-		 * @param {String} aMessage
+		 * @param {Object} aError
 		 */
 
-		error: function( aMessage ) {
+		error: function( aError ) {
 			if ( this._module !== null ) {
-				this._module.error( aMessage );
+				this._module.error( aError );
 			}
 			else {
-				alert( aMessage );
+				alert( aError );
 			}
 		},
 
 		/**
-		 * Method: loadModule
+		 * Method: load
 		 * @param {Object} aData
 		 */
 
 		load: function( aData ) {
 			var data = aData || { },
-				old, link, el, i, len,
+				last, link, el, i, len,
 				options = { },
 				redir = false,
 				self = this;
@@ -124,22 +124,24 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				title: null,
 				url: '/',
 				module: false,
-				css: [ ],
-				js: [ ],
-				view: null,
-				container: null,
-				json: { }
+				view: {
+					css: [ ],
+					container: null,
+					path: null,
+					hash: null,
+					data: [ ]
+				}
 			}, data );
 
 			if ( this._module !== null ) {
-				old = this.getData( );
+				last = this.getData( );
 
-				if ( old.hasOwnProperty( 'module' ) && old.module !== false && data.hasOwnProperty( 'module' ) && data.module !== false ) {
+				if ( last.module !== false && data.module !== false ) {
 					redir = true;
 
-					if ( old.css.length > 0 ) {
-						for ( i = 0, len = old.css.length; i < len; i++ ) {
-							link = old.css[ i ].substr( 0, old.css[ i ].length - 4 );
+					if ( last.view.css.length > 0 ) {
+						for ( i = 0, len = last.view.css.length; i < len; i++ ) {
+							link = last.view.css[ i ].substr( 0, last.view.css[ i ].length - 4 );
 
 							this.verbose( 'app: unload ' + link );
 
@@ -152,46 +154,36 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 						}
 					}
 
-					if ( old.js.length > 0 ) {
-						for ( i = 0, len = old.js.length; i < len; i++ ) {
-							link = old.js[ i ].substr( 0, old.js[ i ].length - 3 );
+					this.verbose( 'app: unload ' + last.module );
 
-							this.verbose( 'app: unload ' + link );
-
-							requirejs.undef( link );
-						}
-					}
+					requirejs.undef( last.module );
 				}
 			}
 
-			for ( i = 0, len = data.css.length; i < len; i++ ) {
-				link = 'css!' + data.css[ i ].substr( 0, data.css[ i ].indexOf( '.' ) );
+			for ( i = 0, len = data.view.css.length; i < len; i++ ) {
+				link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
 
 				this.verbose( 'app: load ' + link );
 
 				require( [ link ], function( ) { } );
 			}
 
-			if ( data.js.length > 0 ) {
+			if ( data.module !== false ) {
 				options.parent = this;
 				options.url = data.url;
 
 				data.redirect = redir;
 
-				for ( i = 0, len = data.js.length; i < len; i++ ) {
-					link = data.js[ i ].substr( 0, data.js[ i ].indexOf( '.' ) );
+				this.verbose( 'app: load ' + data.module );
 
-					this.verbose( 'app: load ' + link );
+				require( [ data.module ], function( aModule ) {
+					var module = new aModule( options );
 
-					require( [ link ], function( aModule ) {
-						var module = new aModule( options );
-
-						self.setModule( module );
-						self.bindPendingData( data );
-					});
-				}
+					self.setModule( module );
+					self.bindPendingData( data );
+				});
 			}
-			else {
+			else if ( this._module !== null ) {
 				this.bindPendingData( data );
 			}
 		},
@@ -231,7 +223,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					this.history( data.title, data.url, data );
 				}
 
-				el = jQuery( data.container );
+				el = jQuery( data.view.container );
 
 				if ( el.length > 0 ) {
 					view = this.getView( data.url, data.hash );
@@ -239,20 +231,20 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					if ( view === false ) {
 						view = this.createView({
 							url: data.url,
-							hash: data.hash,
-							content: data.html
+							hash: data.view.hash,
+							content: data.view.html
 						});
 					}
 
 					el.empty( );
-					el[ 0 ].innerHTML = view( data.json );
+					el[ 0 ].innerHTML = view( data.view.data );
 
 					this.bindLinks( el );
 					this.bindForms( el );
 				}
 
-				if ( this._module !== null && data.hasOwnProperty( 'callback' ) === true && data.callback !== '' && data.callback !== 'init' ) {
-					if ( jQuery.isFunction( this._module[ data.callback ] ) == true ) {
+				if ( this._module !== null && data.hasOwnProperty( 'callback' ) === true ) {
+					if ( data.callback !== 'init' && jQuery.isFunction( this._module[ data.callback ] ) == true ) {
 						this.verbose( 'app: callback ' + data.callback );
 
 						this._module[ data.callback ]( );

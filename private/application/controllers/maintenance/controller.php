@@ -10,15 +10,15 @@ class Maintenance_controller extends MY_Controller {
 	}
 
 	public function index( ) {
-		$this->load->partial(array(
-			'title' => 'Maintenance',
-			'css' => array(
-				'style.css',
+		$this->load->partial( array(
+			'title' => 'Down for Maintenance',
+			'module' => 'module.js',
+			'view' => array(
+				'css' => array(
+					'style.css',
+				),
 			),
-			'js' => array(
-				'module.js',
-			),
-		));
+		) );
 	}
 }
 

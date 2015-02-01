@@ -72,10 +72,14 @@ define( [ 'class', 'jquery' ], function( ) {
 					else if ( ( r = self.parse( aResponse ) ) !== false ) {
 						if ( r.hasOwnProperty( 'status' ) && r.status === false ) {
 							if ( r.hasOwnProperty( 'message' ) ) {
-								self.error( r.message );
+								self.error( {
+									body: r.message
+								} );
 							}
 							else {
-								self.error( 'An error has occurred. '+ parent.getData( 'support_message' ) );
+								self.error( {
+									body: 'An error has occurred. '+ parent.getData( 'support_message' )
+								} );
 							}
 
 							if ( opt.hasOwnProperty( 'error' ) === true ) {
@@ -90,7 +94,9 @@ define( [ 'class', 'jquery' ], function( ) {
 						}
 					}
 					else {
-						self.error( 'An error has occurred. ' + parent.getData( 'support_message' ) );
+						self.error( {
+							body: 'An error has occurred. ' + parent.getData( 'support_message' )
+						} );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {
 							opt.error( );
@@ -101,7 +107,9 @@ define( [ 'class', 'jquery' ], function( ) {
 			else {
 				ncb = function( aResponse, aCode, aXhr ) {
 					if ( jsonp === false && self.parse( aResponse ) === false ) {
-						self.error( 'An error has occurred. '+ parent.getData( 'support_message' ) );
+						self.error( {
+							body: 'An error has occurred. '+ parent.getData( 'support_message' )
+						} );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {
 							opt.error( );
@@ -161,16 +169,13 @@ define( [ 'class', 'jquery' ], function( ) {
 
 		/**
 		 * Method: error
-		 * @param {String} aMessage
+		 * @param {Object} aMessage
 		 */
 
-		error: function( aMessage ) {
-			var parent = this.getParent( ),
-				message = aMessage.trim( );
+		error: function( aError ) {
+			var parent = this.getParent( );
 
-			if ( message != '' ) {
-				parent.error( message );
-			}
+			parent.error( aError );
 		}
 	});
 

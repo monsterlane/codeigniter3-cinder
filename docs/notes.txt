@@ -2,14 +2,31 @@
 app.model = array(
 	'system' => array(
 		'options' => array(
+			'verbose' => true,
 			'support_address' => $this->config->item( 'support_address' ),
 			'support_message' => $this->config->item( 'support_message' ),
-			'verbose' => true,
+		),
+		'data' => array( ),
+	),
+	'module' => array(
+		'options' => array(
+			'url' => link,
 		),
 		'data' => array(
-			'support_address' => option,
-			'support_message' => option,
-			'verbose' => option,
+			'system' => true || false,
+			'redirect' => link || false,
+			'history' => true || false,
+			'url' => link || false,
+			'module' => link || false,
+			'view' => array(
+				'title' => string || false,
+				'css' => array( ),
+				'js' => array( ),
+				'container' => selector || null,
+				'name' => path,
+				'hash' => timestamp,
+				'data' => array( ),
+			) || false,
 		),
 		'messages' => array(
 			array(
@@ -18,28 +35,6 @@ app.model = array(
 				'body' => string,
 			),
 		),
-		'verbose' => false,
-	),
-	'module' => array(
-		'options' => array(
-			'base_url' => link,
-		),
-		'data' => array(
-			'system' => true || false,
-			'redirect' => link || false,
-			'history' => true || false,
-			'title' => string || false,
-			'url' => link || false,
-			'module' => link || false,
-			'view' => array(
-				'css' => array( ),
-				'container' => selector || null,
-				'name' => path,
-				'hash' => timestamp,
-				'data' => array( ),
-			) || false,
-		),
-		'base_url' => '/',
 	),
 )
 

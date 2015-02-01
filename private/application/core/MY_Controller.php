@@ -1,7 +1,7 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Controller extends CI_Controller {
-	protected $data;
+	private $_data;
 
 	public function __construct( ) {
 		parent::__construct( );
@@ -11,19 +11,29 @@ class MY_Controller extends CI_Controller {
 			$post[ 'system' ] = true;
 		}
 
-		$this->data = array(
+		$this->_data = array(
 			'post' => $post,
-			'system' => array( ),
+			'system' => array(
+				'options' => array( ),
+				'data' => array( ),
+			),
 			'pending' => array(
-				'system' => false,
-				'redirect' => false,
+				'options' => array( ),
+				'data' => array(
+					'system' => false,
+					'redirect' => false,
+					'module' => false,
+					'view' => false,
+					'url' => uri_string( ),
+				),
+				'messages' => array( ),
 			),
 		);
 
 		if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
 			$this->redirect( 'maintenance' );
 		}
-		else if ( $this->data[ 'post' ][ 'system' ] !== false ) {
+		else if ( $this->_data[ 'post' ][ 'system' ] !== false ) {
 			$this->_load_system( );
 		}
 	}
@@ -31,97 +41,118 @@ class MY_Controller extends CI_Controller {
 	/* internal methods */
 
 	private function _load_system( ) {
+		$data = array(
+			'verbose' => $this->config->item( 'verbose' ),
+			'cache_path' => $this->config->item( 'cache_web_path' ),
+			'support_address' => $this->config->item( 'support_address' ),
+			'support_message' => $this->config->item( 'support_message' ),
+		);
+
+		$this->set_data( 'system.options', $data );
+
 		$this->set_view( array(
 			'title' => 'CI3-Cinder',
-			'view' => 'system/views/index.html',
-			'json' => array(
-				'title' => 'CI3-Cinder',
-				'cache_path' => $this->config->item( 'cache_web_path' ),
-			),
-			'css' => array(
-				'system/css/reset.css',
-				'system/css/style.css',
-			),
-			'js' => array(
-				'system/js/require.min.js',
-				'system/js/css.min.js',
-				'system/js/jquery.min.js',
-				'system/js/class.min.js',
-				'system/js/dot.min.js',
-				'system/js/app.js',
-				'system/js/module.js',
-				'system/js/cache.js',
-				'system/js/conduit.js',
-				'system/js/model.js',
-				'system/js/view.js',
-			),
-			'options' => array(
-				'verbose' => $this->config->item( 'verbose' ),
-				'support_address' => $this->config->item( 'support_address' ),
-				'support_message' => $this->config->item( 'support_message' ),
+			'module' => false,
+			'view' => array(
+				'path' => 'system/views/index.html',
+				'css' => array(
+					'system/css/reset.css',
+					'system/css/style.css',
+				),
+				'js' => array(
+					'system/js/require.min.js',
+					'system/js/css.min.js',
+					'system/js/jquery.min.js',
+					'system/js/dot.min.js',
+					'system/js/class.min.js',
+					'system/js/cache.js',
+					'system/js/conduit.js',
+					'system/js/model.js',
+					'system/js/view.js',
+					'system/js/app.js',
+					'system/js/module.js',
+				),
 			),
 		), 'system' );
 
-		$this->set_data( array(
+		$data = array(
 			'system' => true,
-		), 'pending' );
+		);
+
+		$this->set_data( 'pending.data', $data );
 	}
 
 	/* public methods */
 
-	public function &get_data( $key = null ) {
+	public function get_data( $key = null ) {
+		$root = $this->_data;
+
 		if ( $key !== null ) {
-			if ( array_key_exists( $key, $this->data ) ) {
-				return $this->data[ $key ];
+			$keys = explode( '.', $key );
+
+			while ( count( $keys ) > 1 ) {
+				$key = array_shift( $keys );
+
+				if ( !isset( $root[ $key ] ) ) {
+					return null;
+				}
+
+				$root = $root[ $key ];
 			}
 		}
 
-		return $this->data;
+		return $root;
 	}
 
-	public function &set_data( $data = array( ), $key = 'pending' ) {
-		if ( array_key_exists( $key, $this->data ) === false ) {
-			$this->data[ $key ] = array( );
+	public function set_data( $key, $data = array( ) ) {
+		$keys = explode( '.', $key );
+		$root = &$this->_data;
+
+		while ( count( $keys ) > 1 ) {
+			$key = array_shift( $keys );
+
+			if ( !isset( $root[ $key ] ) ) {
+				$root[ $key ] = array( );
+			}
+
+			$root = &$root[ $key ];
 		}
 
-		foreach ( $data as $k => $v ) {
-			$this->data[ $key ][ $k ] = $v;
-		}
+		$key = reset( $keys );
 
-		return $this->data[ $key ];
+		if ( is_array( $data ) === true && is_array( $root[ $key ] ) === true ) {
+			foreach ( $data as $k => $v ) {
+				$root[ $key ][ $k ] = $v;
+			}
+		}
+		else {
+			$root[ $key ] = $data;
+		}
 	}
 
 	public function set_view( $data = array( ), $key = 'pending' ) {
-		$redirect = false;
+		$pending = $this->get_data( $key . '.data' );
 
-		if ( $key === 'pending' ) {
-			$pending = $this->get_data( 'pending' );
-
-			if ( is_string( $pending[ 'redirect' ] ) === true ) {
-				$redirect = true;
-			}
-		}
-
-		if ( $redirect === false ) {
+		if ( $key === 'system' || is_string( $pending[ 'data' ][ 'redirect' ] ) === false ) {
 			$data = merge_array( array(
-				'container' => $this->config->item( 'default_container' ),
-				'url' => '/' . uri_string( ),
-				'module' => null,
-				'json' => array( ),
-				'css' => array( ),
-				'js' => array( ),
-				'options' => array( ),
+				'module' => false,
+				'view' => array(
+					'path' => null,
+					'css' => array( ),
+					'js' => array( ),
+					'container' => $this->config->item( 'default_container' ),
+					'data' => array( ),
+					'hash' => false,
+				)
 			), $data );
 
-			$data =& $this->set_data( $data, $key );
-
 			if ( $data[ 'module' ] !== false ) {
-				$this->data[ $key ][ 'module' ] = $this->router->directory . 'js/module';
+				$data[ 'module' ] = $this->router->directory . 'js/module';
 			}
 
 			$dest = $this->config->item( 'cache_file_path' );
 
-			foreach ( $this->data[ $key ][ 'css' ] as &$style ) {
+			foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
 				if ( strpos( $style, '/' ) === false ) {
 					$style = $this->router->directory . 'css/' . $style;
 				}
@@ -134,13 +165,11 @@ class MY_Controller extends CI_Controller {
 					if ( file_exists( $dir ) == false ) {
 						mkdir( $dir, 0755, true );
 					}
-
-					copy( $path, $dest . $style);
 				}
 			}
 			unset( $style );
 
-			foreach ( $this->data[ $key ][ 'js' ] as &$script ) {
+			foreach ( $data[ 'view' ][ 'js' ] as &$script ) {
 				if ( strpos( $script, '/' ) === false ) {
 					$script = $this->router->directory . 'js/' . $script;
 				}
@@ -158,11 +187,28 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 			unset( $script );
+
+			if ( $data[ 'module' ] !== false ) {
+				$script = $data[ 'module' ] . '.js';
+				$path = VIEWPATH . $script;
+
+				if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
+					$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
+
+					if ( file_exists( $dir ) == false ) {
+						mkdir( $dir, 0755, true );
+					}
+
+					copy( $path, $dest . $script );
+				}
+			}
+
+			$this->set_data( $key . '.data', $data );
 		}
 	}
 
 	public function redirect( $aUrl ) {
-		$this->set_data( array(
+		$this->set_data( 'pending.data', array(
 			'redirect' => base_url( $aUrl ),
 		) );
 	}

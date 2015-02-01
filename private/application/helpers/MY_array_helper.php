@@ -18,12 +18,17 @@ function trim_array( $arr ) {
 
 function merge_array( ) {
 	$args = func_get_args( );
-	$result = array( );
+	$result = $args[ 0 ];
 
-	foreach ( $args as $arr ) {
-		$arr = ( is_array( $arr ) ) ? trim_array( $arr ) : array( );
-
-		$result = array_merge( $result, $arr );
+	foreach ( $args as $arg ) {
+		foreach ( $arg as $k => $v ) {
+			if ( is_array( $v ) === true && isset( $result[ $k ] ) === true && is_array( $result[ $k ] ) === true ) {
+				$result[ $k ] = merge_array( $result[ $k ], $v );
+			}
+			else {
+				$result[ $k ] = $v;
+			}
+		}
 	}
 
 	return $result;

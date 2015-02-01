@@ -2,18 +2,18 @@
 
 class Main_controller extends MY_Controller {
 	public function index( ) {
-		$this->load->partial(array(
+		$this->load->partial( array(
 			'title' => 'Main',
-			'json' => array(
-				'body' => 'Main Page',
+			'module' => 'module.js',
+			'view' => array(
+				'css' => array(
+					'style.css',
+				),
+				'data' => array(
+					'body' => 'Main Page',
+				),
 			),
-			'css' => array(
-				'style.css',
-			),
-			'js' => array(
-				'module.js',
-			),
-		));
+		) );
 	}
 }
 

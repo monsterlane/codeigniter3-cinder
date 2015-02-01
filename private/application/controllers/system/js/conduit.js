@@ -78,7 +78,7 @@ define( [ 'class', 'jquery' ], function( ) {
 							}
 							else {
 								self.error( {
-									body: 'An error has occurred. '+ parent.getData( 'support_message' )
+									body: 'An error has occurred. '+ parent.getData( 'system.support_message' )
 								} );
 							}
 
@@ -95,7 +95,7 @@ define( [ 'class', 'jquery' ], function( ) {
 					}
 					else {
 						self.error( {
-							body: 'An error has occurred. ' + parent.getData( 'support_message' )
+							body: 'An error has occurred. ' + parent.getData( 'system.support_message' )
 						} );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {
@@ -108,7 +108,7 @@ define( [ 'class', 'jquery' ], function( ) {
 				ncb = function( aResponse, aCode, aXhr ) {
 					if ( jsonp === false && self.parse( aResponse ) === false ) {
 						self.error( {
-							body: 'An error has occurred. '+ parent.getData( 'support_message' )
+							body: 'An error has occurred. '+ parent.getData( 'system.support_message' )
 						} );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {

@@ -135,7 +135,7 @@ class MY_Controller extends CI_Controller {
 
 		if ( $key === 'system' || is_string( $pending[ 'data' ][ 'redirect' ] ) === false ) {
 			$data = merge_array( array(
-				'module' => false,
+				'module' => null,
 				'view' => array(
 					'path' => null,
 					'css' => array( ),
@@ -147,7 +147,12 @@ class MY_Controller extends CI_Controller {
 			), $data );
 
 			if ( $data[ 'module' ] !== false ) {
-				$data[ 'module' ] = $this->router->directory . 'js/module';
+				$data[ 'module' ] = $this->router->directory . 'js/';
+				$data[ 'module' ].= ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
+
+				if ( file_exists( VIEWPATH . $data[ 'module' ] . '.js' ) === false ) {
+					$data[ 'module' ] = 'system/js/module';
+				}
 			}
 
 			$dest = $this->config->item( 'cache_file_path' );

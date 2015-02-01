@@ -4,7 +4,6 @@ class Main_controller extends MY_Controller {
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Main',
-			'module' => 'module.js',
 			'view' => array(
 				'css' => array(
 					'style.css',

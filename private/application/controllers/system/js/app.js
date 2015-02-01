@@ -26,8 +26,13 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			this._model = new aModel( this );
 			this._view = new aView( this );
 
-			if ( options.hasOwnProperty( 'verbose' ) === true && options.verbose === true ) {
-				this._verbose = true;
+			this.setData( 'system.options', options );
+			this.setData( 'views', [ ] );
+
+			if ( Object.keys( options ).length > 0 ) {
+				if ( options.hasOwnProperty( 'verbose' ) === true && options.verbose === true ) {
+					this._verbose = true;
+				}
 			}
 
 			this.bindEventListeners( );
@@ -134,7 +139,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			}, data );
 
 			if ( this._module !== null ) {
-				last = this.getData( );
+				last = this.getData( 'module.data' );
 
 				if ( last.module !== false && data.module !== false ) {
 					redir = true;
@@ -180,11 +185,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					var module = new aModule( options );
 
 					self.setModule( module );
-					self.bindPendingData( data );
+					self.setPendingData( data );
 				});
 			}
 			else if ( this._module !== null ) {
-				this.bindPendingData( data );
+				this.setPendingData( data );
 			}
 		},
 
@@ -202,11 +207,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		},
 
 		/**
-		 * Method: bindPendingData
+		 * Method: setPendingData
 		 * @param {Object} aData
 		 */
 
-		bindPendingData: function( aData ) {
+		setPendingData: function( aData ) {
 			var data = aData || { },
 				el, view;
 
@@ -214,7 +219,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				this.redirect( data.redirect );
 			}
 			else {
-				this.setData( data );
+				this.setData( 'module.data', data );
 
 				if ( data.system === true || data.history === true ) {
 					document.title = data.title;
@@ -226,7 +231,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				el = jQuery( data.view.container );
 
 				if ( el.length > 0 ) {
-					view = this.getView( data.url, data.hash );
+					view = this.getView( data.url, data.view.hash );
 
 					if ( view === false ) {
 						view = this.createView({
@@ -262,32 +267,21 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		/**
 		 * Method: getData
+		 * @param {String} aKey
 		 */
 
 		getData: function( aKey ) {
-			var key = aKey || null,
-				data = this._model.getData( );
-
-			if ( key !== null ) {
-				if ( data.hasOwnProperty( aKey ) ) {
-					return data[ key ];
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return data;
-			}
+			return this._model.get( aKey );
 		},
 
 		/**
 		 * Method: setData
-		 * @param {Mixed}
+		 * @param {String} aKey
+		 * @param {Mixed} aData
 		 */
 
-		setData: function( ) {
-			this._model.setData( arguments );
+		setData: function( aKey, aData ) {
+			this._model.set( aKey, aData );
 
 			return this;
 		},
@@ -298,16 +292,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		getViews: function( aUrl ) {
-			var views;
-
-			if ( this._model._data.hasOwnProperty( aUrl ) ) {
-				views = this._model._data[ aUrl ];
-			}
-			else {
-				views = [ ];
-			}
-
-			return views;
+			return this.getData( 'views.' + aUrl );
 		},
 
 		/**
@@ -344,11 +329,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		createView: function( aView ) {
 			this.verbose( 'app: creating view' );
 
-			if ( this._model._data.hasOwnProperty( aView.url ) === false ) {
-				this._model._data[ aView.url ] = [ ];
+			if ( this._model._data.views.hasOwnProperty( aView.url ) === false ) {
+				this._model._data.views[ aView.url ] = [ ];
 			}
 
-			this._model._data[ aView.url ].push( aView.hash );
+			this._model._data.views[ aView.url ].push( aView.hash );
 
 			this.setCache( aView.hash, JSON.stringify( aView ) );
 

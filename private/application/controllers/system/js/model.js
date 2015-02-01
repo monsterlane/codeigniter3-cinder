@@ -1,5 +1,5 @@
 
-define( [ 'class' ], function( ) {
+define( [ 'class', 'jquery' ], function( ) {
 	'use strict';
 
 	/*
@@ -31,35 +31,62 @@ define( [ 'class' ], function( ) {
 		},
 
 		/**
-		 * Method: getData
+		 * Method: get
+		 * @param {String} aKey
 		 */
 
-		getData: function( ) {
-			return this._data;
-		},
+		get: function( aKey ) {
+			var key = aKey || false,
+				val = this._data,
+				keys, i, len;
 
-		/**
-		 * Method: setData
-		 * @param {Mixed}
-		 */
+			if ( key !== false ) {
+				keys = key.split( '.' );
 
-		setData: function( ) {
-			var parent = this.getParent( ),
-				arg = arguments[ 0 ] || [ ],
-				i;
-
-			if ( arg.length === 2 ) {
-				this._data[ arg[ 0 ] ] = arg[ 1 ];
-			}
-			else if ( arg.length === 1 && typeof arg === 'object' ) {
-				for ( i in arg[ 0 ] ) {
-					if ( arg[ 0 ].hasOwnProperty( i ) ) {
-						this._data[ i ] = arg[ 0 ][ i ];
+				for ( i = 0, len = keys.length; i < len; i++ ) {
+					if ( val.hasOwnProperty( keys[ i ] ) === true ) {
+						val = val[ keys[ i ] ];
+					}
+					else {
+						val = false;
+						break;
 					}
 				}
 			}
 
-			return this;
+			return val;
+		},
+
+		/**
+		 * Method: set
+		 * @param {String} aKey
+		 * @param {Mixed} aValue
+		 */
+
+		set: function( aKey, aValue ) {
+			var keys = aKey.split( '.' ),
+				arr = this._data,
+				i, len;
+
+			for ( i = 0, len = keys.length; i < len; i++ ) {
+				if ( arr.hasOwnProperty( keys[ i ] ) === true ) {
+					if ( i == len - 1 ) {
+						if ( arr[ keys[ i ] ].constructor === Array && aValue.constructor === Array ) {
+							arr[ keys[ i ] ] = jQuery.extend( true, arr[ keys[ i ] ], aValue );
+						}
+						else {
+							arr[ keys[ i ] ] = aValue;
+						}
+					}
+					else {
+						arr = arr[ keys[ i ] ];
+					}
+				}
+				else {
+					arr[ keys[ i ] ] = aValue;
+					break;
+				}
+			}
 		}
 	});
 

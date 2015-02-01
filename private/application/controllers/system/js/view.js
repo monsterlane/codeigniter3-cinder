@@ -29,6 +29,20 @@ define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
 		},
 
 		/**
+		 * Method: get
+		 * @param {String} aUrl
+		 * @param {String} aHash
+		 */
+
+		get: function( aUrl, aHash ) {
+			if ( this._data.hasOwnProperty( aUrl ) === true && this._data[ aUrl ].hasOwnProperty( aHash ) === true ) {
+				return this._data[ aUrl ][ aHash ];
+			}
+
+			return false;
+		},
+
+		/**
 		 * Method: create
 		 * @param {Object} aView
 		 */
@@ -41,20 +55,6 @@ define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
 			this._data[ aView.url ][ aView.hash ] = aParser.template( aView.content );
 
 			return this._data[ aView.url ][ aView.hash ];
-		},
-
-		/**
-		 * Method: get
-		 * @param {String} aUrl
-		 * @param {String} aHash
-		 */
-
-		get: function( aUrl, aHash ) {
-			if ( this._data[ aUrl ] && this._data[ aUrl ][ aHash ] ) {
-				return this._data[ aUrl ][ aHash ];
-			}
-
-			return false;
 		}
 	});
 

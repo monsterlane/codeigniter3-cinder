@@ -19,11 +19,11 @@ define( [ 'class', 'jquery' ], function( ) {
 			var options = aOptions || { };
 
 			this._parent = aOptions.parent;
+			this._parent.setData( 'module.options', options );
+
 			this._url = '/';
 
 			if ( Object.keys( options ).length > 0 ) {
-				this._parent.setData( options );
-
 				if ( options.hasOwnProperty( 'url' ) ) {
 					this._url = options.url;
 				}

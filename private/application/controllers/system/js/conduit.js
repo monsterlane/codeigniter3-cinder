@@ -134,7 +134,7 @@ define( [ 'class', 'jquery' ], function( ) {
 		 */
 
 		abort: function( ) {
-			if ( this.inProgress( ) === true ) {
+			if ( this.running( ) === true ) {
 				this._xhr.abort( );
 				this._xhr = null;
 			}
@@ -159,11 +159,11 @@ define( [ 'class', 'jquery' ], function( ) {
 		},
 
 		/**
-		 * Method: inProgress
+		 * Method: running
 		 * @return {Bool}
 		 */
 
-		inProgress: function( ) {
+		running: function( ) {
 			return ( this._xhr !== null ) ? true : false;
 		},
 

@@ -27,7 +27,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 		bindSearchResults: function( ) {
 			var parent = this.getParent( ),
-				data = parent.getData( ),
+				data = parent.getData( 'module.data' ),
 				container = jQuery( data.view.container ),
 				self = this;
 

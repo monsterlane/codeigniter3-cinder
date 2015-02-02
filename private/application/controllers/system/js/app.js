@@ -213,12 +213,18 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				el, view;
+				module, el, view;
 
 			if ( typeof data.redirect === 'string' ) {
 				this.redirect( data.redirect );
 			}
 			else {
+				module = this.getData( 'module.data.module' );
+
+				if ( module !== false && data.module === false ) {
+					delete data.module;
+				}
+
 				this.setData( 'module.data', data );
 
 				if ( data.system === true || data.history === true ) {

@@ -19,12 +19,9 @@
 
 <div id="cinderBodyArea"></div>
 
-<script type="text/javascript" src="files/cache/system/js/require.min.js"></script>
+<script type="text/javascript" src="<?=base_url( $system[ 'options' ][ 'cache_path' ] . 'system/js/require.min.js' )?>"></script>
 <script type="text/javascript">
-/**
- * config
- */
-
+/* config */
 require.config({
 	baseUrl: '<?=rtrim( $system[ 'options' ][ 'cache_path' ], '/' )?>',
 	map: {
@@ -33,17 +30,15 @@ require.config({
 		}
 	},
 	paths: {
+		'domready': 'system/js/domready.min',
 		'jquery': 'system/js/jquery.min',
 		'class': 'system/js/class.min'
 	},
 	urlArgs: Date.now( )
 });
 
-/**
- * boot
- */
-
-require( [ 'system/js/app' ], function( aApp ) {
+/* boot */
+require( [ 'domready!', 'system/js/app' ], function( aDocument, aApp ) {
 	'use strict';
 
 	var app = new aApp( <?=json_encode( $system[ 'options' ] )?> );

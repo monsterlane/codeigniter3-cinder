@@ -61,6 +61,7 @@ class MY_Controller extends CI_Controller {
 				),
 				'js' => array(
 					'system/js/require.min.js',
+					'system/js/domready.min.js',
 					'system/js/css.min.js',
 					'system/js/jquery.min.js',
 					'system/js/dot.min.js',

@@ -23,9 +23,11 @@ Cinder is built using a number of open source projects.
 
 1. Unpack files to a folder
 2. Set your document root to /public
-3. Copy /public/.htaccess.example and rename to /public/.htaccess
+3. Copy /public/.htaccess.example to /public/.htaccess
 4. In your .htaccess file set CI_ENV to your desired environment
 5. Make /public/files writable by your web user
+6. Make /private/logs writable by your web user
+7. Make /private/session writable by your web user
 
 ### License
 

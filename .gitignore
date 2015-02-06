@@ -6,6 +6,7 @@ public/.htaccess
 public/files/*
 public/files/cache/*
 !public/files/cache/index.html
+node_modules/*
 
 # eclipse files
 .project

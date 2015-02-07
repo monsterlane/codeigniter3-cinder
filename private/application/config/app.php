@@ -11,7 +11,4 @@ $config['support_message'] = 'Please refresh the page, if the problem persists p
 $config['files_file_path'] = FCPATH . 'files/';
 $config['files_web_path'] = '/files/';
 
-$config['cache_file_path'] = FCPATH . 'files/cache/';
-$config['cache_web_path'] = '/files/cache/';
-
 ?>

@@ -1,5 +1,5 @@
 
-define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
+define( [ 'jclass', 'system/js/dot.min' ], function( Class, Parser ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
 	===============================================================================
 	*/
 
-	var View = Object.subClass({
+	var View = Class._extend({
 
 		/**
 		 * Method: init
@@ -52,7 +52,7 @@ define( [ 'system/js/dot.min', 'class' ], function( aParser ) {
 				this._data[ aView.url ] = [ ];
 			}
 
-			this._data[ aView.url ][ aView.hash ] = aParser.template( aView.content );
+			this._data[ aView.url ][ aView.hash ] = Parser.template( aView.content );
 
 			return this._data[ aView.url ][ aView.hash ];
 		}

@@ -43,7 +43,6 @@ class MY_Controller extends CI_Controller {
 	private function _load_system( ) {
 		$data = array(
 			'verbose' => $this->config->item( 'verbose' ),
-			'cache_path' => $this->config->item( 'cache_web_path' ),
 			'support_address' => $this->config->item( 'support_address' ),
 			'support_message' => $this->config->item( 'support_message' ),
 		);
@@ -60,18 +59,19 @@ class MY_Controller extends CI_Controller {
 					'system/css/style.css',
 				),
 				'js' => array(
-					'system/js/require.min.js',
-					'system/js/domready.min.js',
-					'system/js/css.min.js',
+					'system/js/require.config.js',
+					'system/js/require.js.min.js',
+					'system/js/require.css.min.js',
+					'system/js/require.domready.min.js',
 					'system/js/jquery.min.js',
+					'system/js/jclass.min.js',
 					'system/js/dot.min.js',
-					'system/js/class.min.js',
+					'system/js/app.js',
 					'system/js/cache.js',
 					'system/js/conduit.js',
 					'system/js/model.js',
-					'system/js/view.js',
-					'system/js/app.js',
 					'system/js/module.js',
+					'system/js/view.js',
 				),
 			),
 		), 'system' );
@@ -156,7 +156,7 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 
-			$dest = $this->config->item( 'cache_file_path' );
+			$dest = FCPATH . 'files/cache/';
 
 			foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
 				if ( strpos( $style, '/' ) === false ) {
@@ -171,6 +171,8 @@ class MY_Controller extends CI_Controller {
 					if ( file_exists( $dir ) == false ) {
 						mkdir( $dir, 0755, true );
 					}
+
+					copy( $path, $dest . $style );
 				}
 			}
 			unset( $style );

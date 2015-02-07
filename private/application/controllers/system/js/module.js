@@ -1,5 +1,5 @@
 
-define( [ 'class', 'jquery' ], function( ) {
+define( [ 'jquery', 'jclass' ], function( $, Class ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'class', 'jquery' ], function( ) {
 	===============================================================================
 	*/
 
-	var Module = Object.subClass({
+	var Module = Class._extend({
 
 		/**
 		 * Method: init
@@ -57,7 +57,7 @@ define( [ 'class', 'jquery' ], function( ) {
 		error: function( aOptions ) {
 			var options = aOptions || { };
 
-			options = jQuery.extend( true, {
+			options = $.extend( true, {
 				title: 'Error',
 				body: 'An error has occured.'
 			}, options );
@@ -75,7 +75,7 @@ define( [ 'class', 'jquery' ], function( ) {
 		notification: function( aOptions ) {
 			var options = aOptions || { };
 
-			options = jQuery.extend( true, {
+			options = $.extend( true, {
 				title: 'Notification',
 				body: 'An event has occured.'
 			}, options );
@@ -93,7 +93,7 @@ define( [ 'class', 'jquery' ], function( ) {
 		dialog: function( aOptions ) {
 			var options = aOptions || { };
 
-			options = jQuery.extend( true, {
+			options = $.extend( true, {
 				title: 'Dialog'
 			}, options );
 

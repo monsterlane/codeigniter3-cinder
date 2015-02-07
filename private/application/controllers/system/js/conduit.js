@@ -1,5 +1,5 @@
 
-define( [ 'class', 'jquery' ], function( ) {
+define( [ 'jquery', 'jclass' ], function( $, Class ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'class', 'jquery' ], function( ) {
 	===============================================================================
 	*/
 
-	var Conduit = Object.subClass({
+	var Conduit = Class._extend({
 
 		/**
 		 * Method: init
@@ -122,9 +122,9 @@ define( [ 'class', 'jquery' ], function( ) {
 
 			this.abort( );
 
-			this._xhr = jQuery.ajax( opt );
+			this._xhr = $.ajax( opt );
 
-			jQuery.when( this._xhr ).then( function( ) {
+			$.when( this._xhr ).then( function( ) {
 				self._xhr = null;
 			});
 		},

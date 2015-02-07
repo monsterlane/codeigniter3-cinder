@@ -1,5 +1,5 @@
 
-define( [ 'class', 'jquery' ], function( ) {
+define( [ 'jquery', 'jclass' ], function( $, Class ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'class', 'jquery' ], function( ) {
 	===============================================================================
 	*/
 
-	var Model = Object.subClass({
+	var Model = Class._extend({
 
 		/**
 		 * Method: init
@@ -18,8 +18,6 @@ define( [ 'class', 'jquery' ], function( ) {
 		init: function( aParent ) {
 			this._parent = aParent;
 			this._data = { };
-
-			return this;
 		},
 
 		/**
@@ -70,9 +68,9 @@ define( [ 'class', 'jquery' ], function( ) {
 
 			for ( i = 0, len = keys.length; i < len; i++ ) {
 				if ( arr.hasOwnProperty( keys[ i ] ) === true ) {
-					if ( i == len - 1 ) {
+					if ( i === len - 1 ) {
 						if ( arr[ keys[ i ] ].constructor === Array && aValue.constructor === Array ) {
-							arr[ keys[ i ] ] = jQuery.extend( true, arr[ keys[ i ] ], aValue );
+							arr[ keys[ i ] ] = $.extend( true, arr[ keys[ i ] ], aValue );
 						}
 						else {
 							arr[ keys[ i ] ] = aValue;

@@ -1,5 +1,5 @@
 
-define( [ 'class' ], function( ) {
+define( [ 'jclass' ], function( Class ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'class' ], function( ) {
 	===============================================================================
 	*/
 
-	var Cache = Object.subClass({
+	var Cache = Class._extend({
 
 		/**
 		 * Method: init

@@ -1,5 +1,5 @@
 
-define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view', 'class', 'jquery' ], function( aCache, aConduit, aModel, aView ) {
+define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( $, Class, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 	===============================================================================
 	*/
 
-	var App = Object.subClass({
+	var App = Class._extend({
 
 		/**
 		 * Method: init
@@ -20,11 +20,11 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			this._verbose = false;
 			this._module = null;
 
-			this._cache = new aCache( this );
+			this._cache = new Cache( this );
 			this._conduit = [ ];
 
-			this._model = new aModel( this );
-			this._view = new aView( this );
+			this._model = new Model( this );
+			this._view = new View( this );
 
 			this.setData( 'system.options', options );
 			this.setData( 'views', [ ] );
@@ -45,9 +45,9 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		bindEventListeners: function( ) {
 			var self = this;
 
-			jQuery( 'body' ).addClass( 'cinder' );
+			$( 'body' ).addClass( 'cinder' );
 
-			jQuery( window ).on( 'popstate.cinder', function( aEvent ) {
+			$( window ).on( 'popstate.cinder', function( aEvent ) {
 				if ( aEvent.originalEvent.state ) {
 					aEvent.originalEvent.state.history = true;
 
@@ -122,7 +122,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				redir = false,
 				self = this;
 
-			data = jQuery.extend( true, {
+			data = $.extend( true, {
 				system: false,
 				redirect: false,
 				history: false,
@@ -150,12 +150,12 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 							this.verbose( 'app: unload ' + link );
 
-							el = jQuery( 'link[href^="/files/cache/' + link + '.css"]' );
+							el = $( 'link[href^="/files/cache/' + link + '.css"]' );
 
 							el.prop( 'disabled', true );
 							el.remove( );
 
-							requirejs.undef( 'system/js/css.min!' + link );
+							requirejs.undef( 'system/js/require.css.min!' + link );
 						}
 					}
 
@@ -181,8 +181,8 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 				this.verbose( 'app: load ' + data.module );
 
-				require( [ data.module ], function( aModule ) {
-					var module = new aModule( options );
+				require( [ data.module ], function( Module ) {
+					var module = new Module( options );
 
 					self.setModule( module );
 					self.setPendingData( data );
@@ -199,7 +199,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		setModule: function( aModule ) {
-			if ( this._module != null ) {
+			if ( this._module !== null ) {
 				this._module = null;
 			}
 
@@ -234,7 +234,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 					this.history( data.title, data.url, data );
 				}
 
-				el = jQuery( data.view.container );
+				el = $( data.view.container );
 
 				if ( el.length > 0 ) {
 					view = this.getView( data.url, data.view.hash );
@@ -255,7 +255,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 				}
 
 				if ( this._module !== null && data.hasOwnProperty( 'callback' ) === true ) {
-					if ( data.callback !== 'init' && jQuery.isFunction( this._module[ data.callback ] ) == true ) {
+					if ( data.callback !== 'init' && $.isFunction( this._module[ data.callback ] ) === true ) {
 						this.verbose( 'app: callback ' + data.callback );
 
 						this._module[ data.callback ]( );
@@ -385,7 +385,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 			var name = aName || Math.random( ).toString( 36 ).substr( 2 );
 
 			if ( this._conduit.hasOwnProperty( name ) === false ) {
-				this._conduit[ name ] = new aConduit( this );
+				this._conduit[ name ] = new Conduit( this );
 			}
 
 			return this._conduit[ name ];
@@ -397,7 +397,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindLinks: function( aContainer ) {
-			var container = jQuery( aContainer ),
+			var container = $( aContainer ),
 				self = this;
 
 			container.find( 'a.cinder' ).on( 'click.cinder', function( aEvent ) {
@@ -415,10 +415,10 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 
 		handleLinkClick: function( aLink ) {
 			var link = aLink || document.createElement( 'a' ),
-				data = jQuery( link ).data( ),
+				data = $( link ).data( ),
 				url, self = this;
 
-			if ( link.href != window.location.href ) {
+			if ( link.href !== window.location.href ) {
 				url = link.href.replace( '//', '' );
 				url = url.substr( url.indexOf( '/' ) );
 
@@ -445,7 +445,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		bindForms: function( aContainer ) {
-			var container = jQuery( aContainer ),
+			var container = $( aContainer ),
 				self = this;
 
 			container.find( 'form.cinder' ).on( 'submit.cinder', function( aEvent ) {
@@ -462,7 +462,7 @@ define( [ 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/
 		 */
 
 		handleFormSubmit: function( aForm ) {
-			var form = jQuery( aForm ),
+			var form = $( aForm ),
 				data = form.serialize( ),
 				url, views, i, len,
 				self = this;

@@ -1,5 +1,5 @@
 
-define( [ 'system/js/module' ], function( aModule ) {
+define( [ 'jquery', 'jclass', 'system/js/module' ], function( $, Class, BaseModule ) {
 	'use strict';
 
 	/*
@@ -8,15 +8,15 @@ define( [ 'system/js/module' ], function( aModule ) {
 	===============================================================================
 	*/
 
-	var Module = aModule.subClass({
+	var Module = BaseModule._extend({
 
 		/**
 		 * Method: init
 		 * @param {Object} aOptions
 		 */
 
-		init: function( aOptions ) {
-			this._super( aOptions );
+		init: function init( aOptions ) {
+			init._super.call( this, aOptions );
 
 			this.verbose( 'module: search' );
 		},
@@ -28,7 +28,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 		bindSearchResults: function( ) {
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
-				container = jQuery( data.view.container ),
+				container = $( data.view.container ),
 				self = this;
 
 			this.verbose( 'module: bindSearchResults' );
@@ -46,7 +46,7 @@ define( [ 'system/js/module' ], function( aModule ) {
 
 		handleDeleteButtonClick: function( aButton ) {
 			var parent = this.getParent( ),
-				container = jQuery( aButton ).closest( 'tr' ),
+				container = $( aButton ).closest( 'tr' ),
 				id = container[ 0 ].getAttribute( 'data-id' );
 
 			parent.getConduit( 'delete' ).ajax({

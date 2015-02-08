@@ -36,42 +36,70 @@ module.exports = function( grunt ) {
 					skipDirOptimize: true,
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
-					separateCSS: true,
 					fileExclusionRegExp: /^(\.|error|views|controller\.php)/,
 					paths: {
-						'requirejs': 'private/application/controllers/system/js/require.js.min'
+						'requirejs': 'system/js/require.js.min'
 					},
 					modules: [
 						{
-							name: 'system/js/app',
-							include: [
-								'system/js/require.js.min',
-								'system/js/require.css.min',
-								'system/js/require.domready.min',
-								'system/js/jquery.min',
-								'system/js/jclass.min',
-								'system/js/dot.min',
-								'system/js/cache',
-								'system/js/conduit',
-								'system/js/model',
-								'system/js/view',
-								'system/js/module',
-								'system/js/app'
-							]
+							name: 'system/js/app'
 						},
 						{
 							name: 'search/js/module',
-							exclude: [ 'system/js/app' ]
+							exclude: [ 'system/js/module' ]
 						}
 					]
 				}
 			}
+		},
+		cssmin: {
+			target: {
+				files: [
+					{
+						cwd: 'public/files/cache/system/css',
+						dest: 'public/files/cache/system/css',
+						src: [ '*.css' ],
+						expand: true
+					},
+					{
+						cwd: 'public/files/cache/maintenance/css',
+						dest: 'public/files/cache/maintenance/css',
+						src: [ '*.css' ],
+						expand: true
+					},
+					{
+						cwd: 'public/files/cache/main/css',
+						dest: 'public/files/cache/main/css',
+						src: [ '*.css' ],
+						expand: true
+					},
+					{
+						cwd: 'public/files/cache/search/css',
+						dest: 'public/files/cache/search/css',
+						src: [ '*.css' ],
+						expand: true
+					}
+				]
+			}
+		},
+		clean: {
+			system: [
+				'public/files/cache/system/css/reset.css',
+				'public/files/cache/system/js/*.js',
+				'!public/files/cache/system/js/app.js',
+				'!public/files/cache/system/js/require.config.js',
+				'!public/files/cache/system/js/require.js.min.js',
+				'!public/files/cache/system/js/require.css.min.js',
+				'!public/files/cache/system/js/require.domready.min.js'
+			]
 		}
 	});
 
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
+	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 
 	grunt.registerTask( 'default', [ 'jshint' ] );
-	grunt.registerTask( 'release', [ 'jshint', 'requirejs' ] );
+	grunt.registerTask( 'release', [ 'jshint', 'requirejs', 'clean', 'cssmin' ] );
 };

@@ -85,12 +85,23 @@ class MY_Loader extends CI_Loader {
 
 		if ( $data[ 'view' ][ 'path' ] !== false ) {
 			$data[ 'view' ][ 'hash' ] = md5( $view . filemtime( VIEWPATH . $view ) );
-			$post = $ci->get_data( 'post' );
+			$post = $ci->get_data( 'post.data' );
 			$skip = false;
 
 			if ( array_key_exists( 'views', $post ) === true && is_array( $post[ 'views' ] ) === true && empty( $post[ 'views' ] ) === false ) {
-				if ( in_array( $data[ 'view' ][ 'hash' ], $post[ 'views' ] ) ) {
+				if ( in_array( $view . '|' . $data[ 'view' ][ 'hash' ], $post[ 'views' ] ) ) {
 					$skip = true;
+				}
+
+				if ( $skip === false ) {
+					foreach ( $post[ 'views' ] as $view ) {
+						$parts = explode( '|', $view );
+
+						if ( $parts[ 0 ] === $data[ 'view' ][ 'path' ] ) {
+							$data[ 'view' ][ 'invalidate' ] = $parts[ 1 ];
+							break;
+						}
+					}
 				}
 			}
 

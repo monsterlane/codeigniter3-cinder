@@ -211,7 +211,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, el, view;
+				module, el, view, cache;
 
 			this.verbose( 'app: set pending data' );
 
@@ -242,9 +242,16 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 					if ( view === false ) {
 						view = this.createView({
 							url: data.url,
+							path: data.view.path,
 							hash: data.view.hash,
 							content: data.view.html
 						});
+
+						if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
+							this.verbose( 'app: invalidate ' + data.view.invalidate );
+
+							this.removeCache( data.view.invalidate );
+						}
 					}
 
 					el.empty( );
@@ -331,6 +338,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 			if ( view === false ) {
 				cache = this.getCache( aHash );
+				cache = false;
 
 				if ( cache !== false ) {
 					this.verbose( 'app: view cache found' );
@@ -357,7 +365,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				this._model._data.views[ aView.url ] = [ ];
 			}
 
-			this._model._data.views[ aView.url ].push( aView.hash );
+			this._model._data.views[ aView.url ].push( aView.path + '|' + aView.hash );
 
 			this.setCache( aView.hash, JSON.stringify( aView ) );
 
@@ -381,6 +389,17 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 		setCache: function( aKey, aContent ) {
 			this._cache.set( aKey, aContent );
+
+			return this;
+		},
+
+		/**
+		 * Method: removeCache
+		 * @param {String} aKey
+		 */
+
+		removeCache: function( aKey )  {
+			this._cache.remove( aKey );
 
 			return this;
 		},

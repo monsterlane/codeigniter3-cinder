@@ -500,7 +500,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		handleFormSubmit: function( aForm ) {
 			var options = { },
 				form = $( aForm ),
-				url, data, i,
+				url, files, data, i, len,
 				self = this;
 
 			url = form[ 0 ].action.replace( '//', '' );
@@ -509,16 +509,10 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			options.url = url;
 
 			if ( form[ 0 ].hasAttribute( 'enctype' ) === true && form[ 0 ].getAttribute( 'enctype' ) === 'multipart/form-data' ) {
-				options.data = new FormData( );
+				options.data = new FormData( form[ 0 ] );
 				options.processData = false;
 				options.contentType = false;
 				options.cache = false;
-
-				for ( i in form[ 0 ] ) {
-					if ( form[ 0 ].hasOwnProperty( i ) === true ) {
-						options.data.append( form[ 0 ][ i ].name, form[ 0 ][ i ].value );
-					}
-				}
 			}
 			else {
 				options.data = form.serialize( );

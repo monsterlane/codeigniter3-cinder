@@ -130,8 +130,6 @@ define( [ 'jquery', 'jclass', 'system/js/jquery.transport.min' ], function( $, C
 
 			this.abort( );
 
-
-
 			this._xhr = $.ajax( opt );
 
 			$.when( this._xhr ).then( function( ) {

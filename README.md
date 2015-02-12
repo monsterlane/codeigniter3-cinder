@@ -28,10 +28,7 @@ Cinder is built using a number of open source projects.
 5. Make /public/files writable by your web user
 6. Make /private/logs writable by your web user
 7. Make /private/session writable by your web user
-8. Run 'npm install' in the root directory
-
-* Run 'grunt' to lint your code
-* Run 'grunt deploy' to lint and compile with r.js
+8. Run npm install in the root directory
 
 ### License
 

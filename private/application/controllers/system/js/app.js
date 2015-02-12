@@ -500,8 +500,10 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		handleFormSubmit: function( aForm ) {
 			var options = { },
 				form = $( aForm ),
-				url, files, data, i, len,
+				button, url,
 				self = this;
+
+			button = form.find( 'button[type=submit], input[type=submit]' );
 
 			url = form[ 0 ].action.replace( '//', '' );
 			url = url.substr( url.indexOf( '/' ) );
@@ -519,10 +521,83 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			}
 
 			options.success = function( response ) {
+				self.enable( button );
 				self.load( response );
 			};
 
+			this.disable( button, 'Searching' );
+
 			this.getConduit( url ).ajax( options );
+		},
+
+		/**
+		 * Method: enable
+		 * @param {DOMelement} aElement
+		 */
+
+		enable: function( aElement ) {
+			var el = $( aElement );
+
+			if ( el.is( 'button' ) === true ) {
+				if ( el[ 0 ].hasAttribute( 'data-label' ) === true ) {
+					el[ 0 ].innerHTML = el[ 0 ].getAttribute( 'data-label' );
+					el[ 0 ].removeAttribute( 'data-label' );
+				}
+			}
+
+			el.prop( 'disabled', false );
+			el.removeClass( 'disabled' );
+		},
+
+		/**
+		 * Method: disable
+		 * @param {DOMelement} aElement
+		 */
+
+		disable: function( aElement, aLabel ) {
+			var el = $( aElement ),
+				label = aLabel || 'Saving';
+
+			if ( el.is( 'button' ) === true ) {
+				if ( el[ 0 ].hasAttribute( 'data-label' ) === true ) {
+					label = el[ 0 ].innerHTML;
+
+					el[ 0 ].innerHTML = el[ 0 ].getAttribute( 'data-label' );
+					el[ 0 ].setAttribute( 'data-label', label );
+				}
+				else {
+					el[ 0 ].setAttribute( 'data-label', el[ 0 ].innerHTML );
+					el[ 0 ].innerHTML = label;
+				}
+			}
+
+			el.prop( 'disabled', true );
+			el.addClass( 'disabled' );
+		},
+
+		/**
+		 * Method: selectByValue
+		 * @param {DOMelement} aElement
+		 * @param {String} aValue
+		 */
+
+		selectByValue: function( aElement, aValue, aEvent ) {
+			var el = $( aElement ),
+				val = aValue.toString( ),
+				evt = aEvent || false,
+				i, len;
+
+			for ( i = 0, len = el[ 0 ].options.length; i < len; i++ ) {
+				if ( el[ 0 ].options[ i ].value === val ) {
+					el[ 0 ].options[ i ].selected = true;
+
+					if ( evt === true ) {
+						el.trigger( 'change' );
+					}
+
+					break;
+				}
+			}
 		}
 	});
 

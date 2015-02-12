@@ -17,7 +17,7 @@ Cinder is built using a number of open source projects.
 * [RequireJS] - RequireJS is a JavaScript file and module loader. It is optimized for in-browser use, but it can be used in other JavaScript environments, like Rhino and Node. Using a modular script loader like RequireJS will improve the speed and quality of your code.
 * [RequireCSS] - A RequireJS CSS loader plugin to allow CSS requires and optimization
 * [doT.js] - The fastest + concise javascript template engine for nodejs and browsers. Partials, custom delimiters and more.
-* [Class.js] - Simple JavaScript Inheritance
+* [jclass] - Advanced but lightweight and fast Javascript inheritance model providing class members and prototype conversion.
 
 ### Installation
 
@@ -28,6 +28,7 @@ Cinder is built using a number of open source projects.
 5. Make /public/files writable by your web user
 6. Make /private/logs writable by your web user
 7. Make /private/session writable by your web user
+8. Run npm install in the root director
 
 ### License
 
@@ -58,6 +59,6 @@ THE SOFTWARE.
 [RequireCSS]:https://github.com/guybedford/require-css
 [doT.js]:https://github.com/olado/doT
 [jQuery]:http://jquery.com/
-[Class.js]:http://ejohn.org/blog/simple-javascript-inheritance/
+[jclass]:https://github.com/riga/jclass
 [history]:https://developer.mozilla.org/en-US/docs/Web/API/History
 [local storage]:https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage

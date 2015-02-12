@@ -101,5 +101,5 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 
 	grunt.registerTask( 'default', [ 'jshint' ] );
-	grunt.registerTask( 'release', [ 'jshint', 'requirejs', 'clean', 'cssmin' ] );
+	grunt.registerTask( 'deploy', [ 'jshint', 'requirejs', 'clean', 'cssmin' ] );
 };

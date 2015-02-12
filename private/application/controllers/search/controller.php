@@ -32,7 +32,7 @@ class Search_controller extends MY_Controller {
 		);
 
 		$this->load->partial( array(
-			'module' => false,
+			'name' => false,
 			'view' => array(
 				'path' => 'users.html',
 				'container' => '#cinderSearchResults',

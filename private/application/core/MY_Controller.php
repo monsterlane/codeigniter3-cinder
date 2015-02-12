@@ -51,7 +51,7 @@ class MY_Controller extends CI_Controller {
 
 		$this->set_view( array(
 			'title' => 'CI3-Cinder',
-			'module' => false,
+			'name' => false,
 			'view' => array(
 				'path' => 'system/views/index.html',
 				'css' => array(

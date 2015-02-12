@@ -498,20 +498,37 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		 */
 
 		handleFormSubmit: function( aForm ) {
-			var form = $( aForm ),
-				data = form.serialize( ),
-				url, self = this;
+			var options = { },
+				form = $( aForm ),
+				url, data, i,
+				self = this;
 
-			url = aForm.action.replace( '//', '' );
+			url = form[ 0 ].action.replace( '//', '' );
 			url = url.substr( url.indexOf( '/' ) );
 
-			this.getConduit( aForm.action ).ajax({
-				url: aForm.action,
-				data: data,
-				success: function( response ) {
-					self.load( response );
+			options.url = url;
+
+			if ( form[ 0 ].hasAttribute( 'enctype' ) === true && form[ 0 ].getAttribute( 'enctype' ) === 'multipart/form-data' ) {
+				options.data = new FormData( );
+				options.processData = false;
+				options.contentType = false;
+				options.cache = false;
+
+				for ( i in form[ 0 ] ) {
+					if ( form[ 0 ].hasOwnProperty( i ) === true ) {
+						options.data.append( form[ 0 ][ i ].name, form[ 0 ][ i ].value );
+					}
 				}
-			});
+			}
+			else {
+				options.data = form.serialize( );
+			}
+
+			options.success = function( response ) {
+				self.load( response );
+			};
+
+			this.getConduit( url ).ajax( options );
 		}
 	});
 

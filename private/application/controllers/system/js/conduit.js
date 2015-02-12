@@ -1,5 +1,5 @@
 
-define( [ 'jquery', 'jclass' ], function( $, Class ) {
+define( [ 'jquery', 'jclass', 'system/js/jquery.transport.min' ], function( $, Class ) {
 	'use strict';
 
 	/*
@@ -36,8 +36,8 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 		ajax: function( aOptions ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
-				jsonp = false,
 				ncb, ocb, views, i, len,
+				jsonp = false,
 				self = this;
 
 			opt.type = 'post';

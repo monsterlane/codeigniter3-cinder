@@ -163,16 +163,18 @@ class MY_Controller extends CI_Controller {
 					$style = $this->router->directory . 'css/' . $style;
 				}
 
-				$path = VIEWPATH . $style;
+				if ( ENVIRONMENT === 'development' ) {
+					$path = VIEWPATH . $style;
 
-				if ( ENVIRONMENT == 'development' || file_exists( $dest . $style ) == false ) {
-					$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
+					if ( filemtime( $path ) !== filemtime( $dest . $style ) ) {
+						$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
 
-					if ( file_exists( $dir ) == false ) {
-						mkdir( $dir, 0755, true );
+						if ( file_exists( $dir ) === false ) {
+							mkdir( $dir, 0755, true );
+						}
+
+						copy( $path, $dest . $style );
 					}
-
-					copy( $path, $dest . $style );
 				}
 			}
 			unset( $style );
@@ -182,21 +184,23 @@ class MY_Controller extends CI_Controller {
 					$script = $this->router->directory . 'js/' . $script;
 				}
 
-				$path = VIEWPATH . $script;
+				if ( ENVIRONMENT === 'development' ) {
+					$path = VIEWPATH . $script;
 
-				if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
-					$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
+					if ( filemtime( $path ) !== filemtime( $dest . $script ) ) {
+						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
-					if ( file_exists( $dir ) == false ) {
-						mkdir( $dir, 0755, true );
+						if ( file_exists( $dir ) == false ) {
+							mkdir( $dir, 0755, true );
+						}
+
+						copy( $path, $dest . $script );
 					}
-
-					copy( $path, $dest . $script );
 				}
 			}
 			unset( $script );
 
-			if ( $data[ 'name' ] !== false ) {
+			if ( ENVIRONMENT === 'development' && $data[ 'name' ] !== false ) {
 				$script = $data[ 'name' ] . '.js';
 				$path = VIEWPATH . $script;
 

@@ -23,7 +23,7 @@ require( [ 'domready!', 'system/js/app' ], function( aDocument, aApp ) {
 
 	var app = new aApp( <?=json_encode( $system[ 'options' ] )?> );
 
-	app.load( <?=json_encode( $pending[ 'data' ] )?> );
+	app.load( <?=json_encode( $module[ 'data' ] )?> );
 });
 </script>
 

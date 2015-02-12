@@ -128,7 +128,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				history: false,
 				title: null,
 				url: '/',
-				module: false,
+				name: false,
 				view: {
 					css: [ ],
 					container: null,
@@ -141,27 +141,25 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			if ( this._module !== null ) {
 				last = this.getData( 'module.data' );
 
-				if ( last.module !== false && data.module !== false ) {
+				if ( last.name !== false && data.name !== false ) {
 					redir = true;
 
-					if ( last.view.css.length > 0 ) {
-						for ( i = 0, len = last.view.css.length; i < len; i++ ) {
-							link = last.view.css[ i ].substr( 0, last.view.css[ i ].length - 4 );
+					for ( i = 0, len = last.view.css.length; i < len; i++ ) {
+						link = last.view.css[ i ].substr( 0, last.view.css[ i ].length - 4 );
 
-							this.verbose( 'app: unload ' + link );
+						this.verbose( 'app: unload ' + link );
 
-							el = $( 'link[href^="/files/cache/' + link + '.css"]' );
+						el = $( 'link[href^="/files/cache/' + link + '.css"]' );
 
-							el.prop( 'disabled', true );
-							el.remove( );
+						el.prop( 'disabled', true );
+						el.remove( );
 
-							requirejs.undef( 'system/js/require.css.min!' + link );
-						}
+						requirejs.undef( 'system/js/require.css.min!' + link );
 					}
 
-					this.verbose( 'app: unload ' + last.module );
+					this.verbose( 'app: unload ' + last.name );
 
-					requirejs.undef( last.module );
+					requirejs.undef( last.name );
 				}
 			}
 
@@ -173,15 +171,15 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				require( [ link ], function( ) { } );
 			}
 
-			if ( data.module !== false ) {
+			if ( data.name !== false ) {
 				options.parent = this;
 				options.url = data.url;
 
 				data.redirect = redir;
 
-				this.verbose( 'app: load ' + data.module );
+				this.verbose( 'app: load ' + data.name );
 
-				require( [ data.module ], function( Module ) {
+				require( [ data.name ], function( Module ) {
 					var module = new Module( options );
 
 					self.setModule( module );
@@ -215,14 +213,16 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			var data = aData || { },
 				module, el, view;
 
+			this.verbose( 'app: set pending data' );
+
 			if ( typeof data.redirect === 'string' ) {
 				this.redirect( data.redirect );
 			}
 			else {
-				module = this.getData( 'module.data.module' );
+				module = this.getData( 'module.data.name' );
 
-				if ( module !== false && data.module === false ) {
-					delete data.module;
+				if ( module !== false && data.name === false ) {
+					delete data.name;
 				}
 
 				this.setData( 'module.data', data );
@@ -298,7 +298,25 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		 */
 
 		getViews: function( aUrl ) {
-			return this.getData( 'views.' + aUrl );
+			var url = aUrl || '',
+				a, views;
+
+			if ( url.indexOf( 'http' ) !== -1 ) {
+				a = document.createElement( a );
+				a.href = url;
+
+				url = a.pathname + a.search;
+				url = url.substring( 1 );
+			}
+			else if ( url.charAt( 0 ) === '/' ) {
+				url = url.substring( 1 );
+			}
+
+			views = this.getData( 'views.' + url );
+
+			return views;
+
+			//return this.getData( 'views.' + aUrl );
 		},
 
 		/**
@@ -368,10 +386,11 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		},
 
 		/**
-		 * Method: emptyCache
+		 * Method: clearCache
 		 */
 
-		emptyCache: function( ) {
+		clearCache: function( ) {
+			this._view.empty( );
 			this._cache.empty( );
 			this._cache.free( );
 		},
@@ -422,8 +441,6 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				url = link.href.replace( '//', '' );
 				url = url.substr( url.indexOf( '/' ) );
 
-				data.views = this.getViews( url );
-
 				this.getConduit( url ).ajax({
 					url: url,
 					data: data,
@@ -464,17 +481,10 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		handleFormSubmit: function( aForm ) {
 			var form = $( aForm ),
 				data = form.serialize( ),
-				url, views, i, len,
-				self = this;
+				url, self = this;
 
 			url = aForm.action.replace( '//', '' );
 			url = url.substr( url.indexOf( '/' ) );
-
-			views = this.getViews( url );
-
-			for ( i = 0, len = views.length; i < len; i++ ) {
-				data += '&views[]=' + encodeURIComponent( views[ i ] );
-			}
 
 			this.getConduit( aForm.action ).ajax({
 				url: aForm.action,

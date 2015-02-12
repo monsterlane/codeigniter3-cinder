@@ -55,6 +55,14 @@ define( [ 'jclass', 'system/js/dot.min' ], function( Class, Parser ) {
 			this._data[ aView.url ][ aView.hash ] = Parser.template( aView.content );
 
 			return this._data[ aView.url ][ aView.hash ];
+		},
+
+		/**
+		 * Method: empty
+		 */
+
+		empty: function( ) {
+			this._data = [ ];
 		}
 	});
 

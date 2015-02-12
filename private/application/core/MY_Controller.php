@@ -17,12 +17,12 @@ class MY_Controller extends CI_Controller {
 				'options' => array( ),
 				'data' => array( ),
 			),
-			'pending' => array(
+			'module' => array(
 				'options' => array( ),
 				'data' => array(
 					'system' => false,
 					'redirect' => false,
-					'module' => false,
+					'name' => false,
 					'view' => false,
 					'url' => uri_string( ),
 				),
@@ -80,7 +80,7 @@ class MY_Controller extends CI_Controller {
 			'system' => true,
 		);
 
-		$this->set_data( 'pending.data', $data );
+		$this->set_data( 'module.data', $data );
 	}
 
 	/* public methods */
@@ -131,12 +131,12 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function set_view( $data = array( ), $key = 'pending' ) {
-		$pending = $this->get_data( $key . '.data' );
+	public function set_view( $data = array( ), $key = 'module' ) {
+		$module = $this->get_data( $key . '.data' );
 
-		if ( $key === 'system' || is_string( $pending[ 'data' ][ 'redirect' ] ) === false ) {
+		if ( $key === 'system' || is_string( $module[ 'data' ][ 'redirect' ] ) === false ) {
 			$data = merge_array( array(
-				'module' => null,
+				'name' => null,
 				'view' => array(
 					'path' => null,
 					'css' => array( ),
@@ -147,12 +147,12 @@ class MY_Controller extends CI_Controller {
 				)
 			), $data );
 
-			if ( $data[ 'module' ] !== false ) {
-				$data[ 'module' ] = $this->router->directory . 'js/';
-				$data[ 'module' ].= ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
+			if ( $data[ 'name' ] !== false ) {
+				$data[ 'name' ] = $this->router->directory . 'js/';
+				$data[ 'name' ].= ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
 
-				if ( file_exists( VIEWPATH . $data[ 'module' ] . '.js' ) === false ) {
-					$data[ 'module' ] = 'system/js/module';
+				if ( file_exists( VIEWPATH . $data[ 'name' ] . '.js' ) === false ) {
+					$data[ 'name' ] = 'system/js/module';
 				}
 			}
 
@@ -196,8 +196,8 @@ class MY_Controller extends CI_Controller {
 			}
 			unset( $script );
 
-			if ( $data[ 'module' ] !== false ) {
-				$script = $data[ 'module' ] . '.js';
+			if ( $data[ 'name' ] !== false ) {
+				$script = $data[ 'name' ] . '.js';
 				$path = VIEWPATH . $script;
 
 				if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
@@ -216,7 +216,7 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function redirect( $aUrl ) {
-		$this->set_data( 'pending.data', array(
+		$this->set_data( 'module.data', array(
 			'redirect' => base_url( $aUrl ),
 		) );
 	}

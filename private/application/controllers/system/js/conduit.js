@@ -37,22 +37,30 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
 				jsonp = false,
-				ncb, ocb,
+				ncb, ocb, views, i, len,
 				self = this;
 
 			opt.type = 'post';
 
+			views = parent.getViews( opt.url );
+
 			if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
 				if ( typeof opt.data === 'object' ) {
 					opt.data.system = false;
+					opt.data.views = views;
 				}
 				else if ( typeof opt.data === 'string' ) {
 					opt.data += '&system=false';
+
+					for ( i = 0, len = views.length; i < len; i++ ) {
+						opt.data += '&views[]=' + encodeURIComponent( views[ i ] );
+					}
 				}
 			}
 			else {
 				opt.data = {
-					system: false
+					system: false,
+					views: views
 				};
 			}
 
@@ -121,6 +129,8 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 			opt.success = ncb;
 
 			this.abort( );
+
+
 
 			this._xhr = $.ajax( opt );
 

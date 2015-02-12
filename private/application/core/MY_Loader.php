@@ -29,15 +29,15 @@ class MY_Loader extends CI_Loader {
 		$data = $ci->get_data( );
 
 		if ( $data[ 'post' ][ 'system' ] !== false ) {
-			if ( is_string( $data[ 'pending' ][ 'data' ][ 'redirect' ] ) === true ) {
-				redirect( $data[ 'pending' ][ 'data' ][ 'redirect' ] );
+			if ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) === true ) {
+				redirect( $data[ 'module' ][ 'data' ][ 'redirect' ] );
 			}
 			else {
 				$ci->load->view( $data[ 'system' ][ 'data' ][ 'view' ][ 'path' ], $data );
 			}
 		}
 		else {
-			$ci->output->json( $this->_compress( $data[ 'pending' ][ 'data' ] ) );
+			$ci->output->json( $this->_compress( $data[ 'module' ][ 'data' ] ) );
 		}
 	}
 

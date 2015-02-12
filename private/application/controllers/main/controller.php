@@ -12,6 +12,7 @@ class Main_controller extends MY_Controller {
 					'body' => 'Main Page',
 				),
 			),
+			'callback' => 'bindEventListeners',
 		) );
 	}
 }

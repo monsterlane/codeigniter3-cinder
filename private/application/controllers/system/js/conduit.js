@@ -1,5 +1,5 @@
 
-define( [ 'jquery', 'jclass', 'system/js/jquery.transport.min' ], function( $, Class ) {
+define( [ 'jquery', 'jclass' ], function( $, Class ) {
 	'use strict';
 
 	/*

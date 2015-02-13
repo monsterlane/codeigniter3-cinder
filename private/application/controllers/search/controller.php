@@ -49,7 +49,7 @@ class Search_controller extends MY_Controller {
 				'message' => 'Error deleting record. ' . $this->config->item( 'support_message' ),
 			);
 
-			$this->set_data( 'pending.data', $data );
+			$this->set_data( 'module.data', $data );
 		}
 	}
 }

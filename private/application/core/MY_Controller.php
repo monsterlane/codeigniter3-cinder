@@ -94,7 +94,7 @@ class MY_Controller extends CI_Controller {
 			while ( count( $keys ) > 1 ) {
 				$key = array_shift( $keys );
 
-				if ( !isset( $root[ $key ] ) ) {
+				if ( isset( $root[ $key ] ) === false ) {
 					return null;
 				}
 
@@ -112,7 +112,7 @@ class MY_Controller extends CI_Controller {
 		while ( count( $keys ) > 1 ) {
 			$key = array_shift( $keys );
 
-			if ( !isset( $root[ $key ] ) ) {
+			if ( isset( $root[ $key ] ) === false ) {
 				$root[ $key ] = array( );
 			}
 
@@ -121,7 +121,7 @@ class MY_Controller extends CI_Controller {
 
 		$key = reset( $keys );
 
-		if ( is_array( $data ) === true && is_array( $root[ $key ] ) === true ) {
+		if ( empty( $data ) === false && is_array( $root[ $key ] ) === true ) {
 			foreach ( $data as $k => $v ) {
 				$root[ $key ][ $k ] = $v;
 			}
@@ -164,17 +164,18 @@ class MY_Controller extends CI_Controller {
 				}
 
 				if ( ENVIRONMENT === 'development' ) {
-					$path = VIEWPATH . $style;
-
-					if ( filemtime( $path ) !== filemtime( $dest . $style ) ) {
+					if ( file_exists( $dest . $style ) === false || filemtime( VIEWPATH . $style ) !== filemtime( $dest . $style ) ) {
 						$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
 
 						if ( file_exists( $dir ) === false ) {
 							mkdir( $dir, 0755, true );
 						}
 
-						copy( $path, $dest . $style );
+						copy( VIEWPATH . $style, $dest . $style );
 					}
+				}
+				else {
+					$style = preg_replace( '/[^min]\.css$/', '.min.css', $style );
 				}
 			}
 			unset( $style );
@@ -185,33 +186,35 @@ class MY_Controller extends CI_Controller {
 				}
 
 				if ( ENVIRONMENT === 'development' ) {
-					$path = VIEWPATH . $script;
-
-					if ( filemtime( $path ) !== filemtime( $dest . $script ) ) {
+					if ( file_exists( $dest . $script ) === false ||  filemtime( VIEWPATH . $script ) !== filemtime( $dest . $script ) ) {
 						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
 						if ( file_exists( $dir ) == false ) {
 							mkdir( $dir, 0755, true );
 						}
 
-						copy( $path, $dest . $script );
+						copy( VIEWPATH . $script, $dest . $script );
 					}
 				}
 			}
 			unset( $script );
 
-			if ( ENVIRONMENT === 'development' && $data[ 'name' ] !== false ) {
-				$script = $data[ 'name' ] . '.js';
-				$path = VIEWPATH . $script;
+			if ( $data[ 'name' ] !== false ) {
+				if ( ENVIRONMENT === 'development' ) {
+					$script = $data[ 'name' ] . '.js';
 
-				if ( ENVIRONMENT == 'development' || file_exists( $dest . $script ) == false ) {
-					$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
+					if ( file_exists( $dest . $script ) === false || filemtime( VIEWPATH . $script ) !== filemtime( $dest . $script ) ) {
+						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
-					if ( file_exists( $dir ) == false ) {
-						mkdir( $dir, 0755, true );
+						if ( file_exists( $dir ) == false ) {
+							mkdir( $dir, 0755, true );
+						}
+
+						copy( VIEWPATH . $script, $dest . $script );
 					}
-
-					copy( $path, $dest . $script );
+				}
+				else if ( substr( $data[ 'name' ], -4 ) !== '.min' ) {
+					$data[ 'name' ] .= '.min';
 				}
 			}
 

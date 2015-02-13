@@ -86,7 +86,7 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 							}
 							else {
 								self.error( {
-									body: 'An error has occurred. '+ parent.getData( 'system.support_message' )
+									body: 'An error has occurred. ' + parent.getData( 'system.support_message' )
 								} );
 							}
 
@@ -116,7 +116,7 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 				ncb = function( aResponse, aCode, aXhr ) {
 					if ( jsonp === false && self.parse( aResponse ) === false ) {
 						self.error( {
-							body: 'An error has occurred. '+ parent.getData( 'system.support_message' )
+							body: 'An error has occurred. ' + parent.getData( 'system.support_message' )
 						} );
 
 						if ( opt.hasOwnProperty( 'error' ) === true ) {

@@ -47,6 +47,12 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 			$( 'body' ).addClass( 'cinder' );
 
+			window.onerror = function( aMessage, aFilename, aLine ) {
+				self.log( aMessage, aFilename, aLine );
+
+				return true;
+			};
+
 			$( window ).on( 'popstate.cinder', function( aEvent ) {
 				if ( aEvent.originalEvent.state ) {
 					aEvent.originalEvent.state.history = true;
@@ -108,6 +114,34 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			else {
 				alert( aError );
 			}
+		},
+
+		/**
+		 * Method: log
+		 * @param {String} aMessage
+		 * @param {String} aFilename
+		 * @param {Int} aLine
+		 */
+
+		log: function( aMessage, aFilename, aLine ) {
+			var msg = aMessage || 'SyntaxError: Unknown',
+				file = aFilename || 'unknown',
+				line = aLine || 0,
+				self = this;
+
+			this.getConduit( ).ajax({
+				url: '/error',
+				data: {
+					message: msg,
+					filename: file,
+					line: line
+				},
+				success: function( response ) {
+					self.error( {
+						body: 'An error has occurred. ' + self.getData( 'system.support_message' )
+					} );
+				}
+			});
 		},
 
 		/**

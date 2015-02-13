@@ -147,15 +147,7 @@ class MY_Controller extends CI_Controller {
 				)
 			), $data );
 
-			if ( $data[ 'name' ] !== false ) {
-				$data[ 'name' ] = $this->router->directory . 'js/';
-				$data[ 'name' ].= ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
-
-				if ( file_exists( VIEWPATH . $data[ 'name' ] . '.js' ) === false ) {
-					$data[ 'name' ] = 'system/js/module';
-				}
-			}
-
+			$vpath = str_replace( '.', '', $this->config->item( 'version' ) ) . '/';
 			$dest = FCPATH . 'files/cache/';
 
 			foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
@@ -177,15 +169,17 @@ class MY_Controller extends CI_Controller {
 				else {
 					$style = preg_replace( '/[^min]\.css$/', '.min.css', $style );
 				}
+
+				$style = $vpath . $style;
 			}
 			unset( $style );
 
-			foreach ( $data[ 'view' ][ 'js' ] as &$script ) {
-				if ( strpos( $script, '/' ) === false ) {
-					$script = $this->router->directory . 'js/' . $script;
-				}
+			if ( ENVIRONMENT === 'development' ) {
+				foreach ( $data[ 'view' ][ 'js' ] as $script ) {
+					if ( strpos( $script, '/' ) === false ) {
+						$script = $this->router->directory . 'js/' . $script;
+					}
 
-				if ( ENVIRONMENT === 'development' ) {
 					if ( file_exists( $dest . $script ) === false ||  filemtime( VIEWPATH . $script ) !== filemtime( $dest . $script ) ) {
 						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
@@ -197,9 +191,20 @@ class MY_Controller extends CI_Controller {
 					}
 				}
 			}
-			unset( $script );
 
 			if ( $data[ 'name' ] !== false ) {
+				if ( $data[ 'name' ] === null ) {
+					$data[ 'name' ] = ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
+				}
+
+				if ( strpos( $data[ 'name' ], '/' ) === false ) {
+					$data[ 'name' ] = $this->router->directory . 'js/' . $data[ 'name' ];
+				}
+
+				if ( file_exists( VIEWPATH . $data[ 'name' ] . '.js' ) === false ) {
+					$data[ 'name' ] = 'system/js/module';
+				}
+
 				if ( ENVIRONMENT === 'development' ) {
 					$script = $data[ 'name' ] . '.js';
 
@@ -216,6 +221,8 @@ class MY_Controller extends CI_Controller {
 				else if ( substr( $data[ 'name' ], -4 ) !== '.min' ) {
 					$data[ 'name' ] .= '.min';
 				}
+
+				$data[ 'name' ] = $vpath . $data[ 'name' ];
 			}
 
 			$this->set_data( $key . '.data', $data );

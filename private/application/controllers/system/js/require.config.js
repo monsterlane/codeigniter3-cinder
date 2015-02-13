@@ -10,6 +10,5 @@ require.config({
 		'domready': 'system/js/require.domready.min',
 		'jquery': 'system/js/jquery.min',
 		'jclass': 'system/js/jclass.min'
-	},
-	urlArgs: Date.now( )
+	}
 });

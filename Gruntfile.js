@@ -97,6 +97,19 @@ module.exports = function( grunt ) {
 				'!public/files/cache/system/js/require.css.min.js',
 				'!public/files/cache/system/js/require.domready.min.js'
 			]
+		},
+		copy: {
+			system: {
+				files: [
+					{
+						src: [ 'private/application/controllers/system/img/*' ],
+						dest: 'public/files/cache/system/img/',
+						expand: true,
+						flatten: true,
+						filter: 'isFile'
+					}
+				]
+			}
 		}
 	});
 
@@ -104,7 +117,8 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
 	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
+	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
-	grunt.registerTask( 'default', [ 'jshint' ] );
-	grunt.registerTask( 'deploy', [ 'jshint', 'requirejs', 'clean', 'cssmin' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'copy' ] );
+	grunt.registerTask( 'deploy', [ 'jshint', 'requirejs', 'clean', 'cssmin', 'copy' ] );
 };

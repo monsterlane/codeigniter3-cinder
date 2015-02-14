@@ -50,6 +50,7 @@ class MY_Controller extends CI_Controller {
 		$this->set_data( 'system.options', $data );
 
 		$this->set_view( array(
+			'favicon' => false,
 			'title' => 'CI3-Cinder',
 			'name' => false,
 			'view' => array(
@@ -75,6 +76,12 @@ class MY_Controller extends CI_Controller {
 				),
 			),
 		), 'system.data' );
+
+		$icon = 'system/img/favicon.ico';
+
+		if ( file_exists( FCPATH . 'files/cache/' . $icon ) === true && is_file( FCPATH . 'files/cache/' . $icon ) === true ) {
+			$this->set_data( 'system.data.favicon', $icon );
+		}
 
 		$data = array(
 			'system' => true,

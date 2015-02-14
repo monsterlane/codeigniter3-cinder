@@ -4,8 +4,11 @@
 	<title><?=$system[ 'data' ][ 'title' ]?></title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<?php
+	if ( $system[ 'data' ][ 'favicon' ] !== false ) {
+		?><link href="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'favicon' ] )?>" type="image/x-icon" rel="icon" /><?php
+	}
+
 	foreach ( $system[ 'data' ][ 'view' ][ 'css' ] as $style ) {
 		?><link href="<?=base_url( 'files/cache/' . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
 	}

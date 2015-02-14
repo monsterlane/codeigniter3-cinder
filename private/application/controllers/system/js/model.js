@@ -80,9 +80,13 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 						arr = arr[ keys[ i ] ];
 					}
 				}
-				else {
+				else if ( i === len - 1 ) {
 					arr[ keys[ i ] ] = aValue;
-					break;
+				}
+				else {
+					arr[ keys[ i ] ] = [ ];
+
+					arr = arr[ keys[ i ] ];
 				}
 			}
 		}

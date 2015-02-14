@@ -19,6 +19,8 @@ define( [ 'jquery', 'jclass', 'system/js/module' ], function( $, Class, BaseModu
 			init._super.call( this, aOptions );
 
 			this.verbose( 'module: main' );
+
+			this.bindEventListeners( );
 		},
 
 		/**

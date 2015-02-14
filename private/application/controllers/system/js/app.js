@@ -47,12 +47,6 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 			$( 'body' ).addClass( 'cinder' );
 
-			window.onerror = function( aMessage, aFilename, aLine ) {
-				self.log( aMessage, aFilename, aLine );
-
-				return true;
-			};
-
 			$( window ).on( 'popstate.cinder', function( aEvent ) {
 				if ( aEvent.originalEvent.state ) {
 					aEvent.originalEvent.state.history = true;
@@ -60,6 +54,14 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 					self.load( aEvent.originalEvent.state );
 				}
 			});
+
+			if ( this._verbose === false ) {
+				window.onerror = function( aMessage, aFilename, aLine ) {
+					self.log( aMessage, aFilename, aLine );
+
+					return true;
+				};
+			}
 		},
 
 		/**
@@ -213,15 +215,16 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 				this.verbose( 'app: load ' + data.name );
 
-				require( [ data.name ], function( Module ) {
-					var module = new Module( options );
+				this.setPendingData( data );
 
-					self.setModule( module );
-					self.setPendingData( data );
+				require( [ data.name ], function( Module ) {
+					self.setModule( new Module( options ) );
+					self.callback( data );
 				});
 			}
 			else if ( this._module !== null ) {
 				this.setPendingData( data );
+				this.callback( data );
 			}
 		},
 
@@ -295,21 +298,30 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 					this.bindForms( el );
 				}
 
-				if ( this._module !== null && data.hasOwnProperty( 'callback' ) === true ) {
-					if ( data.callback !== 'init' && $.isFunction( this._module[ data.callback ] ) === true ) {
-						this.verbose( 'app: callback ' + data.callback );
-
-						this._module[ data.callback ]( );
-					}
-					else {
-						this.verbose( 'app: callback ' + data.callback + ' skipped (not found)' );
-					}
-				}
-
 				this._cache.free( );
 			}
 
 			return this;
+		},
+
+		/**
+		 * Method: callback
+		 * @param {Object} aData
+		 */
+
+		callback: function( aData ) {
+			var data = aData || { };
+
+			if ( this._module !== null && data.hasOwnProperty( 'callback' ) === true ) {
+				if ( data.callback !== 'init' && $.isFunction( this._module[ data.callback ] ) === true ) {
+					this.verbose( 'app: callback ' + data.callback );
+
+					this._module[ data.callback ]( );
+				}
+				else {
+					this.verbose( 'app: callback ' + data.callback + ' skipped (not found)' );
+				}
+			}
 		},
 
 		/**
@@ -356,8 +368,6 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 			views = this.getData( 'views.' + url );
 
 			return views;
-
-			//return this.getData( 'views.' + aUrl );
 		},
 
 		/**

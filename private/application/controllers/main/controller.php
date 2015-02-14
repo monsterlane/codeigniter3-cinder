@@ -11,8 +11,7 @@ class Main_controller extends MY_Controller {
 				'data' => array(
 					'body' => 'Main Page',
 				),
-			),
-			'callback' => 'bindEventListeners',
+			)
 		) );
 	}
 }

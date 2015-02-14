@@ -590,7 +590,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 			el = $( data.view.container ).find( 'div.purpose-message' );
 
-			if ( el.length == 0 ) {
+			if ( el.length === 0 ) {
 				el = $( 'div.purpose-message' );
 			}
 

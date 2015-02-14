@@ -86,6 +86,14 @@ module.exports = function( grunt ) {
 				]
 			}
 		},
+		csslint: {
+			modules: {
+				options: {
+					'import': false
+				},
+				src: [ 'private/application/controllers/**/css/*.css' ]
+			}
+		},
 		clean: {
 			system: [
 				'public/files/cache/system/css/reset.css',
@@ -116,9 +124,10 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
 	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+	grunt.loadNpmTasks( 'grunt-contrib-csslint' );
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
-	grunt.registerTask( 'default', [ 'jshint', 'copy' ] );
-	grunt.registerTask( 'deploy', [ 'jshint', 'requirejs', 'clean', 'cssmin', 'copy' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'csslint', 'copy' ] );
+	grunt.registerTask( 'deploy', [ 'jshint', 'csslint', 'requirejs', 'clean', 'cssmin', 'copy' ] );
 };

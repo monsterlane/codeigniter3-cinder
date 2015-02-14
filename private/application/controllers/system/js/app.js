@@ -559,9 +559,41 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				self.load( response );
 			};
 
+			options.error = function( ) {
+				self.enable( button );
+			};
+
+			this.resetValidation( );
 			this.disable( button, 'Searching' );
 
 			this.getConduit( url ).ajax( options );
+		},
+
+		/**
+		 * Method: validation
+		 * @param {String} aValidation
+		 */
+
+		validation: function( aValidation ) {
+			var data = this.getData( 'module.data' ),
+				el;
+
+			el = $( data.view.container ).find( 'div.purpose-message' );
+
+			if ( el.length == 0 ) {
+				el = $( 'div.purpose-message' );
+			}
+
+			el[ 0 ].innerHTML = aValidation;
+			el.show( );
+		},
+
+		/**
+		 * Method: resetValidation
+		 */
+
+		resetValidation: function( ) {
+			$( 'div.purpose-message' ).empty( );
 		},
 
 		/**

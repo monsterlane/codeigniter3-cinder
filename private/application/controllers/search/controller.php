@@ -13,33 +13,47 @@ class Search_controller extends MY_Controller {
 	}
 
 	public function users( ) {
-		$data = array(
-			array(
-				'id' => 1,
-				'first_name' => 'Mr.',
-				'last_name' => 'Black',
-			),
-			array(
-				'id' => 2,
-				'first_name' => 'John',
-				'last_name' => 'Doe',
-			),
-			array(
-				'id' => 3,
-				'first_name' => 'Frank',
-				'last_name' => 'Jr.',
-			),
-		);
+		$this->load->library( 'form_validation' );
 
-		$this->load->partial( array(
-			'name' => false,
-			'view' => array(
-				'path' => 'users.html',
-				'container' => '#cinderSearchResults',
-				'data' => $data,
-			),
-			'callback' => 'bindSearchResults',
-		) );
+		$this->form_validation->set_rules( 'keywords', 'Keywords', 'trim|required' );
+
+		if ( $this->form_validation->run( ) === false ) {
+			$data = array(
+				'status' => false,
+				'validation' => validation_errors( ),
+			);
+
+			$this->set_data( 'module.data', $data );
+		}
+		else {
+			$data = array(
+				array(
+					'id' => 1,
+					'first_name' => 'Mr.',
+					'last_name' => 'Black',
+				),
+				array(
+					'id' => 2,
+					'first_name' => 'John',
+					'last_name' => 'Doe',
+				),
+				array(
+					'id' => 3,
+					'first_name' => 'Frank',
+					'last_name' => 'Jr.',
+				),
+			);
+
+			$this->load->partial( array(
+				'name' => false,
+				'view' => array(
+					'path' => 'users.html',
+					'container' => '#cinderSearchResults',
+					'data' => $data,
+				),
+				'callback' => 'bindSearchResults',
+			) );
+		}
 	}
 
 	public function user( $action = null ) {

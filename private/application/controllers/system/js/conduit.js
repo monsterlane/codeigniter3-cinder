@@ -79,10 +79,13 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 					}
 					else if ( ( r = self.parse( aResponse ) ) !== false ) {
 						if ( r.hasOwnProperty( 'status' ) && r.status === false ) {
-							if ( r.hasOwnProperty( 'message' ) ) {
+							if ( r.hasOwnProperty( 'message' ) === true ) {
 								self.error( {
 									body: r.message
 								} );
+							}
+							else if ( r.hasOwnProperty( 'validation' ) === true ) {
+								self.validation( r.validation );
 							}
 							else {
 								self.error( {
@@ -184,6 +187,17 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 			var parent = this.getParent( );
 
 			parent.error( aError );
+		},
+
+		/**
+		 * Method: validation
+		 * @param {String} aValidation
+		 */
+
+		validation: function( aValidation ) {
+			var parent = this.getParent( );
+
+			parent.validation( aValidation );
 		}
 	});
 

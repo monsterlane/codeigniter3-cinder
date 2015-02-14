@@ -245,7 +245,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, el, view, cache;
+				module, el, view;
 
 			this.verbose( 'app: set pending data' );
 

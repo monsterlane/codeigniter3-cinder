@@ -59,33 +59,21 @@ class MY_Loader extends CI_Loader {
 		$ci =& get_instance( );
 
 		if ( array_key_exists( 'path', $data[ 'view' ] ) === false ) {
-			$view = $ci->router->directory . 'views/' . $ci->router->method . '.html';
-
-			if ( file_exists( VIEWPATH . $view ) === true && is_file( VIEWPATH . $view ) == true ) {
-				$data[ 'view' ][ 'path' ] = $view;
-			}
-			else {
-				$data[ 'view' ][ 'path' ] = false;
-			}
+			$view = $ci->router->directory . 'views/' . $ci->router->method;
 		}
 		else if ( strpos( $data[ 'view' ][ 'path' ], '/' ) === false ) {
 			$view = $ci->router->directory . 'views/' . $data[ 'view' ][ 'path' ];
-
-			if ( strpos( $view, '.' ) === false ) {
-				$view .= '.html';
-			}
-
-			if ( file_exists( VIEWPATH . $view ) === true && is_file( VIEWPATH . $view ) == true ) {
-				$data[ 'view' ][ 'path' ] = $view;
-			}
-			else {
-				$data[ 'view' ][ 'path' ] = false;
-			}
 		}
 
-		if ( $data[ 'view' ][ 'path' ] !== false ) {
+		if ( strpos( $view, '.' ) === false ) {
+			$view .= '.html';
+		}
+
+		if ( file_exists( VIEWPATH . $view ) === true && is_file( VIEWPATH . $view ) == true ) {
+			$data[ 'view' ][ 'path' ] = $view;
 			$data[ 'view' ][ 'hash' ] = md5( $view . filemtime( VIEWPATH . $view ) );
-			$post = $ci->get_data( 'post.data' );
+
+			$post = $ci->get_data( 'post' );
 			$skip = false;
 
 			if ( array_key_exists( 'views', $post ) === true && is_array( $post[ 'views' ] ) === true && empty( $post[ 'views' ] ) === false ) {
@@ -108,6 +96,9 @@ class MY_Loader extends CI_Loader {
 			if ( $skip === false ) {
 				$data[ 'view' ][ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ][ 'path' ], '_ci_return' => true ) );
 			}
+		}
+		else {
+			$data[ 'view' ][ 'path' ] = false;
 		}
 
 		$ci->set_view( $data );

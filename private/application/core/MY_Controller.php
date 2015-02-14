@@ -74,7 +74,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/view.js',
 				),
 			),
-		), 'system' );
+		), 'system.data' );
 
 		$data = array(
 			'system' => true,
@@ -91,14 +91,13 @@ class MY_Controller extends CI_Controller {
 		if ( $key !== null ) {
 			$keys = explode( '.', $key );
 
-			while ( count( $keys ) > 1 ) {
-				$key = array_shift( $keys );
-
-				if ( isset( $root[ $key ] ) === false ) {
+			foreach ( $keys as $key ) {
+				if ( isset( $root[ $key ] ) === true ) {
+					$root = $root[ $key ];
+				}
+				else {
 					return null;
 				}
-
-				$root = $root[ $key ];
 			}
 		}
 
@@ -131,10 +130,10 @@ class MY_Controller extends CI_Controller {
 		}
 	}
 
-	public function set_view( $data = array( ), $key = 'module' ) {
-		$module = $this->get_data( $key . '.data' );
+	public function set_view( $data = array( ), $key = 'module.data' ) {
+		$module = $this->get_data( $key );
 
-		if ( $key === 'system' || is_string( $module[ 'data' ][ 'redirect' ] ) === false ) {
+		if ( $key === 'system.data' || is_string( $module[ 'redirect' ] ) === false ) {
 			$data = merge_array( array(
 				'name' => null,
 				'view' => array(
@@ -150,12 +149,34 @@ class MY_Controller extends CI_Controller {
 			$vpath = str_replace( '.', '', $this->config->item( 'version' ) ) . '/';
 			$dest = FCPATH . 'files/cache/';
 
-			foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
-				if ( strpos( $style, '/' ) === false ) {
-					$style = $this->router->directory . 'css/' . $style;
+			if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
+				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
+					if ( strpos( $style, '/' ) !== false ) {
+						$name = substr( $style, strrpos( $style, '/' ) + 1 );
+					}
+					else {
+						$name = $style;
+					}
+
+					if ( $name !== 'style.css' ) {
+						unset( $data[ 'view' ][ 'css' ][ $k ] );
+					}
+					else if ( strpos( $style, '/' ) === false ) {
+						$data[ 'view' ][ 'css' ][ $k ] = $vpath . $this->router->directory . 'css/' . $style;
+					}
+					else {
+						$data[ 'view' ][ 'css' ][ $k ] = $vpath . $style;
+					}
 				}
 
-				if ( ENVIRONMENT === 'development' ) {
+				$data[ 'view' ][ 'css' ] = array_values( $data[ 'view' ][ 'css' ] );
+			}
+			else if ( ENVIRONMENT === 'development' ) {
+				foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
+					if ( strpos( $style, '/' ) === false ) {
+						$style = $this->router->directory . 'css/' . $style;
+					}
+
 					if ( file_exists( $dest . $style ) === false || filemtime( VIEWPATH . $style ) !== filemtime( $dest . $style ) ) {
 						$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
 
@@ -165,16 +186,11 @@ class MY_Controller extends CI_Controller {
 
 						copy( VIEWPATH . $style, $dest . $style );
 					}
-				}
-				else {
-					$style = preg_replace( '/[^min]\.css$/', '.min.css', $style );
-				}
 
-				$style = $vpath . $style;
-			}
-			unset( $style );
+					$style = $vpath . $style;
+				}
+				unset( $style );
 
-			if ( ENVIRONMENT === 'development' ) {
 				foreach ( $data[ 'view' ][ 'js' ] as $script ) {
 					if ( strpos( $script, '/' ) === false ) {
 						$script = $this->router->directory . 'js/' . $script;
@@ -218,14 +234,11 @@ class MY_Controller extends CI_Controller {
 						copy( VIEWPATH . $script, $dest . $script );
 					}
 				}
-				else if ( substr( $data[ 'name' ], -4 ) !== '.min' ) {
-					$data[ 'name' ] .= '.min';
-				}
 
 				$data[ 'name' ] = $vpath . $data[ 'name' ];
 			}
 
-			$this->set_data( $key . '.data', $data );
+			$this->set_data( $key, $data );
 		}
 	}
 

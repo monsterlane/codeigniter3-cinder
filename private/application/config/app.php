@@ -8,8 +8,8 @@ $config['default_container'] = '#cinderBodyArea';
 $config['validation_container'] = 'div.purpose-message';
 $config['flashdata_container'] = 'div.purpose-message';
 
-$config['support_email'] = 'support@appdomain.com';
-$config['support_message'] = 'Please refresh the page, if the problem persists please contact <a href="' . $config['support_email'] . '">support</a>.';
+$config['support_address'] = 'support@appdomain.com';
+$config['support_message'] = 'Please refresh the page, if the problem persists please contact <a href="' . $config['support_address'] . '">support</a>.';
 
 $config['files_file_path'] = FCPATH . 'files/';
 $config['files_web_path'] = '/files/';

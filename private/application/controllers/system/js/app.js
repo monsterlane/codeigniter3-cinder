@@ -322,6 +322,14 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 					this.verbose( 'app: callback ' + data.callback + ' skipped (not found)' );
 				}
 			}
+
+			if ( data.hasOwnProperty( 'flashdata' ) === true ) {
+				if ( data.flashdata.hasOwnProperty( 'message' ) === true ) {
+					this.verbose( 'app: flash message' );
+
+					this.message( data.flashdata.message );
+				}
+			}
 		},
 
 		/**
@@ -573,40 +581,36 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				self.enable( button );
 			};
 
-			this.resetValidation( );
 			this.disable( button, 'Searching' );
 
 			this.getConduit( url ).ajax( options );
 		},
 
 		/**
-		 * Method: validation
-		 * @param {String} aValidation
+		 * Method: message
+		 * @param {String} aMessage
+		 * @param {String} aKey
 		 */
 
-		validation: function( aValidation ) {
-			var opt = this.getData( 'system.options' ),
+		message: function( aMessage, aKey ) {
+			var msg = aMessage || false,
+				key = aKey || 'system.options.flashdata_container',
+				selector = this.getData( key ),
 				data = this.getData( 'module.data' ),
 				el;
 
-			el = $( data.view.container ).find( opt.validation_container );
+			if ( msg !== false ) {
+				el = $( data.view.container ).find( selector );
 
-			if ( el.length === 0 ) {
-				el = $( opt.validation_container );
+				if ( el.length === 0 ) {
+					el = $( selector );
+				}
+
+				el.html( aMessage ).show( );
 			}
-
-			el[ 0 ].innerHTML = aValidation;
-			el.show( );
-		},
-
-		/**
-		 * Method: resetValidation
-		 */
-
-		resetValidation: function( ) {
-			var opt = this.getData( 'system.options' );
-
-			$( opt.validation_container ).empty( );
+			else {
+				$( selector ).empty( );
+			}
 		},
 
 		/**

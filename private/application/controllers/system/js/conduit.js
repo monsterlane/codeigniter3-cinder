@@ -85,7 +85,7 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 								} );
 							}
 							else if ( r.hasOwnProperty( 'validation' ) === true ) {
-								self.validation( r.validation );
+								parent.message( r.validation, 'system.options.validation_container' );
 							}
 							else {
 								self.error( {
@@ -130,6 +130,8 @@ define( [ 'jquery', 'jclass' ], function( $, Class ) {
 			}
 
 			opt.success = ncb;
+
+			parent.message( false );
 
 			this.abort( );
 

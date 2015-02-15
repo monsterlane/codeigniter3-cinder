@@ -26,6 +26,12 @@ class MY_Loader extends CI_Loader {
 
 	public function response( ) {
 		$ci =& get_instance( );
+
+		if ( $this->is_loaded( 'session' ) !== false ) {
+			$data = $ci->session->flashdata( );
+			$ci->set_data( 'module.data.flashdata', $data );
+		}
+
 		$data = $ci->get_data( );
 
 		if ( $data[ 'post' ][ 'system' ] !== false ) {

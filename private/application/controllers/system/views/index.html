@@ -10,7 +10,7 @@
 	}
 
 	foreach ( $system[ 'data' ][ 'view' ][ 'css' ] as $style ) {
-		?><link href="<?=base_url( 'files/cache/' . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
+		?><link href="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
 	}
 	?>
 </head>
@@ -19,9 +19,9 @@
 <div class="purpose-message"></div>
 <div id="<?=str_replace( '#', '', $system[ 'data' ][ 'view' ][ 'container' ] )?>"></div>
 
-<script type="text/javascript" src="<?=base_url( 'files/cache/system/js/require.js.min.js' )?>"></script>
-<script type="text/javascript" src="<?=base_url( 'files/cache/system/js/require.config.js' )?>"></script>
+<script type="text/javascript" src="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . 'system/js/require.js.min.js' )?>"></script>
 <script type="text/javascript">
+<?=$system[ 'data' ][ 'view' ][ 'data' ][ 'config' ]?>
 require( [ 'domready!', 'system/js/app' ], function( aDocument, aApp ) {
 	'use strict';
 

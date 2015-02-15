@@ -49,6 +49,10 @@ module.exports = function( grunt ) {
 							exclude: [ 'system/js/app' ]
 						},
 						{
+							name: 'main/js/module',
+							exclude: [ 'system/js/app', 'system/js/module' ]
+						},
+						{
 							name: 'search/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
 						}
@@ -96,6 +100,7 @@ module.exports = function( grunt ) {
 		},
 		clean: {
 			system: [
+				'public/files/cache/build.txt',
 				'public/files/cache/system/css/reset.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',

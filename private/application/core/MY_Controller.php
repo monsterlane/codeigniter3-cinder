@@ -42,6 +42,7 @@ class MY_Controller extends CI_Controller {
 
 	private function _load_system( ) {
 		$data = array(
+			'version' => $this->config->item( 'version' ),
 			'verbose' => $this->config->item( 'verbose' ),
 			'support_address' => $this->config->item( 'support_address' ),
 			'support_message' => $this->config->item( 'support_message' ),
@@ -50,6 +51,23 @@ class MY_Controller extends CI_Controller {
 		);
 
 		$this->set_data( 'system.options', $data );
+
+		$config = file_get_contents( '../private/application/controllers/system/js/require.config.js' );
+		$vpath = '';
+
+		if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
+			$vpath = str_replace( '.', '', $this->config->item( 'version' ) );
+			$config = str_replace( '/files/cache', '/files/cache/' . $vpath, $config );
+			$vpath .= '/';
+		}
+		else if ( ENVIRONMENT === 'development' ) {
+			$config = substr_replace( $config, ",\n	urlArgs: 't=' + Date.now( )\n});", strrpos( $config, "\n" . '});' ), strlen( "\n});" ) );
+		}
+
+		$data = array(
+			'config' => $config,
+			'version' => $vpath,
+		);
 
 		$this->set_view( array(
 			'favicon' => false,
@@ -76,6 +94,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/module.js',
 					'system/js/view.js',
 				),
+				'data' => $data,
 			),
 		), 'system.data' );
 
@@ -155,7 +174,6 @@ class MY_Controller extends CI_Controller {
 				)
 			), $data );
 
-			$vpath = str_replace( '.', '', $this->config->item( 'version' ) ) . '/';
 			$dest = FCPATH . 'files/cache/';
 
 			if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
@@ -171,10 +189,7 @@ class MY_Controller extends CI_Controller {
 						unset( $data[ 'view' ][ 'css' ][ $k ] );
 					}
 					else if ( strpos( $style, '/' ) === false ) {
-						$data[ 'view' ][ 'css' ][ $k ] = $vpath . $this->router->directory . 'css/' . $style;
-					}
-					else {
-						$data[ 'view' ][ 'css' ][ $k ] = $vpath . $style;
+						$data[ 'view' ][ 'css' ][ $k ] = $this->router->directory . 'css/' . $style;
 					}
 				}
 
@@ -195,8 +210,6 @@ class MY_Controller extends CI_Controller {
 
 						copy( VIEWPATH . $style, $dest . $style );
 					}
-
-					$style = $vpath . $style;
 				}
 				unset( $style );
 
@@ -243,8 +256,6 @@ class MY_Controller extends CI_Controller {
 						copy( VIEWPATH . $script, $dest . $script );
 					}
 				}
-
-				$data[ 'name' ] = $vpath . $data[ 'name' ];
 			}
 
 			$this->set_data( $key, $data );

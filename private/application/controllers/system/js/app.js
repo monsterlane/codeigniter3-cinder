@@ -585,13 +585,14 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		 */
 
 		validation: function( aValidation ) {
-			var data = this.getData( 'module.data' ),
+			var opt = this.getData( 'system.options' ),
+				data = this.getData( 'module.data' ),
 				el;
 
-			el = $( data.view.container ).find( 'div.purpose-message' );
+			el = $( data.view.container ).find( opt.validation_container );
 
 			if ( el.length === 0 ) {
-				el = $( 'div.purpose-message' );
+				el = $( opt.validation_container );
 			}
 
 			el[ 0 ].innerHTML = aValidation;
@@ -603,7 +604,9 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		 */
 
 		resetValidation: function( ) {
-			$( 'div.purpose-message' ).empty( );
+			var opt = this.getData( 'system.options' );
+
+			$( opt.validation_container ).empty( );
 		},
 
 		/**

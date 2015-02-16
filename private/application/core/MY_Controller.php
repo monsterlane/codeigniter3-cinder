@@ -52,7 +52,7 @@ class MY_Controller extends CI_Controller {
 
 		$this->set_data( 'system.options', $data );
 
-		$config = file_get_contents( '../private/application/controllers/system/js/require.config.js' );
+		$config = file_get_contents( APPPATH . 'controllers/system/js/require.config.js' );
 		$vpath = '';
 
 		if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
@@ -88,6 +88,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/jquery.plugins.js',
 					'system/js/jclass.min.js',
 					'system/js/dot.min.js',
+					'system/js/webfont.min.js',
 					'system/js/app.js',
 					'system/js/cache.js',
 					'system/js/conduit.js',

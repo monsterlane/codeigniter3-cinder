@@ -36,36 +36,40 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		ajax: function( aOptions ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
+				regex = new RegExp( '^(https?:\/\/)' ),
 				ncb, ocb, views, i, len,
 				jsonp = false,
 				self = this;
 
-			opt.type = 'post';
+			if ( opt.hasOwnProperty( 'dataType' ) === true && opt.dataType === 'jsonp' ) {
+				opt.type = 'get';
 
-			views = parent.getViews( opt.url );
+				jsonp = true;
+			}
+			else if ( regex.test( opt.url ) === false ) {
+				opt.type = 'post';
 
-			if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
-				if ( typeof opt.data === 'object' ) {
-					opt.data.system = false;
-					opt.data.views = views;
-				}
-				else if ( typeof opt.data === 'string' ) {
-					opt.data += '&system=false';
+				views = parent.getViews( opt.url );
 
-					for ( i = 0, len = views.length; i < len; i++ ) {
-						opt.data += '&views[]=' + encodeURIComponent( views[ i ] );
+				if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
+					if ( typeof opt.data === 'object' ) {
+						opt.data.system = false;
+						opt.data.views = views;
+					}
+					else if ( typeof opt.data === 'string' ) {
+						opt.data += '&system=false';
+
+						for ( i = 0, len = views.length; i < len; i++ ) {
+							opt.data += '&views[]=' + encodeURIComponent( views[ i ] );
+						}
 					}
 				}
-			}
-			else {
-				opt.data = {
-					system: false,
-					views: views
-				};
-			}
-
-			if ( opt.hasOwnProperty( 'dataType' ) === true && opt.dataType === 'jsonp' ) {
-				jsonp = true;
+				else {
+					opt.data = {
+						system: false,
+						views: views
+					};
+				}
 			}
 
 			if ( opt.hasOwnProperty( 'success' ) === true ) {
@@ -74,7 +78,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				ncb = function( aResponse, aCode, aXhr ) {
 					var r;
 
-					if ( jsonp === true ) {
+					if ( jsonp === true || $.isPlainObject( aResponse ) === true ) {
 						ocb( aResponse );
 					}
 					else if ( ( r = self.parse( aResponse ) ) !== false ) {

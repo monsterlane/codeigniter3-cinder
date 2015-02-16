@@ -93,9 +93,14 @@ module.exports = function( grunt ) {
 		csslint: {
 			modules: {
 				options: {
-					'import': false
+					'import': false,
+					'universal-selector': false,
+					'unqualified-attributes': false
 				},
-				src: [ 'private/application/controllers/**/css/*.css' ]
+				src: [
+					'private/application/controllers/**/css/*.css',
+					'!private/application/controllers/system/css/reset.css'
+				]
 			}
 		},
 		clean: {

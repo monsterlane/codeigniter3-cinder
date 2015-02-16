@@ -4,11 +4,7 @@ class MY_Log extends CI_Log {
 	protected $_log_db = false;
 
 	public function database( $available ) {
-		$ci =& get_instance( );
-
-		if ( $ci->config->item( 'log_database' ) === true && isset( $ci->db ) === true ) {
-			$this->_log_db = $available;
-		}
+		$this->_log_db = $available;
 	}
 
 	public function write_log( $level, $msg ) {

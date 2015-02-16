@@ -119,6 +119,33 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 		},
 
 		/**
+		 * Method: message
+		 * @param {String} aMessage
+		 * @param {String} aKey
+		 */
+
+		message: function( aMessage, aKey ) {
+			var msg = aMessage || false,
+				key = aKey || 'system.options.flashdata_container',
+				selector = this.getData( key ),
+				data = this.getData( 'module.data' ),
+				el;
+
+			if ( msg !== false ) {
+				el = $( data.view.container ).find( selector );
+
+				if ( el.length === 0 ) {
+					el = $( selector );
+				}
+
+				el.html( aMessage ).show( );
+			}
+			else {
+				$( selector ).empty( );
+			}
+		},
+
+		/**
 		 * Method: log
 		 * @param {String} aMessage
 		 * @param {String} aFilename
@@ -144,6 +171,24 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 					} );
 				}
 			});
+		},
+
+		/**
+		 * Method: extend
+		 * @param {Object} aDestination
+		 * @param {Object} aSource
+		 */
+
+		extend: function( aDestination, aSource ) {
+			var i;
+
+			for ( i in aSource ) {
+				if ( aSource.hasOwnProperty( i ) === true ) {
+					aDestination[ i ] = aSource[ i ];
+				}
+			}
+
+			return aDestination;
 		},
 
 		/**
@@ -603,51 +648,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 			};
 
 			this.getConduit( url ).ajax( options );
-		},
-
-		/**
-		 * Method: message
-		 * @param {String} aMessage
-		 * @param {String} aKey
-		 */
-
-		message: function( aMessage, aKey ) {
-			var msg = aMessage || false,
-				key = aKey || 'system.options.flashdata_container',
-				selector = this.getData( key ),
-				data = this.getData( 'module.data' ),
-				el;
-
-			if ( msg !== false ) {
-				el = $( data.view.container ).find( selector );
-
-				if ( el.length === 0 ) {
-					el = $( selector );
-				}
-
-				el.html( aMessage ).show( );
-			}
-			else {
-				$( selector ).empty( );
-			}
-		},
-
-		/**
-		 * Method: extend
-		 * @param {Object} aDestination
-		 * @param {Object} aSource
-		 */
-
-		extend: function( aDestination, aSource ) {
-			var i;
-
-			for ( i in aSource ) {
-				if ( aSource.hasOwnProperty( i ) === true ) {
-					aDestination[ i ] = aSource[ i ];
-				}
-			}
-
-			return aDestination;
 		}
 	});
 

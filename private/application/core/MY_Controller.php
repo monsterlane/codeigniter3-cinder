@@ -85,7 +85,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/require.css.min.js',
 					'system/js/require.domready.min.js',
 					'system/js/jquery.min.js',
-					'system/js/jquery.helpers.js',
+					'system/js/jquery.plugins.js',
 					'system/js/jclass.min.js',
 					'system/js/dot.min.js',
 					'system/js/app.js',

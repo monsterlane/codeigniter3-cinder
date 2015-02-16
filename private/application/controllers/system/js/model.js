@@ -70,7 +70,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				if ( arr.hasOwnProperty( keys[ i ] ) === true ) {
 					if ( i === len - 1 ) {
 						if ( arr[ keys[ i ] ].constructor === Array && aValue.constructor === Array ) {
-							arr[ keys[ i ] ] = $.extend( true, arr[ keys[ i ] ], aValue );
+							arr[ keys[ i ] ] = $.merge( arr[ keys[ i ] ], aValue );
 						}
 						else {
 							arr[ keys[ i ] ] = aValue;
@@ -87,6 +87,36 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 					arr[ keys[ i ] ] = [ ];
 
 					arr = arr[ keys[ i ] ];
+				}
+			}
+		},
+
+		/**
+		 * Method: remove
+		 * @param {Object} aKey
+		 */
+
+		remove: function( aKey ) {
+			var key = aKey || false,
+				val = this._data,
+				keys, i, len;
+
+			if ( key !== false ) {
+				keys = key.split( '.' );
+
+				for ( i = 0, len = keys.length; i < len; i++ ) {
+					if ( val.hasOwnProperty( keys[ i ] ) === true ) {
+						if ( i === len - 1 ) {
+							delete val[ keys[ i ] ];
+						}
+						else {
+							val = val[ keys[ i ] ];
+						}
+					}
+					else {
+						val = false;
+						break;
+					}
 				}
 			}
 		}

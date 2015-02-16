@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Helpers, Cache, Conduit, Model, View ) {
+define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*
@@ -27,7 +27,7 @@ define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit',
 			this._view = new View( this );
 
 			this.setData( 'system.options', options );
-			this.setData( 'views', [ ] );
+			this.setData( 'system.views', [ ] );
 
 			if ( Object.keys( options ).length > 0 ) {
 				if ( options.hasOwnProperty( 'verbose' ) === true && options.verbose === true ) {
@@ -354,6 +354,17 @@ define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit',
 		},
 
 		/**
+		 * Method: removeData
+		 * @param {String} aKey
+		 */
+
+		removeData: function( aKey ) {
+			this._model.remove( aKey );
+
+			return this;
+		},
+
+		/**
 		 * Method: getViews
 		 * @param {String} aUrl
 		 */
@@ -373,7 +384,7 @@ define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit',
 				url = url.substring( 1 );
 			}
 
-			views = this.getData( 'views.' + url );
+			views = this.getData( 'system.views.' + url );
 
 			return views;
 		},
@@ -411,13 +422,15 @@ define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit',
 		 */
 
 		createView: function( aView ) {
+			var key = 'system.views.' + aView.url;
+
 			this.verbose( 'app: creating view' );
 
-			if ( this._model._data.views.hasOwnProperty( aView.url ) === false ) {
-				this._model._data.views[ aView.url ] = [ ];
+			if ( this.getData( key ) === false ) {
+				this.setData( key, [ ] );
 			}
 
-			this._model._data.views[ aView.url ].push( aView.path + '|' + aView.hash );
+			this.setData( key, [ aView.path + '|' + aView.hash ] );
 
 			this.setCache( aView.hash, JSON.stringify( aView ) );
 
@@ -461,8 +474,12 @@ define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit',
 		 */
 
 		clearCache: function( ) {
+			this.removeData( 'system.views' );
+			this.setData( 'system.views', [ ] );
+
 			this._view.empty( );
 			this._cache.empty( );
+
 			this._cache.free( );
 		},
 

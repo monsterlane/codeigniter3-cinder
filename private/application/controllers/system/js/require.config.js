@@ -9,6 +9,7 @@ require.config({
 	paths: {
 		'domready': 'system/js/require.domready.min',
 		'jquery': 'system/js/jquery.min',
+		'helpers': 'system/js/jquery.helpers',
 		'jclass': 'system/js/jclass.min'
 	}
 });

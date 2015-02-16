@@ -3,7 +3,7 @@
 This project is designed to provide a single page app like experience for websites, wep apps, or web based mobile apps. By adding the class "cinder" on an anchor link or form, the request will be sent over AJAX and injected into the page. Any required assets (JS/CSS) will be loaded asynchronously. After the inital page load, your visitors will never see a full page change!
 
 #### Current Version
-0.3 beta
+0.4 beta
 
 #### Browser Support
 
@@ -18,6 +18,7 @@ Cinder is built using a number of open source projects.
 * [RequireCSS] - A RequireJS CSS loader plugin to allow CSS requires and optimization
 * [doT.js] - The fastest + concise javascript template engine for nodejs and browsers. Partials, custom delimiters and more.
 * [jclass] - Advanced but lightweight and fast Javascript inheritance model providing class members and prototype conversion.
+* [Grunt] - In one word: automation. The less work you have to do when performing repetitive tasks like minification, compilation, unit testing, linting, etc, the easier your job becomes.
 
 ### Installation
 
@@ -62,3 +63,4 @@ THE SOFTWARE.
 [jclass]:https://github.com/riga/jclass
 [history]:https://developer.mozilla.org/en-US/docs/Web/API/History
 [local storage]:https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage
+[Grunt]: http://gruntjs.com/

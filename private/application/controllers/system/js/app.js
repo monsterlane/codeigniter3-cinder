@@ -1,5 +1,5 @@
 
-define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( $, Class, Cache, Conduit, Model, View ) {
+define( [ 'jclass', 'jquery', 'helpers', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Helpers, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*
@@ -140,7 +140,7 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				},
 				success: function( response ) {
 					self.error( {
-						body: 'An error has occurred. ' + self.getData( 'system.support_message' )
+						body: 'An error has occurred. ' + self.getData( 'system.options.support_message' )
 					} );
 				}
 			});
@@ -572,16 +572,18 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 				options.data = form.serialize( );
 			}
 
+			options.beforeSend = function( ) {
+				button.disable( );
+			};
+
 			options.success = function( response ) {
-				self.enable( button );
+				button.enable( );
 				self.load( response );
 			};
 
 			options.error = function( ) {
-				self.enable( button );
+				button.enable( );
 			};
-
-			this.disable( button, 'Searching' );
 
 			this.getConduit( url ).ajax( options );
 		},
@@ -614,73 +616,21 @@ define( [ 'jquery', 'jclass', 'system/js/cache', 'system/js/conduit', 'system/js
 		},
 
 		/**
-		 * Method: enable
-		 * @param {DOMelement} aElement
+		 * Method: extend
+		 * @param {Object} aDestination
+		 * @param {Object} aSource
 		 */
 
-		enable: function( aElement ) {
-			var el = $( aElement );
+		extend: function( aDestination, aSource ) {
+			var i;
 
-			if ( el.is( 'button' ) === true ) {
-				if ( el[ 0 ].hasAttribute( 'data-label' ) === true ) {
-					el[ 0 ].innerHTML = el[ 0 ].getAttribute( 'data-label' );
-					el[ 0 ].removeAttribute( 'data-label' );
+			for ( i in aSource ) {
+				if ( aSource.hasOwnProperty( i ) === true ) {
+					aDestination[ i ] = aSource[ i ];
 				}
 			}
 
-			el.prop( 'disabled', false );
-			el.removeClass( 'disabled' );
-		},
-
-		/**
-		 * Method: disable
-		 * @param {DOMelement} aElement
-		 */
-
-		disable: function( aElement, aLabel ) {
-			var el = $( aElement ),
-				label = aLabel || 'Saving';
-
-			if ( el.is( 'button' ) === true ) {
-				if ( el[ 0 ].hasAttribute( 'data-label' ) === true ) {
-					label = el[ 0 ].innerHTML;
-
-					el[ 0 ].innerHTML = el[ 0 ].getAttribute( 'data-label' );
-					el[ 0 ].setAttribute( 'data-label', label );
-				}
-				else {
-					el[ 0 ].setAttribute( 'data-label', el[ 0 ].innerHTML );
-					el[ 0 ].innerHTML = label;
-				}
-			}
-
-			el.prop( 'disabled', true );
-			el.addClass( 'disabled' );
-		},
-
-		/**
-		 * Method: selectByValue
-		 * @param {DOMelement} aElement
-		 * @param {String} aValue
-		 */
-
-		selectByValue: function( aElement, aValue, aEvent ) {
-			var el = $( aElement ),
-				val = aValue.toString( ),
-				evt = aEvent || false,
-				i, len;
-
-			for ( i = 0, len = el[ 0 ].options.length; i < len; i++ ) {
-				if ( el[ 0 ].options[ i ].value === val ) {
-					el[ 0 ].options[ i ].selected = true;
-
-					if ( evt === true ) {
-						el.trigger( 'change' );
-					}
-
-					break;
-				}
-			}
+			return aDestination;
 		}
 	});
 

@@ -1,5 +1,61 @@
+/* import reset */
 
 @import url( 'reset.css' );
+
+/* global styles */
+
+input::-moz-focus-inner {
+	border:0;
+}
+
+[contenteditable]:focus {
+	outline:0px solid transparent;
+}
+
+.wf-loading {
+	visibility:hidden;
+}
+.wf-active,
+.wf-inactive {
+	visibility:visible;
+}
+
+* + table,
+* + p,
+* + ul,
+* + ol,
+* + form,
+* + div,
+* + nav,
+* + header,
+* + footer,
+* + aside {
+	margin-top:1em;
+}
+
+* + section,
+section + * {
+	margin-top:2em;
+}
+
+header + * {
+	margin-top:1em;
+}
+
+hgroup > * + * {
+	margin-top:0.5em;
+}
+
+fieldset * + label {
+	margin-top:1em;
+}
+
+h1 {
+	font-weight:normal;
+	font-size:128.57142857142857142857142857143%;
+}
+
+/* document styles */
 
 body {
 	padding:1em;

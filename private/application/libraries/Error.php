@@ -3,7 +3,6 @@
 class Error {
 	public function javascript( $data = array( ) ) {
 		$ci =& get_instance( );
-		$ci->load->database( );
 
 		$data = clean_array( $ci->input->post( ) );
 		$data = extract_array( $data, array( 'message', 'filename', 'line' ) );
@@ -16,7 +15,6 @@ class Error {
 
 	public function php( $message = 'PHP error' ) {
 		$ci =& get_instance( );
-		$ci->load->database( );
 
 		$p1 = explode( APPPATH, $message );
 		$p2 = explode( ' ', $p1[ 1 ] );
@@ -39,7 +37,6 @@ class Error {
 
 	public function mysql( $message = 'Query error' ) {
 		$ci =& get_instance( );
-		$ci->load->database( );
 
 		$query = substr( $message, 0, strpos( $message, '- Invalid query' ) );
 		$query = trim( $query );

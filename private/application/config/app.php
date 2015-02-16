@@ -1,8 +1,9 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
-$config['version'] = '0.3';
-$config['maintenance'] = false;
+$config['version'] = '0.4';
 $config['verbose'] = true;
+$config['log_database'] = true;
+$config['maintenance'] = false;
 
 $config['default_container'] = '#cinderBodyArea';
 $config['validation_container'] = 'div.purpose-message';

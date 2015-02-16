@@ -1,5 +1,5 @@
 
-define( [ 'jquery', 'jclass', 'system/js/module' ], function( $, Class, BaseModule ) {
+define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, BaseModule ) {
 	'use strict';
 
 	/*

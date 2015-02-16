@@ -1,5 +1,5 @@
 
-define( [ 'jquery', 'jclass' ], function( $, Class ) {
+define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 	'use strict';
 
 	/*

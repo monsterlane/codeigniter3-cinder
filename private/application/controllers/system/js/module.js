@@ -39,6 +39,14 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		},
 
 		/**
+		 * Method: getConduit
+		 */
+
+		getConduit: function( aName ) {
+			return this.getParent( ).getConduit( aName );
+		},
+
+		/**
 		 * Method: verbose
 		 * @param {String} aMessage
 		 */

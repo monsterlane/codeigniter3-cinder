@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, BaseModule ) {
+define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module ) {
 	'use strict';
 
 	/*
@@ -8,7 +8,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, BaseModu
 	===============================================================================
 	*/
 
-	var Module = BaseModule._extend({
+	var Search = Module._extend({
 
 		/**
 		 * Method: init
@@ -45,11 +45,10 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, BaseModu
 		 */
 
 		handleDeleteButtonClick: function( aButton ) {
-			var parent = this.getParent( ),
-				container = $( aButton ).closest( 'tr' ),
+			var container = $( aButton ).closest( 'tr' ),
 				id = container[ 0 ].getAttribute( 'data-id' );
 
-			parent.getConduit( 'delete' ).ajax({
+			this.getConduit( 'delete' ).ajax({
 				url: this._url + '/user/delete/' + id,
 				success: function( response ) {
 					container.remove( );
@@ -58,5 +57,5 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, BaseModu
 		}
 	});
 
-	return Module;
+	return Search;
 });

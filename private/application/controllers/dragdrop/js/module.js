@@ -1,14 +1,14 @@
 
-define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module ) {
+define( [ 'jclass', 'jquery', 'system/js/module', 'upload' ], function( Class, $, Module, Upload ) {
 	'use strict';
 
 	/*
 	===============================================================================
-	Class: Main
+	Class: Dragdrop
 	===============================================================================
 	*/
 
-	var Main = Module._extend({
+	var Dragdrop = Module._extend({
 
 		/**
 		 * Method: init
@@ -18,7 +18,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		init: function init( aOptions ) {
 			init._super.call( this, aOptions );
 
-			this.verbose( 'module: main' );
+			this.verbose( 'module: dragdrop' );
 
 			this.bindEventListeners( );
 		},
@@ -31,27 +31,16 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
 				container = $( data.view.container ),
+				upload = new Upload( this ),
 				self = this;
 
 			this.verbose( 'module: bindEventListeners' );
 
-			container.find( 'button.purpose-clearcache' ).on( 'click', function( aEvent ) {
-				aEvent.preventDefault( );
-				self.handleClearCacheButtonClick( this );
+			upload.bind({
+				container: container.find( 'div.purpose-dragdrop' )
 			});
-		},
-
-		/**
-		 * Method: handleClearCacheButtonClick
-		 * @param {DOMelement} aButton
-		 */
-
-		handleClearCacheButtonClick: function( aButton ) {
-			var parent = this.getParent( );
-
-			parent.clearCache( );
 		}
 	});
 
-	return Main;
+	return Dragdrop;
 });

@@ -116,12 +116,20 @@ module.exports = function( grunt ) {
 							exclude: [ 'system/js/app' ]
 						},
 						{
+							name: 'system/js/upload',
+							exclude: [ 'system/js/app' ]
+						},
+						{
 							name: 'main/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
 						},
 						{
 							name: 'search/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
+						},
+						{
+							name: 'dragdrop/js/module',
+							exclude: [ 'system/js/app', 'system/js/module', 'system/js/upload' ]
 						}
 					]
 				}
@@ -148,9 +156,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
-	grunt.registerTask( 'build', [ 'concurrent:lint', 'copy' ] );
 	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'requirejs', 'sprite', 'clean', 'concurrent:minify' ] );
 
-	grunt.registerTask( 'compile', [ 'concurrent:lint', 'requirejs', 'clean', 'cssmin' ] );
+	grunt.registerTask( 'build', [ 'concurrent:lint', 'copy' ] );
+	grunt.registerTask( 'buildall', [ 'concurrent:lint', 'requirejs', 'clean', 'cssmin' ] );
 	grunt.registerTask( 'img', [ 'sprite', 'imagemin' ] );
 };

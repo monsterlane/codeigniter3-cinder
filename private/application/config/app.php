@@ -6,8 +6,8 @@ $config['log_database'] = true;
 $config['maintenance'] = false;
 
 $config['default_container'] = '#cinderBodyArea';
-$config['validation_container'] = 'div.purpose-message';
-$config['flashdata_container'] = 'div.purpose-message';
+$config['validation_container'] = 'div.purpose-validation';
+$config['flashdata_container'] = 'div.purpose-flashdata';
 
 $config['support_address'] = 'support@appdomain.com';
 $config['support_message'] = 'Please refresh the page, if the problem persists please contact <a href="' . $config['support_address'] . '">support</a>.';

@@ -54,8 +54,17 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 				if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
 					if ( typeof opt.data === 'object' ) {
-						opt.data.system = false;
-						opt.data.views = views;
+						if ( opt.data instanceof FormData ) {
+							opt.data.append( 'system', false );
+
+							for ( i = 0, len = views.length; i < len; i++ ) {
+								opt.data.append( 'views[]', encodeURIComponent( views[ i ] ) );
+							}
+						}
+						else {
+							opt.data.system = false;
+							opt.data.views = views;
+						}
 					}
 					else if ( typeof opt.data === 'string' ) {
 						opt.data += '&system=false';

@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Cache, Conduit, Model, View ) {
+define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Font, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*
@@ -15,7 +15,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 		 */
 
 		init: function( aOptions ) {
-			var options = aOptions || { };
+			var options = aOptions || { },
+				link, i, len;
 
 			this._verbose = false;
 			this._module = null;
@@ -33,6 +34,16 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 				if ( options.hasOwnProperty( 'verbose' ) === true && options.verbose === true ) {
 					this._verbose = true;
 				}
+
+				if ( options.hasOwnProperty( 'fonts' ) === true && $.isArray( options.fonts ) === true ) {
+					for ( i = 0, len = options.fonts.length; i < len; i++ ) {
+						link = 'font!' + options.fonts[ i ];
+
+						this.verbose( 'app: load ' + link );
+
+						require( [ link ] );
+					}
+				}
 			}
 
 			this.bindEventListeners( );
@@ -45,7 +56,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 		bindEventListeners: function( ) {
 			var self = this;
 
-			$( 'body' ).addClass( 'cinder' );
+			$( 'html' ).addClass( 'cinder' );
 
 			$( window ).on( 'popstate.cinder', function( aEvent ) {
 				if ( aEvent.originalEvent.state ) {
@@ -198,7 +209,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 
 		load: function( aData ) {
 			var data = aData || { },
-				last, link, el, i, len,
+				last, link, fp, ff, el, i, len,
 				options = { },
 				redir = false,
 				self = this;
@@ -212,6 +223,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 				name: false,
 				view: {
 					css: [ ],
+					fonts: [ ],
 					container: null,
 					path: null,
 					hash: null,
@@ -224,6 +236,25 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 
 				if ( last.name !== false && data.name !== false ) {
 					redir = true;
+
+					for ( i = 0, len = last.view.fonts.length; i < len; i++ ) {
+						link = last.view.fonts[ i ];
+
+						this.verbose( 'app: unload ' + link );
+
+						fp = link.substring( 0, link.indexOf( ',' ) );
+
+						ff = link.substring( link.indexOf( '[' ) + 1, link.lastIndexOf( ']' ) );
+						ff = ff.replace( ',', '|' );
+						ff = encodeURIComponent( ff );
+
+						el = $( 'link[href*="' + fp + '"][href*="' + ff + '"]' );
+
+						el.prop( 'disabled', true );
+						el.remove( );
+
+						requirejs.undef( 'system/js/require.webfont!' + link );
+					}
 
 					for ( i = 0, len = last.view.css.length; i < len; i++ ) {
 						link = last.view.css[ i ].substr( 0, last.view.css[ i ].length - 4 );
@@ -244,12 +275,22 @@ define( [ 'jclass', 'jquery', 'plugins', 'system/js/cache', 'system/js/conduit',
 				}
 			}
 
-			for ( i = 0, len = data.view.css.length; i < len; i++ ) {
-				link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
+			if ( data.view !== false ) {
+				for ( i = 0, len = data.view.fonts.length; i < len; i++ ) {
+					link = 'font!' + data.view.fonts[ i ];
 
-				this.verbose( 'app: load ' + link );
+					this.verbose( 'app: load ' + link );
 
-				require( [ link ], function( ) { } );
+					require( [ link ] );
+				}
+
+				for ( i = 0, len = data.view.css.length; i < len; i++ ) {
+					link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
+
+					this.verbose( 'app: load ' + link );
+
+					require( [ link ] );
+				}
 			}
 
 			if ( data.name !== false ) {

@@ -10,12 +10,13 @@ class MY_Router extends CI_Router {
 			$method = 'index';
 		}
 
-		if ( !file_exists( APPPATH . 'controllers/' . $class . '/controller.php' ) ) {
+		$this->set_directory( substr( $class, 0, strpos( $class, '_' ) ) );
+
+		if ( !file_exists( APPPATH . 'controllers/' . $this->directory . ucfirst( $class ) . '.php' ) ) {
 			return;
 		}
 
-		$this->set_directory( $class );
-		$this->set_class( 'controller' );
+		$this->set_class( $class );
 		$this->set_method( $method );
 
 		$this->uri->rsegments = array(
@@ -32,8 +33,8 @@ class MY_Router extends CI_Router {
 		while ($c-- > 0) {
 			$test = $this->directory . ucfirst( $this->translate_uri_dashes === TRUE ? str_replace( '-', '_', $segments[ 0 ] ) : $segments[ 0 ] );
 
-			if ( !file_exists( APPPATH . 'controllers/' . $test . '/controller.php' ) && is_dir( APPPATH . 'controllers/' . $this->directory . $segments[ 0 ] ) ) {
-				$this->set_directory( array_shift( $segments ), TRUE );
+			if ( !file_exists( APPPATH . 'controllers/' . $this->directory . $test . '_controller.php' ) && is_dir( APPPATH . 'controllers/' . $this->directory . $segments[ 0 ] ) ) {
+				$this->set_directory( $segments[ 0 ], TRUE );
 				continue;
 			}
 
@@ -60,7 +61,7 @@ class MY_Router extends CI_Router {
 		}
 
 		$this->set_directory( $segments[ 0 ] );
-		$this->set_class( 'controller' );
+		$this->set_class( $segments[ 0 ] . '_controller' );
 
 		if ( isset( $segments[ 1 ] ) ) {
 			$this->set_method( $segments[ 1 ] );

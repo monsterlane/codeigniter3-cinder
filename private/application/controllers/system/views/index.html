@@ -21,7 +21,13 @@
 
 <script type="text/javascript" src="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . 'system/js/require.js.min.js' )?>"></script>
 <script type="text/javascript">
-<?=$system[ 'data' ][ 'view' ][ 'data' ][ 'config' ]?>
+<?php
+if ( count( $system[ 'data' ][ 'view' ][ 'fonts' ] ) > 0 ) {
+	?>document.documentElement.className += ' wf-loading';<?php
+}
+
+echo( $system[ 'data' ][ 'view' ][ 'data' ][ 'config' ] );
+?>
 require( [ 'domready!', 'system/js/app' ], function( aDocument, aApp ) {
 	'use strict';
 

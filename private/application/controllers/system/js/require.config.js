@@ -7,9 +7,10 @@ require.config({
 		}
 	},
 	paths: {
-		'domready': 'system/js/require.domready.min',
-		'jquery': 'system/js/jquery.min',
-		'plugins': 'system/js/jquery.plugins',
-		'jclass': 'system/js/jclass.min'
+		domready: 'system/js/require.domready.min',
+		font: 'system/js/require.webfont',
+		jquery: 'system/js/jquery.min',
+		plugins: 'system/js/jquery.plugins',
+		jclass: 'system/js/jclass.min'
 	}
 });

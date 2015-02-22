@@ -37,7 +37,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
 				regex = new RegExp( '^(https?:\/\/)' ),
-				ncb, ocb, views, i, len,
+				obcb, nbcb, oscb, nscb, oecb, necb, views, i, len,
 				jsonp = false,
 				self = this;
 
@@ -48,6 +48,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			}
 			else if ( regex.test( opt.url ) === false ) {
 				opt.type = 'post';
+				opt.dataType = 'json';
 
 				views = parent.getViews( opt.url );
 
@@ -72,78 +73,94 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				}
 			}
 
-			if ( opt.hasOwnProperty( 'success' ) === true ) {
-				ocb = opt.success;
-
-				ncb = function( aResponse, aCode, aXhr ) {
-					var r;
-
-					if ( jsonp === true || $.isPlainObject( aResponse ) === true ) {
-						ocb( aResponse );
-					}
-					else if ( ( r = self.parse( aResponse ) ) !== false ) {
-						if ( r.hasOwnProperty( 'status' ) && r.status === false ) {
-							if ( r.hasOwnProperty( 'message' ) === true ) {
-								self.error( {
-									body: r.message
-								} );
-							}
-							else if ( r.hasOwnProperty( 'validation' ) === true ) {
-								parent.message( r.validation, 'system.options.validation_container' );
-							}
-							else {
-								self.error( {
-									body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
-								} );
-							}
-
-							if ( opt.hasOwnProperty( 'error' ) === true ) {
-								opt.error( );
-							}
-						}
-						else if ( typeof r.redirect === 'string' ) {
-							self.getParent( ).redirect( r.redirect );
-						}
-						else {
-							ocb( r );
-						}
-					}
-					else {
-						self.error( {
-							body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
-						} );
-
-						if ( opt.hasOwnProperty( 'error' ) === true ) {
-							opt.error( );
-						}
-					}
-				};
+			if ( opt.hasOwnProperty( 'error' ) === true && $.isFunction( opt.error ) === true ) {
+				oecb = opt.error;
 			}
 			else {
-				ncb = function( aResponse, aCode, aXhr ) {
-					if ( jsonp === false && self.parse( aResponse ) === false ) {
-						self.error( {
-							body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
-						} );
-
-						if ( opt.hasOwnProperty( 'error' ) === true ) {
-							opt.error( );
-						}
-					}
-				};
+				oecb = function( ) { };
 			}
 
-			opt.success = ncb;
+			necb = function( aXhr, aStatus, aError ) {
+				if ( aXhr.hasOwnProperty( 'readyState' ) === true ) {
+					self.error( {
+						body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
+					} );
+				}
 
-			parent.message( false );
+				oecb( aXhr, aStatus, aError );
+			};
 
-			this.abort( );
+			opt.error = necb;
+
+			if ( opt.hasOwnProperty( 'beforeSend' ) === true && $.isFunction( opt.beforeSend ) === true ) {
+				obcb = opt.beforeSend;
+			}
+			else {
+				obcb = function( aXhr, aOptions ) { };
+			}
+
+			nbcb = function( aXhr, aOptions ) {
+				parent.message( false );
+
+				self.abort( );
+
+				obcb( aXhr, aOptions );
+			};
+
+			opt.beforeSend = nbcb;
+
+			if ( opt.hasOwnProperty( 'success' ) === true && $.isFunction( opt.success ) === true ) {
+				oscb = opt.success;
+			}
+			else {
+				oscb = function( aResponse, aCode, aXhr ) { };
+			}
+
+			nscb = function( aResponse, aCode, aXhr ) {
+				if ( aResponse.hasOwnProperty( 'status' ) && aResponse.status === false ) {
+					if ( aResponse.hasOwnProperty( 'message' ) === true ) {
+						self.error( {
+							body: aResponse.message
+						} );
+
+						necb( aResponse );
+					}
+					else if ( aResponse.hasOwnProperty( 'validation' ) === true ) {
+						parent.message( aResponse.validation, 'system.options.validation_container' );
+
+						necb( aResponse );
+					}
+				}
+				else if ( typeof aResponse.redirect === 'string' ) {
+					parent.redirect( aResponse.redirect );
+				}
+				else {
+					oscb( aResponse, aCode, aXhr );
+				}
+
+				self.done( );
+			};
+
+			opt.success = nscb;
 
 			this._xhr = $.ajax( opt );
+		},
 
-			$.when( this._xhr ).then( function( ) {
-				self._xhr = null;
-			});
+		/**
+		 * Method: done
+		 */
+
+		done: function( ) {
+			this._xhr = null;
+		},
+
+		/**
+		 * Method: running
+		 * @return {Bool}
+		 */
+
+		running: function( ) {
+			return ( this._xhr !== null ) ? true : false;
 		},
 
 		/**
@@ -155,33 +172,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._xhr.abort( );
 				this._xhr = null;
 			}
-		},
-
-		/**
-		 * Method: parse
-		 * @param {String} aResponse
-		 */
-
-		parse: function( aResponse ) {
-			var r;
-
-			try {
-				r = JSON.parse( aResponse );
-			}
-			catch( err ) {
-				r = false;
-			}
-
-			return r;
-		},
-
-		/**
-		 * Method: running
-		 * @return {Bool}
-		 */
-
-		running: function( ) {
-			return ( this._xhr !== null ) ? true : false;
 		},
 
 		/**

@@ -84,6 +84,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/require.js.min.js',
 					'system/js/require.css.min.js',
 					'system/js/require.domready.min.js',
+					'system/js/require.webfont.js',
 					'system/js/jquery.min.js',
 					'system/js/jquery.plugins.js',
 					'system/js/jclass.min.js',
@@ -96,6 +97,9 @@ class MY_Controller extends CI_Controller {
 					'system/js/module.js',
 					'system/js/upload.js',
 					'system/js/view.js',
+				),
+				'fonts' => array(
+					'google,families:[Tangerine,Cantarell]',
 				),
 				'data' => $data,
 			),
@@ -153,7 +157,12 @@ class MY_Controller extends CI_Controller {
 
 		if ( empty( $data ) === false && isset( $root[ $key ] ) === true && is_array( $root[ $key ] ) === true ) {
 			foreach ( $data as $k => $v ) {
-				$root[ $key ][ $k ] = $v;
+				if ( array_key_exists( $k, $root[ $key ] ) === true && is_array( $root[ $key ][ $k ] ) === true && is_array( $v ) == true ) {
+					$root[ $key ][ $k ] = array_merge_recursive( $root[ $key ][ $k ], $v );
+				}
+				else {
+					$root[ $key ][ $k ] = $v;
+				}
 			}
 		}
 		else {
@@ -171,6 +180,7 @@ class MY_Controller extends CI_Controller {
 					'path' => null,
 					'css' => array( ),
 					'js' => array( ),
+					'fonts' => array( ),
 					'container' => $this->config->item( 'default_container' ),
 					'data' => array( ),
 					'hash' => false,
@@ -262,6 +272,10 @@ class MY_Controller extends CI_Controller {
 			}
 
 			$this->set_data( $key, $data );
+
+			if ( $key === 'system.data' && count( $data[ 'view' ][ 'fonts' ] ) > 0 ) {
+				$this->set_data( 'system.options.fonts', $data[ 'view' ][ 'fonts' ] );
+			}
 		}
 	}
 

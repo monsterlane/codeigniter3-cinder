@@ -42,6 +42,7 @@ module.exports = function( grunt ) {
 		csslint: {
 			modules: {
 				options: {
+					'adjoining-classes': false,
 					'import': false,
 					'universal-selector': false,
 					'unqualified-attributes': false

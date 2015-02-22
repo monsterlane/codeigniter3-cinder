@@ -31,8 +31,7 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'upload' ], function( Class, $
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
 				container = $( data.view.container ),
-				upload = new Upload( this ),
-				self = this;
+				upload = new Upload( this );
 
 			this.verbose( 'module: bindEventListeners' );
 

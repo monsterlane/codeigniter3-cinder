@@ -88,7 +88,7 @@ module.exports = function( grunt ) {
 				},
 				ignores: [
 					'private/application/controllers/**/js/*.min.js',
-					'private/application/controllers/system/js/require.font.js'
+					'private/application/controllers/system/js/require.webfont.js'
 				]
 			},
 			all: [ 'Gruntfile.js', 'private/application/controllers/**/js/*.js' ]

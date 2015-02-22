@@ -26,7 +26,7 @@ define( [ 'system/js/webfont.min' ], function( ) {
 		else if ( val === 'false' ) {
 			val = false;
 		}
-		else if ( val === '' || val == '\'\'' || val == '""' ) {
+		else if ( val === '' || val === '\'\'' || val === '""' ) {
 			val = '';
 		}
 		else if ( isNaN( val ) === false ) {

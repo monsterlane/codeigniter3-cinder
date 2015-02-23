@@ -24,6 +24,7 @@ module.exports = function( grunt ) {
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
+				'!public/files/cache/system/js/upload.js',
 				'!public/files/cache/system/js/require.config.js',
 				'!public/files/cache/system/js/require.js.min.js',
 				'!public/files/cache/system/js/require.css.min.js',
@@ -54,9 +55,12 @@ module.exports = function( grunt ) {
 			}
 		},
 		cssmin: {
-			target: {
-				cwd: 'public/files/cache/',
-				src: '**/css/*.css'
+			all: {
+				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css' ], '', {
+					rename: function( aBase, aPath ) {
+						return aPath;
+					}
+				})
 			}
 		},
 		imagemin: {
@@ -104,7 +108,7 @@ module.exports = function( grunt ) {
 					skipDirOptimize: true,
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
-					fileExclusionRegExp: /^(\.|views|)|\.php$/,
+					fileExclusionRegExp: /^(\.|views)|(\.php)$/,
 					paths: {
 						'requirejs': 'system/js/require.js.min'
 					},

@@ -161,9 +161,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
-	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'requirejs', 'sprite', 'clean', 'concurrent:minify' ] );
+	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'requirejs', 'clean', 'concurrent:minify' ] );
 
 	grunt.registerTask( 'build', [ 'concurrent:lint', 'copy' ] );
 	grunt.registerTask( 'buildall', [ 'concurrent:lint', 'requirejs', 'clean', 'cssmin' ] );
-	grunt.registerTask( 'img', [ 'sprite', 'imagemin' ] );
+	grunt.registerTask( 'img', [ 'imagemin' ] );
 };

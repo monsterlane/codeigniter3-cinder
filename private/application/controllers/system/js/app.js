@@ -676,7 +676,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		handleFormSubmit: function( aForm ) {
 			var options = { },
 				form = $( aForm ),
-				button, url,
+				button, url, view,
 				self = this;
 
 			button = form.find( 'button[type=submit], input[type=submit]' );
@@ -696,8 +696,14 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				options.data = form.serialize( );
 			}
 
+			view = this.getData( 'module.data.view.container' );
+
 			options.beforeSend = function( ) {
 				self.clear( 'system.options.validation_container' );
+
+				if ( view !== self.getData( 'system.options.default_container' ) ) {
+					$( view ).empty( );
+				}
 
 				button.disable( );
 			};

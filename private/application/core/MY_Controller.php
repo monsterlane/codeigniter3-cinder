@@ -46,6 +46,7 @@ class MY_Controller extends CI_Controller {
 			'verbose' => $this->config->item( 'verbose' ),
 			'support_address' => $this->config->item( 'support_address' ),
 			'support_message' => $this->config->item( 'support_message' ),
+			'default_container' => $this->config->item( 'default_container' ),
 			'validation_container' => $this->config->item( 'validation_container' ),
 			'flashdata_container' => $this->config->item( 'flashdata_container' ),
 		);

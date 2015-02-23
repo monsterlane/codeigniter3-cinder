@@ -19,7 +19,7 @@ class MY_Log extends CI_Log {
 			if ( strpos( $msg, 'Query error:' ) !== false ) {
 				$ci->error->mysql( $msg );
 			}
-			else {
+			else if ( strpos( $msg, 'PHP error' ) !== false ) {
 				$ci->error->php( $msg );
 			}
 		}

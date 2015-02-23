@@ -16,7 +16,7 @@ class Error {
 		}
 	}
 
-	public function php( $message = 'PHP error' ) {
+	public function php( $message = 'PHP Error' ) {
 		$ci =& get_instance( );
 
 		if ( $ci->config->item( 'log_database' ) === true && isset( $ci->db ) === true ) {

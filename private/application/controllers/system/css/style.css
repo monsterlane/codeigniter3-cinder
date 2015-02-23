@@ -67,6 +67,7 @@ body {
 
 .purpose-dragdrop {
 	border:2px dotted black;
+	padding:1em;
 }
 	.purpose-dragdrop.drop {
 		border:2px dotted red;

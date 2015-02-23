@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/view.js',
 				),
 				'fonts' => array(
-					'google,families:[Tangerine,Cantarell]',
+					'google,families:[Open+Sans]',
 				),
 				'data' => $data,
 			),

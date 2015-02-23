@@ -157,6 +157,27 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		},
 
 		/**
+		 * Method: clear
+		 * @param {String} aKey
+		 */
+
+		clear: function( aKey ) {
+			var key = aKey || 'system.options.flashdata_container',
+				selector = this.getData( key ),
+				data = this.getData( 'module.data' ),
+				el;
+
+			if ( data !== false ) {
+				el = $( data.view.container );
+			}
+			else {
+				el = $( key );
+			}
+
+			el.find( selector ).hide( ).empty( );
+		},
+
+		/**
 		 * Method: log
 		 * @param {String} aMessage
 		 * @param {String} aFilename
@@ -676,11 +697,14 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 			}
 
 			options.beforeSend = function( ) {
+				self.clear( 'system.options.validation_container' );
+
 				button.disable( );
 			};
 
 			options.success = function( response ) {
 				button.enable( );
+
 				self.load( response );
 			};
 

@@ -91,7 +91,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 			necb = function( aXhr, aStatus, aError ) {
 				if ( aXhr.hasOwnProperty( 'readyState' ) === true ) {
-					self.error( {
+					parent.error( {
 						body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
 					} );
 				}
@@ -128,7 +128,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			nscb = function( aResponse, aCode, aXhr ) {
 				if ( aResponse.hasOwnProperty( 'status' ) && aResponse.status === false ) {
 					if ( aResponse.hasOwnProperty( 'message' ) === true ) {
-						self.error( {
+						parent.error( {
 							body: aResponse.message
 						} );
 
@@ -181,28 +181,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._xhr.abort( );
 				this._xhr = null;
 			}
-		},
-
-		/**
-		 * Method: error
-		 * @param {Object} aMessage
-		 */
-
-		error: function( aError ) {
-			var parent = this.getParent( );
-
-			parent.error( aError );
-		},
-
-		/**
-		 * Method: validation
-		 * @param {String} aValidation
-		 */
-
-		validation: function( aValidation ) {
-			var parent = this.getParent( );
-
-			parent.validation( aValidation );
 		}
 	});
 

@@ -65,7 +65,7 @@ module.exports = function( grunt ) {
 		},
 		imagemin: {
 			all: {
-				files: grunt.file.expandMapping( [ 'private/application/controllers/**/img/*' ], 'public/files/cache/', {
+				files: grunt.file.expandMapping( [ 'private/application/controllers/**/img/*.*' ], 'public/files/cache/', {
 					rename: function( aBase, aPath ) {
 						return aPath.replace( 'private/application/controllers/', aBase );
 					}

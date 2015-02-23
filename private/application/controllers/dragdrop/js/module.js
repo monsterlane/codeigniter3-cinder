@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'system/js/module', 'upload' ], function( Class, $, Module, Upload ) {
+define( [ 'jclass', 'jquery', 'system/js/module', 'system/js/upload' ], function( Class, $, Module, Upload ) {
 	'use strict';
 
 	/*

@@ -3,7 +3,7 @@
 This project is designed to provide a single page app like experience for websites, wep apps, or web based mobile apps. By adding the class "cinder" on an anchor link or form, the request will be sent over AJAX and injected into the page. Any required assets (JS/CSS) will be loaded asynchronously. After the inital page load, your visitors will never see a full page change!
 
 #### Current Version
-0.4 beta
+0.5 beta
 
 #### Browser Support
 

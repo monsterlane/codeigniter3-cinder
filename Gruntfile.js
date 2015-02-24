@@ -21,6 +21,7 @@ module.exports = function( grunt ) {
 			deploy: [
 				'public/files/cache/build.txt',
 				'public/files/cache/system/css/reset.css',
+				'public/files/cache/system/css/sprite.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
@@ -44,9 +45,11 @@ module.exports = function( grunt ) {
 			modules: {
 				options: {
 					'adjoining-classes': false,
+					'duplicate-background-images': false,
 					'import': false,
 					'universal-selector': false,
-					'unqualified-attributes': false
+					'unqualified-attributes': false,
+					'zero-units': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',
@@ -142,9 +145,15 @@ module.exports = function( grunt ) {
 		},
 		sprite: {
 			sheet: {
-				src: 'private/application/controllers/system/img/sprite/*',
-				dest: 'public/files/cache/system/img/sprite.png',
-				destCss: 'public/files/cache/system/css/sprite.css'
+				src: 'private/application/controllers/system/img/sprite/*.png',
+				dest: 'private/application/controllers/system/img/sprite.png',
+				destCss: 'private/application/controllers/system/css/sprite.css',
+				padding: 2,
+				cssOpts: {
+					cssSelector: function( item ) {
+						return '.' + item.image.substring( item.image.lastIndexOf( '/' ) + 1, item.image.lastIndexOf( '.' ) ) + '-' + item.name;
+					}
+				}
 			}
 		}
 	});
@@ -161,9 +170,6 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
-	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'requirejs', 'clean', 'concurrent:minify' ] );
-
-	grunt.registerTask( 'build', [ 'concurrent:lint', 'copy' ] );
-	grunt.registerTask( 'buildall', [ 'concurrent:lint', 'requirejs', 'clean', 'cssmin' ] );
-	grunt.registerTask( 'img', [ 'imagemin' ] );
+	grunt.registerTask( 'dev', [ 'concurrent:lint', 'sprite', 'copy' ] );
+	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean', 'concurrent:minify' ] );
 };

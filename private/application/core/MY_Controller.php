@@ -78,6 +78,7 @@ class MY_Controller extends CI_Controller {
 				'path' => 'system/views/index.html',
 				'css' => array(
 					'system/css/reset.css',
+					'system/css/sprite.css',
 					'system/css/style.css',
 				),
 				'js' => array(

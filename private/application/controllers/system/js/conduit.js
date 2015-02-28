@@ -37,7 +37,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
 				regex = new RegExp( '^(https?:\/\/)' ),
-				obcb, nbcb, oscb, nscb, oecb, necb, views, i, len,
+				obcb, nbcb, oscb, nscb, oecb, necb, views, csrf, i, len,
 				jsonp = false,
 				self = this;
 
@@ -57,6 +57,10 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						if ( opt.data instanceof FormData ) {
 							opt.data.append( 'system', false );
 
+							if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+								opt.data.append( csrf.name, csrf.value );
+							}
+
 							for ( i = 0, len = views.length; i < len; i++ ) {
 								opt.data.append( 'views[]', encodeURIComponent( views[ i ] ) );
 							}
@@ -64,10 +68,18 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						else {
 							opt.data.system = false;
 							opt.data.views = views;
+
+							if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+								opt.data[ csrf.name ] = csrf.value;
+							}
 						}
 					}
 					else if ( typeof opt.data === 'string' ) {
 						opt.data += '&system=false';
+
+						if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+							opt.data += '&' + csrf.name + '=' + csrf.value;
+						}
 
 						for ( i = 0, len = views.length; i < len; i++ ) {
 							opt.data += '&views[]=' + encodeURIComponent( views[ i ] );
@@ -79,6 +91,10 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						system: false,
 						views: views
 					};
+
+					if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+						opt.data[ csrf.name ] = csrf.value;
+					}
 				}
 			}
 
@@ -126,6 +142,12 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			}
 
 			nscb = function( aResponse, aCode, aXhr ) {
+				var csrf;
+
+				if ( aResponse.hasOwnProperty( 'csrf' ) === true && $.isEmptyObject( aResponse.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+					csrf.value = aResponse.csrf.hash;
+				}
+
 				if ( aResponse.hasOwnProperty( 'status' ) && aResponse.status === false ) {
 					if ( aResponse.hasOwnProperty( 'message' ) === true ) {
 						parent.error( {

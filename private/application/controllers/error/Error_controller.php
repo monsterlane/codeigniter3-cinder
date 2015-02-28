@@ -11,22 +11,33 @@ class Error_controller extends MY_Controller {
 		}
 	}
 
-	public function index( ) {
+	public function index( $number = '403' ) {
+		if ( $number === '403' ) {
+			$number = '403 Forbidden';
+			$type_id = 3;
+		}
+		else {
+			$number = '404 Not Found';
+			$type_id = 3;
+		}
+
 		$data = array(
-			'error_type_id' => 3,
+			'error_type_id' => $type_id,
 			'message' => current_url( ),
 		);
 
 		$this->log->write_db( $data );
 
 		$this->load->partial( array(
-			'title' => '404',
+			'title' => $number,
 			'view' => array(
 				'path' => 'index.html',
 				'css' => array(
 					'style.css',
 				),
-				'data' => $data,
+				'data' => array(
+					'body' => $number . ': ' . current_url( ),
+				),
 			)
 		) );
 	}

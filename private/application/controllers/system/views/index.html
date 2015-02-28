@@ -18,6 +18,11 @@
 
 <div class="purpose-message"></div>
 <div id="<?=str_replace( '#', '', $system[ 'data' ][ 'view' ][ 'container' ] )?>"></div>
+<?php
+if ( empty( $module[ 'data' ][ 'csrf' ] ) === false ) {
+	?><div class="purpose-hidden"><input id="cinderCsrf" name="<?=$module[ 'data' ][ 'csrf' ][ 'name' ]?>" value="" type="hidden" /></div><?php
+}
+?>
 
 <script type="text/javascript" src="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . 'system/js/require.js.min.js' )?>"></script>
 <script type="text/javascript">

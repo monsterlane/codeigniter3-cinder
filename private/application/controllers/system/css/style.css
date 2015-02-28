@@ -66,6 +66,10 @@ body {
 
 /* global classes */
 
+.purpose-hidden {
+	display:none;
+}
+
 .purpose-dragdrop {
 	border:2px dotted black;
 	padding:1em;

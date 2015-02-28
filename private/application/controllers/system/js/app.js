@@ -355,58 +355,57 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, el, view;
+				module, csrf, el, view;
 
 			this.verbose( 'app: set pending data' );
 
-			if ( typeof data.redirect === 'string' ) {
-				this.redirect( data.redirect );
+			module = this.getData( 'module.data.name' );
+
+			if ( module !== false && data.name === false ) {
+				delete data.name;
 			}
-			else {
-				module = this.getData( 'module.data.name' );
 
-				if ( module !== false && data.name === false ) {
-					delete data.name;
-				}
+			this.setData( 'module.data', data );
 
-				this.setData( 'module.data', data );
+			if ( data.system === true || data.history === true ) {
+				document.title = data.title;
+			}
+			else if ( data.redirect === true ) {
+				this.history( data.title, data.url, data );
+			}
 
-				if ( data.system === true || data.history === true ) {
-					document.title = data.title;
-				}
-				else if ( data.redirect === true ) {
-					this.history( data.title, data.url, data );
-				}
+			if ( $.isEmptyObject( data.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+				csrf.value = data.csrf.hash;
+			}
 
-				el = $( data.view.container );
+			el = $( data.view.container );
 
-				if ( el.length > 0 ) {
-					view = this.getView( data.url, data.view.hash );
+			if ( el.length > 0 ) {
+				view = this.getView( data.url, data.view.hash );
 
-					if ( view === false ) {
-						view = this.createView({
-							url: data.url,
-							path: data.view.path,
-							hash: data.view.hash,
-							content: data.view.html
-						});
+				if ( view === false ) {
+					view = this.createView({
+						url: data.url,
+						path: data.view.path,
+						hash: data.view.hash,
+						content: data.view.html
+					});
 
-						if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
-							this.verbose( 'app: invalidate ' + data.view.invalidate );
+					if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
+						this.verbose( 'app: invalidate ' + data.view.invalidate );
 
-							this.removeCache( data.view.invalidate );
-						}
+						this.removeCache( data.view.invalidate );
 					}
-
-					el.empty( );
-					el[ 0 ].innerHTML = view( data.view.data );
-
-					this.bindLinks( el );
-					this.bindForms( el );
 				}
 
-				this._cache.free( );
+				el.empty( );
+				el[ 0 ].innerHTML = view( data.view.data );
+
+				this.bindLinks( el );
+				this.bindForms( el );
 			}
+
+			this._cache.free( );
 
 			return this;
 		},

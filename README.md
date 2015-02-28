@@ -7,7 +7,7 @@ This project is designed to provide a single page app like experience for websit
 
 #### Browser Support
 
-Cinder makes use of several HTML5 API's available in modern browsers: [history], [local storage]. No support is planned for older browsers.
+Cinder makes use of several HTML5 API's available in modern browsers: [history], [local storage], [file reader]. No support is planned for older browsers.
 
 #### Dependencies
 Cinder is built using a number of open source projects.
@@ -63,4 +63,5 @@ THE SOFTWARE.
 [jclass]:https://github.com/riga/jclass
 [history]:https://developer.mozilla.org/en-US/docs/Web/API/History
 [local storage]:https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Storage
+[file reader]:https://developer.mozilla.org/en-US/docs/Web/API/FileReader
 [Grunt]: http://gruntjs.com/

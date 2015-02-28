@@ -1,40 +1,47 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Controller extends CI_Controller {
+	private $_system = true;
 	private $_data;
 
 	public function __construct( ) {
 		parent::__construct( );
 
-		$post = clean_array( $this->input->post( ) );
-		if ( array_key_exists( 'system', $post ) === false ) {
-			$post[ 'system' ] = true;
+		if ( in_array( $this->router->class, $this->config->item( 'system_blacklist' ) ) === true ) {
+			$this->_system = false;
 		}
 
-		$this->_data = array(
-			'post' => $post,
-			'system' => array(
-				'options' => array( ),
-				'data' => array( ),
-			),
-			'module' => array(
-				'options' => array( ),
-				'data' => array(
-					'system' => false,
-					'redirect' => false,
-					'name' => false,
-					'view' => false,
-					'url' => uri_string( ),
+		if ( $this->_system === true ) {
+			$post = clean_array( $this->input->post( ) );
+			if ( array_key_exists( 'system', $post ) === false ) {
+				$post[ 'system' ] = true;
+			}
+
+			$this->_data = array(
+				'post' => $post,
+				'system' => array(
+					'options' => array( ),
+					'data' => array( ),
 				),
-				'messages' => array( ),
-			),
-		);
+				'module' => array(
+					'options' => array( ),
+					'data' => array(
+						'system' => false,
+						'redirect' => false,
+						'name' => false,
+						'view' => false,
+						'url' => uri_string( ),
+					),
+					'messages' => array( ),
+				),
+			);
 
-		if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
-			$this->redirect( 'maintenance' );
-		}
-		else if ( $this->_data[ 'post' ][ 'system' ] !== false ) {
-			$this->_load_system( );
+			if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
+				$this->redirect( 'maintenance' );
+			}
+			else if ( $this->_data[ 'post' ][ 'system' ] !== false ) {
+				$this->_load_system( );
+			}
 		}
 	}
 
@@ -121,6 +128,10 @@ class MY_Controller extends CI_Controller {
 	}
 
 	/* public methods */
+
+	public function _boot( ) {
+		return $this->_system;
+	}
 
 	public function get_data( $key = null ) {
 		$root = $this->_data;

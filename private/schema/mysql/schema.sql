@@ -1,8 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `cinder`
-USE `cinder`;
-
-DROP TABLE IF EXISTS `error`;
-
 CREATE TABLE `error` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `error_type_id` int(10) unsigned NOT NULL,
@@ -18,9 +13,9 @@ CREATE TABLE `error` (
 
 CREATE TABLE `error_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(16) DEFAULT NULL,
+  `name` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-INSERT INTO `error_type` VALUES (2,'JavaScript'),(3,'MySQL'),(1,'PHP');
+INSERT INTO `error_type` VALUES (1,'PHP'),(2,'MySQL'),(3,'404'),(4,'JavaScript');

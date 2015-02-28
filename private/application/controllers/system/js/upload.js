@@ -2,15 +2,15 @@
 define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 	'use strict';
 
-	$.event.fixHooks.drop = {
-		props: [ 'dataTransfer' ]
-	};
-
 	/*
 	===============================================================================
 	Class: Upload
 	===============================================================================
 	*/
+
+	$.event.fixHooks.drop = {
+		props: [ 'dataTransfer' ]
+	};
 
 	var Upload = Class._extend({
 

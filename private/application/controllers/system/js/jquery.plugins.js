@@ -8,6 +8,10 @@ define( [ 'jquery' ], function( $ ) {
 	===============================================================================
 	*/
 
+	$.event.fixHooks.click = {
+		props: [ 'detail' ]
+	};
+
 	$.fn.serializeObject = function( ) {
 		var o = { },
 			a = this.serializeArray( );

@@ -2,7 +2,7 @@
 
 function logger( ) {
 	$ci =& get_instance( );
-	$ci->log->database( true );
+	$ci->log->system( true );
 }
 
 ?>

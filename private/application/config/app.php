@@ -15,4 +15,6 @@ $config['support_message'] = 'Please refresh the page, if the problem persists p
 $config['files_file_path'] = FCPATH . 'files/';
 $config['files_web_path'] = '/files/';
 
+$config['system_blacklist'] = array('cron_controller');
+
 ?>

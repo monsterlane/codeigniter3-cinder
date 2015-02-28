@@ -49,6 +49,8 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		handleClearCacheButtonClick: function( aButton ) {
 			var parent = this.getParent( );
 
+			var x = y / 2;
+
 			parent.clearCache( );
 		}
 	});

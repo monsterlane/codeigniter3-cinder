@@ -27,33 +27,35 @@ class MY_Loader extends CI_Loader {
 	public function response( ) {
 		$ci =& get_instance( );
 
-		if ( $this->is_loaded( 'session' ) !== false && isset( $_SESSION[ '__ci_vars' ] ) === true ) {
-			$flash = $ci->session->flashdata( );
-			$data = array( );
+		if ( $ci->_boot( ) === true ) {
+			if ( $this->is_loaded( 'session' ) !== false && isset( $_SESSION[ '__ci_vars' ] ) === true ) {
+				$flash = $ci->session->flashdata( );
+				$data = array( );
 
-			foreach ( $flash as $key => $val ) {
-				if ( isset( $_SESSION[ '__ci_vars' ][ $key ], $_SESSION[ $key ] ) === true && $_SESSION[ '__ci_vars' ][ $key ] === 'old' ) {
-					$data[ $key ] = $_SESSION[ $key ];
+				foreach ( $flash as $key => $val ) {
+					if ( isset( $_SESSION[ '__ci_vars' ][ $key ], $_SESSION[ $key ] ) === true && $_SESSION[ '__ci_vars' ][ $key ] === 'old' ) {
+						$data[ $key ] = $_SESSION[ $key ];
+					}
+				}
+
+				if ( count( $data ) > 0 ) {
+					$ci->set_data( 'module.data.flashdata', $data );
 				}
 			}
 
-			if ( count( $data ) > 0 ) {
-				$ci->set_data( 'module.data.flashdata', $data );
-			}
-		}
+			$data = $ci->get_data( );
 
-		$data = $ci->get_data( );
-
-		if ( $data[ 'post' ][ 'system' ] !== false ) {
-			if ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) === true ) {
-				redirect( $data[ 'module' ][ 'data' ][ 'redirect' ] );
+			if ( $data[ 'post' ][ 'system' ] !== false ) {
+				if ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) === true ) {
+					redirect( $data[ 'module' ][ 'data' ][ 'redirect' ] );
+				}
+				else {
+					$ci->load->view( $data[ 'system' ][ 'data' ][ 'view' ][ 'path' ], $data );
+				}
 			}
 			else {
-				$ci->load->view( $data[ 'system' ][ 'data' ][ 'view' ][ 'path' ], $data );
+				$ci->output->json( $this->_compress( $data[ 'module' ][ 'data' ] ) );
 			}
-		}
-		else {
-			$ci->output->json( $this->_compress( $data[ 'module' ][ 'data' ] ) );
 		}
 	}
 
@@ -87,7 +89,7 @@ class MY_Loader extends CI_Loader {
 
 		if ( file_exists( VIEWPATH . $view ) === true && is_file( VIEWPATH . $view ) == true ) {
 			$data[ 'view' ][ 'path' ] = $view;
-			$data[ 'view' ][ 'hash' ] = md5( $view . filemtime( VIEWPATH . $view ) );
+			$data[ 'view' ][ 'hash' ] = filemtime( VIEWPATH . $view );
 
 			$post = $ci->get_data( 'post' );
 			$skip = false;

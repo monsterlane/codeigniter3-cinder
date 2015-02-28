@@ -191,7 +191,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				self = this;
 
 			this.getConduit( ).ajax({
-				url: '/error',
+				url: '/error/javascript',
 				data: {
 					message: msg,
 					filename: file,

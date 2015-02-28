@@ -3,17 +3,33 @@
 class MY_Model extends CI_Model {
 	protected $table = null;
 	protected $parimary_key = 'id';
+	protected $defaults = array( );
 
-	public function __construct( ) {
-		parent::__construct( );
+	protected function get_defaults( ) {
+		$data = array( );
 
-		$this->_set_table( );
+		foreach ( $this->defaults as $key => $val ) {
+			if ( $val === 'db|date' ) {
+				$data[ $key ] = date( 'Y-m-d' );
+			}
+			else if ( $val === 'db|datetime' ) {
+				$data[ $key ] = date( 'Y-m-d H:i:s' );
+			}
+			else if ( $val === 'user|ip' ) {
+				$data[ $key ] = $_SERVER[ 'REMOTE_ADDR' ];
+			}
+			else {
+				$data[ $key ] = $val;
+			}
+		}
+
+		return $data;
 	}
 
-	private function _set_table( ) {
-		if ( $this->table === null ) {
-			$this->table = strtolower( get_class( $this ) );
-		}
+	public function insert( $data = array( ) ) {
+		$data = merge_array( $this->get_defaults( ), $data );
+
+		$this->db->insert( $this->table, $data );
 	}
 }
 

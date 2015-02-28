@@ -10,16 +10,10 @@ class MY_Log extends CI_Log {
 	public function write_db( $data = array( ) ) {
 		if ( $this->_system === true ) {
 			$ci =& get_instance( );
+			$ci->load->model( 'error' );
 
 			if ( $ci->config->item( 'log_database' ) === true && isset( $ci->db ) === true ) {
-				$defaults = array(
-					'ip_address' => $_SERVER[ 'REMOTE_ADDR' ],
-					'created_datetime' => date( 'Y-m-d H:i:s' ),
-				);
-
-				$data = merge_array( $defaults, $data );
-
-				$ci->db->insert( 'error', $data );
+				$ci->error->insert( $data );
 			}
 		}
 	}

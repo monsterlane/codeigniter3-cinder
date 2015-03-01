@@ -31,16 +31,10 @@ class MY_Controller extends CI_Controller {
 						'name' => false,
 						'view' => false,
 						'url' => uri_string( ),
-						'csrf' => array( ),
 					),
 					'messages' => array( ),
 				),
 			);
-
-			if ( $this->config->item( 'csrf_protection' ) === true ) {
-				$this->_data[ 'module' ][ 'data' ][ 'csrf' ][ 'name' ] = $this->security->get_csrf_token_name( );
-				$this->_data[ 'module' ][ 'data' ][ 'csrf' ][ 'hash' ] = $this->security->get_csrf_hash( );
-			}
 
 			if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
 				$this->redirect( 'maintenance' );
@@ -129,6 +123,13 @@ class MY_Controller extends CI_Controller {
 		$data = array(
 			'system' => true,
 		);
+
+		if ( $this->config->item( 'csrf_protection' ) === true ) {
+			$data[ 'csrf' ] = array(
+				'name' => $this->security->get_csrf_token_name( ),
+				'hash' => $this->security->get_csrf_hash( ),
+			);
+		}
 
 		$this->set_data( 'module.data', $data );
 	}

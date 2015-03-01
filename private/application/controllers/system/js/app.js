@@ -374,7 +374,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				this.history( data.title, data.url, data );
 			}
 
-			if ( $.isEmptyObject( data.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+			if ( data.hasOwnProperty( 'csrf' ) === true && $.isEmptyObject( data.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
 				csrf.value = data.csrf.hash;
 			}
 

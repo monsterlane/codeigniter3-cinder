@@ -142,12 +142,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			}
 
 			nscb = function( aResponse, aCode, aXhr ) {
-				var csrf;
-
-				if ( aResponse.hasOwnProperty( 'csrf' ) === true && $.isEmptyObject( aResponse.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
-					csrf.value = aResponse.csrf.hash;
-				}
-
 				if ( aResponse.hasOwnProperty( 'status' ) && aResponse.status === false ) {
 					if ( aResponse.hasOwnProperty( 'message' ) === true ) {
 						parent.error( {

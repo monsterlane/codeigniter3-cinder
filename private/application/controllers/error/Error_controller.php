@@ -11,7 +11,7 @@ class Error_controller extends MY_Controller {
 		}
 	}
 
-	public function index( $number = '403' ) {
+	public function index( $number = '404' ) {
 		if ( $number === '403' ) {
 			$number = '403 Forbidden';
 			$type_id = 3;

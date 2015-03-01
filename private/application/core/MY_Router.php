@@ -75,6 +75,44 @@ class MY_Router extends CI_Router {
 
 		$this->uri->rsegments = $segments;
 	}
+
+	public function set_class( $class ) {
+		parent::set_class( $class );
+
+		if ( file_exists( APPPATH . 'controllers/' . $this->directory . $this->class . '.php' ) === false || is_file( APPPATH . 'controllers/' . $this->directory . $this->class . '.php' ) === false ) {
+			$this->set_directory( 'error' );
+			$this->set_class( 'error_controller' );
+			$this->set_method( 'index' );
+		}
+	}
+
+	public function set_method( $method ) {
+		parent::set_method( $method );
+
+		if ( file_exists( APPPATH . 'controllers/' . $this->directory . $this->class . '.php' ) === true || is_file( APPPATH . 'controllers/' . $this->directory . $this->class . '.php' ) === true ) {
+			if ( class_exists( 'Controller' ) === false ) {
+				require_once( BASEPATH . 'core/Controller.php' );
+			}
+
+			if ( class_exists( 'MY_Controller' ) === false ) {
+				require_once( APPPATH . 'core/MY_Controller.php' );
+			}
+
+			if ( class_exists( ucfirst( $this->class ) ) === false ) {
+				require_once( APPPATH . 'controllers/' . $this->directory . ucfirst( $this->class ) . '.php' );
+			}
+
+			if ( class_exists( ucfirst( $this->class ) ) === true ) {
+				$methods = array_map( 'strtolower', get_class_methods( ucfirst( $this->class ) ) );
+
+				if ( in_array( strtolower( $this->method ), $methods ) === false ) {
+					$this->set_directory( 'error' );
+					$this->set_class( 'error_controller' );
+					$this->set_method( 'index' );
+				}
+			}
+		}
+	}
 }
 
 ?>

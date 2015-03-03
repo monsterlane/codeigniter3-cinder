@@ -1,7 +1,6 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
-class Error extends MY_Model {
-	protected $table = 'error';
-}
+$config['verbose'] = true;
+$config['log_database'] = false;
 
 ?>

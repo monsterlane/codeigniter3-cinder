@@ -23,9 +23,6 @@ class Error_controller extends MY_Controller {
 			'title' => '404 Not Found',
 			'view' => array(
 				'path' => 'index.html',
-				'css' => array(
-					'style.css',
-				),
 				'data' => array(
 					'body' => '404 Not Found: ' . current_url( ),
 				),

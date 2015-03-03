@@ -209,6 +209,15 @@ class MY_Controller extends CI_Controller {
 
 			$dest = FCPATH . 'files/cache/';
 
+			if ( empty( $data[ 'view' ][ 'css' ] ) === true ) {
+				$style = ( $this->router->method == 'index' ) ? 'style' : $this->router->method;
+				$style = $this->router->directory . 'css/' . $style . '.css';
+
+				if ( file_exists( VIEWPATH . $style ) === true && is_file( VIEWPATH . $style ) === true ) {
+					$data[ 'view' ][ 'css' ][ ] = $style;
+				}
+			}
+
 			if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
 				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
 					if ( strpos( $style, '/' ) !== false ) {

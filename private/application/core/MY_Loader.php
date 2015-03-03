@@ -76,7 +76,7 @@ class MY_Loader extends CI_Loader {
 	public function partial( $data = array( ) ) {
 		$ci =& get_instance( );
 
-		if ( array_key_exists( 'path', $data[ 'view' ] ) === false ) {
+		if ( array_key_exists( 'view', $data ) === false || array_key_exists( 'path', $data[ 'view' ] ) === false ) {
 			$view = $ci->router->directory . 'views/' . $ci->router->method;
 		}
 		else if ( strpos( $data[ 'view' ][ 'path' ], '/' ) === false ) {

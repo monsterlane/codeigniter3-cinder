@@ -5,9 +5,6 @@ class Main_controller extends MY_Controller {
 		$this->load->partial( array(
 			'title' => 'Main',
 			'view' => array(
-				'css' => array(
-					'style.css',
-				),
 				'data' => array(
 					'body' => 'Main Page',
 				),

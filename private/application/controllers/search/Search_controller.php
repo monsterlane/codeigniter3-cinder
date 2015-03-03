@@ -4,11 +4,6 @@ class Search_controller extends MY_Controller {
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Search',
-			'view' => array(
-				'css' => array(
-					'style.css',
-				),
-			),
 		) );
 	}
 

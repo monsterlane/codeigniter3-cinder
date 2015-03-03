@@ -5,9 +5,6 @@ class Dragdrop_controller extends MY_Controller {
 		$this->load->partial( array(
 			'title' => 'Drag/drop',
 			'view' => array(
-				'css' => array(
-					'style.css',
-				),
 				'data' => array(
 					'body' => 'Drag a file into the dotted area.'
 				),

@@ -152,7 +152,7 @@ class MY_Model extends CI_Model {
 	public function search( $params = array( ) ) {
 		$this->hook( 'before_search', $params );
 
-		$data = $this->db->get_where( $this->table, array( $params ) )->result_array( );
+		$data = $this->db->get_where( $this->table, $params )->result_array( );
 
 		$data = $this->hook( 'after_search', $data );
 

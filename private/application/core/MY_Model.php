@@ -30,9 +30,7 @@ class MY_Model extends CI_Model {
 	/* shared methods */
 
 	protected function get_schema( ) {
-		$ci =& get_instance( );
-
-		if ( $this->table !== null && isset( $ci->db ) === true ) {
+		if ( $this->table !== null && isset( $this->db ) === true ) {
 			$results = $this->db->query( 'SHOW FULL COLUMNS FROM ' . $this->db->protect_identifiers( $this->table, true, null, false ) )->result_array( );
 
 			foreach ( $results as $result ) {

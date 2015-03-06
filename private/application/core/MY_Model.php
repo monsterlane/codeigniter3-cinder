@@ -74,7 +74,7 @@ class MY_Model extends CI_Model {
 	protected function hook( $key, $data = array( ) ) {
 		if ( array_key_exists( $key, $this->hooks ) === true ) {
 			foreach ( $this->hooks[ $key ] as $hook ) {
-				$data = call_user_func( array( $this, $hook ) );
+				$data = call_user_func_array( array( $this, $hook ), array( $data ) );
 			}
 		}
 
@@ -85,7 +85,6 @@ class MY_Model extends CI_Model {
 
 	public function post( $data = array( ), $id = null ) {
 		$data = merge_array( $this->input->post( ), $data );
-		$data = extract_array( $data, $this->columns );
 
 		if ( $id === null && array_key_exists( $this->primary_key, $data ) === true ) {
 			$id = $data[ $this->primary_key ];
@@ -105,6 +104,7 @@ class MY_Model extends CI_Model {
 	public function insert( $data = array( ) ) {
 		$data = $this->hook( 'before_insert', $data );
 		$data = merge_array( $this->get_defaults( ), $data );
+		$data = extract_array( $data, $this->columns );
 
 		$this->db->insert( $this->table, $data );
 		$data[ 'id' ] = $this->db->insert_id( );
@@ -116,10 +116,12 @@ class MY_Model extends CI_Model {
 
 	public function update( $data = array( ), $id = null ) {
 		$data = $this->hook( 'before_update', $data );
+		$data = extract_array( $data, $this->columns );
 
 		$this->db->update( $this->table, $data, array( $this->primary_key => $id ) );
 
 		$data[ $this->primary_key ] = $id;
+
 		$this->db->hook( 'after_update', $data );
 
 		return $this->db->get( $id );
@@ -128,7 +130,7 @@ class MY_Model extends CI_Model {
 	public function get( $id = null ) {
 		$this->hook( 'before_get', $id );
 
-		$data =  $this->db->get_where( $this->table, array( $this->primary_key => $id ) )->row_array( );
+		$data = $this->db->get_where( $this->table, array( $this->primary_key => $id ) )->row_array( );
 		$data = $this->hook( 'after_get', $data );
 
 		return $data;

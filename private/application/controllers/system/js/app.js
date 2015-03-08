@@ -282,7 +282,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 						this.verbose( 'app: unload ' + link );
 
-						el = $( 'link[href$="' + link + '.css"]' );
+						el = $( 'link[href*="' + link + '.css"]' );
 
 						el.prop( 'disabled', true );
 						el.remove( );

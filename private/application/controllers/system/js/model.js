@@ -29,6 +29,26 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		},
 
 		/**
+		 * Method: merge
+		 * @param {Mixed} aObject
+		 * @param {Mixed} bObject
+		 */
+
+		merge: function( aObject, bObject ) {
+			if ( $.isPlainObject( aObject ) === true && $.isPlainObject( bObject ) === true ) {
+				aObject = $.extend( true, aObject, bObject );
+			}
+			else if ( $.isArray( aObject ) === true && $.isArray( bObject ) === true ) {
+				aObject = $.merge( aObject, bObject );
+			}
+			else {
+				aObject = bObject;
+			}
+
+			return aObject;
+		},
+
+		/**
 		 * Method: get
 		 * @param {String} aKey
 		 */
@@ -69,19 +89,14 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			for ( i = 0, len = keys.length; i < len; i++ ) {
 				if ( arr.hasOwnProperty( keys[ i ] ) === true ) {
 					if ( i === len - 1 ) {
-						if ( arr[ keys[ i ] ].constructor === Array && aValue.constructor === Array ) {
-							arr[ keys[ i ] ] = $.merge( arr[ keys[ i ] ], aValue );
-						}
-						else {
-							arr[ keys[ i ] ] = aValue;
-						}
+						arr[ keys[ i ] ] = this.merge( arr[ keys[ i ] ], aValue );
 					}
 					else {
 						arr = arr[ keys[ i ] ];
 					}
 				}
 				else if ( i === len - 1 ) {
-					arr[ keys[ i ] ] = aValue;
+					arr[ keys[ i ] ] = this.merge( arr[ keys[ i ] ], aValue );
 				}
 				else {
 					arr[ keys[ i ] ] = [ ];

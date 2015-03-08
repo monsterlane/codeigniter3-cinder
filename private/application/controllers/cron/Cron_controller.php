@@ -17,19 +17,21 @@ class Cron_controller extends MY_Controller {
 			$this->_cli = false;
 			$this->_lb = '<br/>';
 		}
+	}
+
+	/* internal methods */
+
+	private function _start( ) {
+		$this->_start = time( );
 
 		$this->_message( 'CRON started' );
 
 		if ( $this->_cli === false ) {
 			$this->output->append_output( '<hr/>' );
 		}
-
-		$this->_start = time( );
 	}
 
-	/* internal methods */
-
-	private function _done( ) {
+	private function _stop( ) {
 		$this->_end = time( );
 
 		if ( $this->_cli === false ) {
@@ -46,9 +48,9 @@ class Cron_controller extends MY_Controller {
 	/* public methods */
 
 	public function job( ) {
+		$this->_start( );
 		$this->_message( 'Doing something...' );
-
-		$this->_done( );
+		$this->_stop( );
 	}
 }
 

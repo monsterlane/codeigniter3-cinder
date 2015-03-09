@@ -9,16 +9,16 @@ class MY_Model extends CI_Model {
 	protected $validate = array( );
 
 	protected $hooks = array(
-		'before_insert' => array( ),
-		'after_insert' => array( ),
-		'before_update' => array( ),
-		'after_update' => array( ),
-		'before_get' => array( ),
-		'after_get' => array( ),
-		'before_delete' => array( ),
-		'after_delete' => array( ),
-		'before_search' => array( ),
-		'after_search' => array( ),
+		'before.insert' => array( ),
+		'before.update' => array( ),
+		'before.get' => array( ),
+		'before.delete' => array( ),
+		'before.search' => array( ),
+		'after.insert' => array( ),
+		'after.update' => array( ),
+		'after.get' => array( ),
+		'after.delete' => array( ),
+		'after.search' => array( ),
 	);
 
 	public function __construct( ) {
@@ -163,7 +163,7 @@ class MY_Model extends CI_Model {
 	}
 
 	public function insert( $data = array( ) ) {
-		$data = $this->hook( 'before_insert', $data );
+		$data = $this->hook( 'before.insert', $data );
 
 		$data = merge_array( $this->get_defaults( ), $data );
 		$data = extract_array( $data, $this->columns );
@@ -171,13 +171,13 @@ class MY_Model extends CI_Model {
 		$this->db->insert( $this->table, $data );
 		$data[ 'id' ] = $this->db->insert_id( );
 
-		$data = $this->hook( 'after_insert', $data );
+		$data = $this->hook( 'after.insert', $data );
 
 		return $this->get( $data[ 'id' ] );
 	}
 
 	public function update( $data = array( ), $id = null ) {
-		$data = $this->hook( 'before_update', $data );
+		$data = $this->hook( 'before.update', $data );
 
 		$data = extract_array( $data, $this->columns );
 
@@ -190,23 +190,23 @@ class MY_Model extends CI_Model {
 
 		$data[ $this->primary_key ] = $id;
 
-		$data = $this->db->hook( 'after_update', $data );
+		$data = $this->db->hook( 'after.update', $data );
 
 		return $this->db->get( $id );
 	}
 
 	public function get( $id = null ) {
-		$id = $this->hook( 'before_get', $id );
+		$id = $this->hook( 'before.get', $id );
 
 		$data = $this->db->get_where( $this->table, array( $this->primary_key => $id ) )->row_array( );
 
-		$data = $this->hook( 'after_get', $data );
+		$data = $this->hook( 'after.get', $data );
 
 		return $data;
 	}
 
 	public function delete( $id = null ) {
-		$id = $this->hook( 'before_delete', $id );
+		$id = $this->hook( 'before.delete', $id );
 
 		if ( $this->delete_flag !== false ) {
 			$this->db->update( $this->table, array( $this->delete_flag, 1 ), array( $this->primary_key => $id ) );
@@ -215,17 +215,17 @@ class MY_Model extends CI_Model {
 			$this->db->delete( $this->table, array( $this->primary_key => $id ) );
 		}
 
-		$id = $this->hook( 'after_delete', $id );
+		$id = $this->hook( 'after.delete', $id );
 
 		return true;
 	}
 
 	public function search( $params = array( ) ) {
-		$params = $this->hook( 'before_search', $params );
+		$params = $this->hook( 'before.search', $params );
 
 		$data = $this->db->get_where( $this->table, $params )->result_array( );
 
-		$data = $this->hook( 'after_search', $data );
+		$data = $this->hook( 'after.search', $data );
 
 		return $data;
 	}

@@ -29,7 +29,8 @@ module.exports = function( grunt ) {
 				'!public/files/cache/system/js/require.config.js',
 				'!public/files/cache/system/js/require.js.min.js',
 				'!public/files/cache/system/js/require.css.min.js',
-				'!public/files/cache/system/js/require.domready.min.js'
+				'!public/files/cache/system/js/require.domready.min.js',
+				'public/files/cache/plugin/js/jquery.hotkeys.min.js'
 			]
 		},
 		copy: {
@@ -138,6 +139,10 @@ module.exports = function( grunt ) {
 						{
 							name: 'dragdrop/js/module',
 							exclude: [ 'system/js/app', 'system/js/module', 'system/js/upload' ]
+						},
+						{
+							name: 'plugin/js/module',
+							exclude: [ 'system/js/app', 'system/js/module' ]
 						}
 					]
 				}

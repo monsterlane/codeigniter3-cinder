@@ -26,7 +26,7 @@ class Error_controller extends MY_Controller {
 				'data' => array(
 					'body' => '404 Not Found: ' . current_url( ),
 				),
-			)
+			),
 		) );
 	}
 

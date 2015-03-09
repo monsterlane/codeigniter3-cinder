@@ -5,10 +5,14 @@ class Dragdrop_controller extends MY_Controller {
 		$this->load->partial( array(
 			'title' => 'Drag/drop',
 			'view' => array(
+				'js' => array(
+					'module.js',
+					'system/js/upload.js',
+				),
 				'data' => array(
 					'body' => 'Drag a file into the dotted area.'
 				),
-			)
+			),
 		) );
 	}
 

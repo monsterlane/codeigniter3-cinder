@@ -104,7 +104,6 @@ class MY_Controller extends CI_Controller {
 					'system/js/conduit.js',
 					'system/js/model.js',
 					'system/js/module.js',
-					'system/js/upload.js',
 					'system/js/view.js',
 				),
 				'fonts' => array(

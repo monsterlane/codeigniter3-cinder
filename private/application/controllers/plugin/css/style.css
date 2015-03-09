@@ -1,0 +1,15 @@
+
+body {
+	background-color:#FFFFCC;
+}
+
+.colourPreview {
+	display:inline-block;
+	width:200px;
+	height:200px;
+	background-color:white;
+	outline:1px solid black;
+}
+	.colourPreview.on {
+		background-color:green;
+	}

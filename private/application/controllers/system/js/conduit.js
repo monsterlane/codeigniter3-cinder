@@ -107,6 +107,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 			necb = function( aXhr, aStatus, aError ) {
 				if ( aXhr.hasOwnProperty( 'readyState' ) === true ) {
+					parent.verbose( 'app: fatal error' );
+
 					parent.error( {
 						body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
 					} );
@@ -144,6 +146,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			nscb = function( aResponse, aCode, aXhr ) {
 				if ( aResponse.hasOwnProperty( 'status' ) && aResponse.status === false ) {
 					if ( aResponse.hasOwnProperty( 'message' ) === true ) {
+						parent.verbose( 'app: error' );
+
 						parent.error( {
 							body: aResponse.message
 						} );
@@ -151,6 +155,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						necb( aResponse );
 					}
 					else if ( aResponse.hasOwnProperty( 'validation' ) === true ) {
+						parent.verbose( 'app: validation failed' );
+
 						parent.message( aResponse.validation, 'system.options.validation_container' );
 
 						necb( aResponse );

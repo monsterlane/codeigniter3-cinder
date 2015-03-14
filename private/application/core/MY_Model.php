@@ -1,14 +1,13 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Model extends CI_Model {
-	protected $table = null;
-	protected $columns = array( );
-	protected $primary_key = null;
-	protected $delete_flag = false;
-	protected $defaults = array( );
-	protected $validate = array( );
+	protected $_table = null;
+	protected $_columns = array( );
+	protected $_primary_key = null;
+	protected $_delete_flag = false;
+	protected $_validate = array( );
 
-	protected $hooks = array(
+	protected $_hooks = array(
 		'before.insert' => array( ),
 		'before.update' => array( ),
 		'before.get' => array( ),
@@ -30,19 +29,19 @@ class MY_Model extends CI_Model {
 	/* shared methods */
 
 	protected function get_schema( ) {
-		if ( $this->table !== null && isset( $this->db ) === true ) {
-			$results = $this->db->query( 'SHOW FULL COLUMNS FROM ' . $this->db->protect_identifiers( $this->table, true, null, false ) )->result_array( );
+		if ( $this->_table !== null ) {
+			$results = $this->db->query( 'SHOW FULL COLUMNS FROM ' . $this->db->protect_identifiers( $this->_table, true, null, false ) )->result_array( );
 
 			foreach ( $results as $result ) {
 				if ( $result[ 'Key' ] === 'PRI' ) {
-					$this->primary_key = $result[ 'Field' ];
+					$this->_primary_key = $result[ 'Field' ];
 				}
 
 				$null = ( $result[ 'Null' ] === 'NO' ) ? false : true;
 				$required = false;
 
-				if ( $result[ 'Field' ] !== $this->primary_key && $null === false && $result[ 'Default' ] === null ) {
-					$required = true;
+				if ( $result[ 'Field' ] !== $this->_primary_key && $null === false && $result[ 'Default' ] === null ) {
+					$required = 'trim|required';
 				}
 
 				$field = array(
@@ -56,17 +55,21 @@ class MY_Model extends CI_Model {
 				);
 
 				if ( $field[ 'comment' ] !== '' ) {
-					$params = explode( '|', strtolower( $field[ 'comment' ] ) );
+					$params = explode( "\n", strtolower( $field[ 'comment' ] ) );
 
 					foreach ( $params as $param ) {
 						if ( strpos( $param, '=' ) !== false ) {
 							$var = explode( '=', $param );
 
-							if ( $var[ 0 ] === 'required' && (bool)$var[ 1 ] === true ) {
-								$field[ 'required' ] = true;
+							if ( $var[ 0 ] === 'required' ) {
+								$field[ 'required' ] = $var[ 1 ];
+
+								if ( strpos( $field[ 'required' ], 'required' ) === false ) {
+									$field[ 'required' ] .= '|required';
+								}
 							}
 							else if ( $var[ 0 ] === 'deleted' && (bool)$var[ 1 ] === true ) {
-								$this->delete_flag = true;
+								$this->_delete_flag = true;
 							}
 							else if ( in_array( $var[ 0 ], array( 'default', 'name' ) ) === true ) {
 								$field[ $var[ 0 ] ] = $var[ 1 ];
@@ -81,15 +84,15 @@ class MY_Model extends CI_Model {
 					}
 				}
 
-				if ( $field[ 'default' ] === null && $field[ 'required' ] === true ) {
-					$this->validate[ ] = array(
+				if ( $field[ 'default' ] === null && $field[ 'required' ] !== false ) {
+					$this->_validate[ ] = array(
 						'field' => $result[ 'Field' ],
 						'label' => $field[ 'name' ],
-						'rules' => 'trim|required',
+						'rules' => $field[ 'required' ],
 					);
 				}
 
-				$this->columns[ $result[ 'Field' ] ] = $field;
+				$this->_columns[ $result[ 'Field' ] ] = $field;
 			}
 		}
 	}
@@ -97,7 +100,7 @@ class MY_Model extends CI_Model {
 	protected function get_defaults( ) {
 		$data = array( );
 
-		foreach ( $this->columns as $key => $field ) {
+		foreach ( $this->_columns as $key => $field ) {
 			if ( $field[ 'default' ] !== null ) {
 				if ( $field[ 'default' ] === 'date' ) {
 					$data[ $key ] = date( 'Y-m-d' );
@@ -118,8 +121,8 @@ class MY_Model extends CI_Model {
 	}
 
 	protected function hook( $key, $data = array( ) ) {
-		if ( array_key_exists( $key, $this->hooks ) === true ) {
-			foreach ( $this->hooks[ $key ] as $hook ) {
+		if ( array_key_exists( $key, $this->_hooks ) === true ) {
+			foreach ( $this->_hooks[ $key ] as $hook ) {
 				$data = call_user_func_array( array( $this, $hook ), array( $data ) );
 			}
 		}
@@ -130,11 +133,11 @@ class MY_Model extends CI_Model {
 	/* public methods */
 
 	public function get_validation_rules( ) {
-		return $this->validate;
+		return $this->_validate;
 	}
 
 	public function validate( $validator ) {
-		$validator->set_rules( $this->validate );
+		$validator->set_rules( $this->_validate );
 
 		if ( $validator->run( ) === false ) {
 			return false;
@@ -147,9 +150,9 @@ class MY_Model extends CI_Model {
 	public function post( $data = array( ), $id = null ) {
 		$data = merge_array( $this->input->post( ), $data );
 
-		if ( $id === null && array_key_exists( $this->primary_key, $data ) === true ) {
-			$id = $data[ $this->primary_key ];
-			unset( $data[ $this->primary_key ] );
+		if ( $id === null && array_key_exists( $this->_primary_key, $data ) === true ) {
+			$id = $data[ $this->_primary_key ];
+			unset( $data[ $this->_primary_key ] );
 		}
 
 		if ( $id !== null ) {
@@ -166,9 +169,9 @@ class MY_Model extends CI_Model {
 		$data = $this->hook( 'before.insert', $data );
 
 		$data = merge_array( $this->get_defaults( ), $data );
-		$data = extract_array( $data, $this->columns );
+		$data = extract_array( $data, $this->_columns );
 
-		$this->db->insert( $this->table, $data );
+		$this->db->insert( $this->_table, $data );
 		$data[ 'id' ] = $this->db->insert_id( );
 
 		$data = $this->hook( 'after.insert', $data );
@@ -179,16 +182,16 @@ class MY_Model extends CI_Model {
 	public function update( $data = array( ), $id = null ) {
 		$data = $this->hook( 'before.update', $data );
 
-		$data = extract_array( $data, $this->columns );
+		$data = extract_array( $data, $this->_columns );
 
-		if ( $id === null && array_key_exists( $this->primary_key, $data ) === true ) {
-			$id = $data[ $this->primary_key ];
-			unset( $data[ $this->primary_key ] );
+		if ( $id === null && array_key_exists( $this->_primary_key, $data ) === true ) {
+			$id = $data[ $this->_primary_key ];
+			unset( $data[ $this->_primary_key ] );
 		}
 
-		$this->db->update( $this->table, $data, array( $this->primary_key => $id ) );
+		$this->db->update( $this->_table, $data, array( $this->_primary_key => $id ) );
 
-		$data[ $this->primary_key ] = $id;
+		$data[ $this->_primary_key ] = $id;
 
 		$data = $this->db->hook( 'after.update', $data );
 
@@ -198,7 +201,7 @@ class MY_Model extends CI_Model {
 	public function get( $id = null ) {
 		$id = $this->hook( 'before.get', $id );
 
-		$data = $this->db->get_where( $this->table, array( $this->primary_key => $id ) )->row_array( );
+		$data = $this->db->get_where( $this->_table, array( $this->_primary_key => $id ) )->row_array( );
 
 		$data = $this->hook( 'after.get', $data );
 
@@ -208,11 +211,11 @@ class MY_Model extends CI_Model {
 	public function delete( $id = null ) {
 		$id = $this->hook( 'before.delete', $id );
 
-		if ( $this->delete_flag !== false ) {
-			$this->db->update( $this->table, array( $this->delete_flag, 1 ), array( $this->primary_key => $id ) );
+		if ( $this->_delete_flag !== false ) {
+			$this->db->update( $this->_table, array( $this->_delete_flag, 1 ), array( $this->_primary_key => $id ) );
 		}
 		else {
-			$this->db->delete( $this->table, array( $this->primary_key => $id ) );
+			$this->db->delete( $this->_table, array( $this->_primary_key => $id ) );
 		}
 
 		$id = $this->hook( 'after.delete', $id );
@@ -223,7 +226,7 @@ class MY_Model extends CI_Model {
 	public function search( $params = array( ) ) {
 		$params = $this->hook( 'before.search', $params );
 
-		$data = $this->db->get_where( $this->table, $params )->result_array( );
+		$data = $this->db->get_where( $this->_table, $params )->result_array( );
 
 		$data = $this->hook( 'after.search', $data );
 

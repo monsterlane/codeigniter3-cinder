@@ -9,6 +9,10 @@ input::-moz-focus-inner {
 	border:0;
 }
 
+input {
+	box-sizing:border-box;
+}
+
 [contenteditable]:focus {
 	outline:0 solid transparent;
 }

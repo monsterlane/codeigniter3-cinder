@@ -81,11 +81,17 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		 */
 
 		redirect: function( aUrl ) {
-			var a = document.createElement( 'a' );
+			var a;
 
-			a.setAttribute( 'href', aUrl );
+			if ( aUrl.indexOf( window.location.protocol ) === -1 ) {
+				window.location.href = aUrl;
+			}
+			else {
+				a = document.createElement( 'a' );
+				a.setAttribute( 'href', aUrl );
 
-			this.handleLinkClick( a );
+				this.handleLinkClick( a );
+			}
 		},
 
 		/**
@@ -231,6 +237,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		load: function( aData ) {
 			var data = aData || { },
 				last, link, fp, ff, el, i, len,
+				dependencies = [ ],
 				options = { },
 				redir = false,
 				self = this;
@@ -302,7 +309,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 					this.verbose( 'app: load ' + link );
 
-					require( [ link ] );
+					dependencies.push( link );
 				}
 
 				for ( i = 0, len = data.view.css.length; i < len; i++ ) {
@@ -310,7 +317,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 					this.verbose( 'app: load ' + link );
 
-					require( [ link ] );
+					dependencies.push( link );
 				}
 			}
 
@@ -324,7 +331,9 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 				this.setPendingData( data );
 
-				require( [ data.name ], function( Module ) {
+				dependencies.unshift( data.name );
+
+				require( dependencies, function( Module ) {
 					self.setModule( new Module( options ) );
 					self.callback( data );
 				});

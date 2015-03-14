@@ -1,14 +1,14 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Log extends CI_Log {
-	private $_system = false;
+	private $_loaded = false;
 
-	public function system( $available = false ) {
-		$this->_system = $available;
+	public function loaded( $loaded = false ) {
+		$this->_loaded = $loaded;
 	}
 
 	public function write_db( $data = array( ) ) {
-		if ( $this->_system === true ) {
+		if ( $this->_loaded === true ) {
 			$ci =& get_instance( );
 			$ci->load->model( 'error' );
 
@@ -36,7 +36,13 @@ class MY_Log extends CI_Log {
 				$this->write_db( $data );
 			}
 			else if ( strpos( $msg, 'PHP error' ) !== false || strpos( $msg, 'Severity: Warning' ) !== false ) {
-				$p1 = explode( APPPATH, $msg );
+				if ( strpos( $msg, APPPATH ) !== false ) {
+					$p1 = explode( APPPATH, $msg );
+				}
+				else {
+					$p1 = explode( BASEPATH, $msg );
+				}
+
 				$p2 = explode( ' ', $p1[ 1 ] );
 
 				$data = array(

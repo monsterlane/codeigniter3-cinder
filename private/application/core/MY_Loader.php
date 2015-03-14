@@ -27,7 +27,7 @@ class MY_Loader extends CI_Loader {
 	public function response( ) {
 		$ci =& get_instance( );
 
-		if ( $ci->system( ) === true ) {
+		if ( $ci->get_option( 'system' ) === true ) {
 			if ( $this->is_loaded( 'session' ) !== false && isset( $_SESSION[ '__ci_vars' ] ) === true ) {
 				$flash = $ci->session->flashdata( );
 				$data = array( );

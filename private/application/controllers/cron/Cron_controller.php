@@ -9,6 +9,8 @@ class Cron_controller extends MY_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
+		$this->set_option( 'system', false );
+
 		if ( $this->input->is_cli_request( ) === true ) {
 			$this->_cli = true;
 			$this->_lb = "\n";

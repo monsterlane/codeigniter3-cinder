@@ -1,0 +1,27 @@
+
+body {
+	background-color:#A9F5F2;
+}
+
+#loginForm {
+	width:250px;
+	margin:0 auto;
+}
+	#loginForm > p {
+		text-align:center;
+	}
+
+	#loginForm > fieldset {
+		padding-top:0.5em;
+		padding-bottom:0.5em;
+	}
+	#loginForm > fieldset > label {
+		display:block;
+	}
+
+	#loginForm > fieldset > input {
+		width:100%;
+	}
+		#loginForm > fieldset > input + label {
+			margin-top:0.5em;
+		}

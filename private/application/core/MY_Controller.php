@@ -1,53 +1,44 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Controller extends CI_Controller {
-	private $_system = true;
-	private $_data;
+	private $_options = array( );
+	private $_data = array( );
 
 	public function __construct( ) {
 		parent::__construct( );
 
-		if ( in_array( $this->router->class, $this->config->item( 'system_blacklist' ) ) === true ) {
-			$this->_system = false;
+		$post = clean_array( $this->input->post( ) );
+		if ( array_key_exists( 'system', $post ) === false ) {
+			$post[ 'system' ] = true;
 		}
 
-		if ( $this->_system === true ) {
-			$post = clean_array( $this->input->post( ) );
-			if ( array_key_exists( 'system', $post ) === false ) {
-				$post[ 'system' ] = true;
-			}
+		$this->set_option( 'system', true );
+		$this->set_option( 'enforce_ssl', false );
+		$this->set_option( 'boot', $post[ 'system' ] );
 
-			$this->_data = array(
-				'post' => $post,
-				'system' => array(
-					'options' => array( ),
-					'data' => array( ),
+		$this->_data = array(
+			'post' => $post,
+			'system' => array(
+				'options' => array( ),
+				'data' => array( ),
+			),
+			'module' => array(
+				'options' => array( ),
+				'data' => array(
+					'system' => false,
+					'redirect' => false,
+					'name' => false,
+					'view' => false,
+					'url' => uri_string( ),
 				),
-				'module' => array(
-					'options' => array( ),
-					'data' => array(
-						'system' => false,
-						'redirect' => false,
-						'name' => false,
-						'view' => false,
-						'url' => uri_string( ),
-					),
-					'messages' => array( ),
-				),
-			);
-
-			if ( $this->config->item( 'maintenance' ) === true && $this->router->directory !== 'maintenance/' ) {
-				$this->redirect( 'maintenance' );
-			}
-			else if ( $this->_data[ 'post' ][ 'system' ] !== false ) {
-				$this->_load_system( );
-			}
-		}
+				'messages' => array( ),
+			),
+		);
 	}
 
-	/* internal methods */
+	/* public methods */
 
-	private function _load_system( ) {
+	public function boot( ) {
 		$data = array(
 			'version' => $this->config->item( 'version' ),
 			'verbose' => $this->config->item( 'verbose' ),
@@ -133,10 +124,17 @@ class MY_Controller extends CI_Controller {
 		$this->set_data( 'module.data', $data );
 	}
 
-	/* public methods */
+	public function set_option( $key, $val ) {
+		$this->_options[ $key ] = $val;
+	}
 
-	public function system( ) {
-		return $this->_system;
+	public function get_option( $key ) {
+		if ( array_key_exists( $key, $this->_options ) === true ) {
+			return $this->_options[ $key ];
+		}
+		else {
+			return null;
+		}
 	}
 
 	public function get_data( $key = null ) {
@@ -308,8 +306,12 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function redirect( $aUrl ) {
+		if ( strpos( $aUrl, 'http' ) === false ) {
+			$aUrl = base_url( $aUrl );
+		}
+
 		$this->set_data( 'module.data', array(
-			'redirect' => base_url( $aUrl ),
+			'redirect' => $aUrl,
 		) );
 	}
 }

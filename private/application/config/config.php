@@ -271,7 +271,7 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 | application/views/errors/ directory.  Use a full server path with trailing slash.
 |
 */
-$config['error_views_path'] = '../private/application/controllers/error/views/';
+$config['error_views_path'] = realpath( '../private/application/controllers/error/views' ) . '/';
 
 /*
 |--------------------------------------------------------------------------
@@ -351,7 +351,7 @@ $config['encryption_key'] = '';
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = '../private/session';
+$config['sess_save_path'] = realpath( '../private/session' );
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 

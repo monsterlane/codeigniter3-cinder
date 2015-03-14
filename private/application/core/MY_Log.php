@@ -1,20 +1,18 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class MY_Log extends CI_Log {
-	private $_loaded = false;
+	private $_database = false;
 
-	public function loaded( $loaded = false ) {
-		$this->_loaded = $loaded;
+	public function database( $mode ) {
+		$this->_database = $mode;
 	}
 
 	public function write_db( $data = array( ) ) {
-		if ( $this->_loaded === true ) {
+		if ( $this->_database === true && isset( $ci->db ) === true ) {
 			$ci =& get_instance( );
 			$ci->load->model( 'error' );
 
-			if ( $ci->config->item( 'log_database' ) === true && isset( $ci->db ) === true ) {
-				$ci->error->insert( $data );
-			}
+			$ci->error->insert( $data );
 		}
 	}
 

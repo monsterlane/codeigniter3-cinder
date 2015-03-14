@@ -13,8 +13,10 @@ class MY_Controller extends CI_Controller {
 		}
 
 		$this->set_option( 'system', true );
-		$this->set_option( 'enforce_ssl', false );
 		$this->set_option( 'boot', $post[ 'system' ] );
+
+		$this->set_option( 'require_ssl', false );
+		$this->set_option( 'require_auth', false );
 
 		$this->_data = array(
 			'post' => $post,

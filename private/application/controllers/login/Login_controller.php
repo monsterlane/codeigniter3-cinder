@@ -4,7 +4,7 @@ class Login_controller extends MY_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
-		$this->set_option( 'enforce_ssl', true );
+		$this->set_option( 'require_ssl', true );
 	}
 
 	public function index( ) {

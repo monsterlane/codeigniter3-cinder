@@ -45,12 +45,14 @@ module.exports = function( grunt ) {
 		csslint: {
 			modules: {
 				options: {
+					'ids': false,
 					'adjoining-classes': false,
 					'duplicate-background-images': false,
 					'import': false,
 					'universal-selector': false,
 					'unqualified-attributes': false,
-					'zero-units': false
+					'zero-units': false,
+					'box-sizing': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',

@@ -12,10 +12,10 @@ function boot( ) {
 
 		$ci->redirect( str_replace( '_controller', '', $ci->router->login_controller ) );
 	}
-	else if ( $ci->get_option( 'require_ssl' ) === true && empty( $_SERVER[ 'HTTPS' ] ) === true ) {
+	else if ( $ci->get_option( 'require_https' ) === true && empty( $_SERVER[ 'HTTPS' ] ) === true ) {
 		$ci->redirect( str_replace( 'http:', 'https:', current_url( ) ) );
 	}
-	else if ( $ci->get_option( 'require_ssl' ) === false && empty( $_SERVER[ 'HTTPS' ] ) === false ) {
+	else if ( $ci->get_option( 'require_https' ) === false && empty( $_SERVER[ 'HTTPS' ] ) === false ) {
 		$ci->redirect( str_replace( 'https:', 'http:', current_url( ) ) );
 	}
 	else if ( $ci->get_option( 'boot' ) === true ) {

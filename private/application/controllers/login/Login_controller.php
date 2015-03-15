@@ -10,7 +10,7 @@ class Login_controller extends MY_Controller {
 			$this->redirect( $this->_after_auth );
 		}
 		else {
-			$this->set_option( 'require_ssl', true );
+			$this->set_option( 'require_https', true );
 		}
 	}
 

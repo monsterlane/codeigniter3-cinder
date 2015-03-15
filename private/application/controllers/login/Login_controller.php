@@ -20,6 +20,7 @@ class Login_controller extends MY_Controller {
 
 	public function authenticate( ) {
 		$this->session->set_userdata( 'authenticated', true );
+
 		$this->redirect( 'main' );
 	}
 }

@@ -1,13 +1,13 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class Login_controller extends MY_Controller {
-	private $_after_login = 'main';
+	private $_after_auth = 'main';
 
 	public function __construct( ) {
 		parent::__construct( );
 
 		if ( $this->session->userdata( 'authenticated' ) === true ) {
-			$this->redirect( $this->_after_login );
+			$this->redirect( $this->_after_auth );
 		}
 		else {
 			$this->set_option( 'require_ssl', true );
@@ -26,15 +26,30 @@ class Login_controller extends MY_Controller {
 	}
 
 	public function authenticate( ) {
-		$this->session->set_userdata( 'authenticated', true );
+		$this->load->library( 'form_validation' );
 
-		$url = $this->session->userdata( 'previous_page' );
+		$this->form_validation->set_rules( 'username', 'Username', 'trim|required' );
+		$this->form_validation->set_rules( 'password', 'Password', 'trim|required' );
 
-		if ( $url === null ) {
-			$url = $this->_after_login;
+		if ( $this->form_validation->run( ) === false ) {
+			$data = array(
+				'status' => false,
+				'validation' => validation_errors( ),
+			);
+
+			$this->set_data( 'module.data', $data );
 		}
+		else {
+			$this->session->set_userdata( 'authenticated', true );
 
-		$this->redirect( $url );
+			$url = $this->session->userdata( 'previous_page' );
+
+			if ( $url === null ) {
+				$url = $this->_after_auth;
+			}
+
+			$this->redirect( $url );
+		}
 	}
 }
 

@@ -1,18 +1,24 @@
 
 <form id="loginForm" name="login" action="/login/authenticate" method="post" class="cinder">
-	<p>{{=it.body}}</p>
+	<header>
+		<hgroup>
+			<h1>{{=it.title}}</h1>
+		</hgroup>
+	</header>
 
 	<div class="purpose-validation"></div>
 
-	<fieldset>
+	<fieldset class="form-group">
 		<label for="loginUsernameTextbox">Username</label>
-		<input id="loginUsernameTextbox" name="username" value="demo" placeholder="john.doe@email.com" type="text" />
+		<input id="loginUsernameTextbox" name="username" value="demo" placeholder="john.doe@email.com" type="text" class="form-control" />
+	</fieldset>
 
+	<fieldset class="form-group">
 		<label for="loginPasswordTextbox">Password</label>
-		<input id="loginPasswordTextbox" name="password" value="demo" type="password" />
+		<input id="loginPasswordTextbox" name="password" value="demo" type="password" class="form-control" />
 	</fieldset>
 
 	<footer>
-		<button type="submit">Login</button>
+		<button type="submit" class="btn btn-default">Login</button>
 	</footer>
 </form>

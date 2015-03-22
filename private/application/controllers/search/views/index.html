@@ -1,15 +1,17 @@
 
-<p><a href="/login" class="cinder">Login</a> | <a href="/logout" class="cinder">Logout</a></p>
+<form id="searchForm" method="post" action="/search/users" class="cinder">
+	<p>{{=it.body}}</p>
 
-<p><a href="/main" class="cinder" data-id="1">Main</a> | <a href="/search" class="cinder" data-id="2">Search</a> | <a href="/dragdrop" class="cinder" data-id="3">Drag/drop</a> | <a href="/plugin" class="cinder" data-id="4">jQuery Plugin</a> | <a href="/anyinvalidpath" class="cinder" data-id="5">404</a></p>
+	<fieldset class="form-group">
+		<label for="searchKeywordsTextbox">Keywords</label>
+		<input id="searchKeywordsTextbox" name="keywords" value="" placeholder="Keyword(s)" type="text" class="form-control" />
+	</fieldset>
 
-<form method="post" action="/search/users" class="cinder">
-	<input name="keywords" value="" placeholder="Keyword(s)" type="text" />
-	<button type="submit" data-label="Searching">Search</button>
+	<button type="submit" data-label="Searching" class="btn btn-primary">Search</button>
 </form>
 
 <div class="purpose-validation"></div>
 
-<table width="50%" cellpadding="0" cellspacing="0">
-	<tbody id="cinderSearchResults"></tbody>
+<table width="50%" cellpadding="0" cellspacing="0" class="table table-striped">
+	<tbody id="searchResults"></tbody>
 </table>

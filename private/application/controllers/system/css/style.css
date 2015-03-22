@@ -15,11 +15,49 @@
 	visibility:visible;
 }
 
-/* global classes */
+/* global styles */
+
+* + table,
+* + p,
+* + ul,
+* + ol,
+* + form,
+* + div,
+* + nav,
+* + header,
+* + footer,
+* + aside {
+	margin-top:1em;
+}
+
+* + section,
+section + * {
+	margin-top:2em;
+}
+
+header + * {
+	margin-top:1em;
+}
+
+hgroup > * + * {
+	margin-top:0.5em;
+}
+
+fieldset * + label {
+	margin-top:1em;
+}
 
 .purpose-hidden {
 	display:none;
 }
+
+ul.toolbar {
+	list-style-type:none;
+	padding:0;
+}
+	ul.toolbar > li {
+		display:inline-block;
+	}
 
 /* document style */
 
@@ -54,6 +92,8 @@ h1 {
 		width:60px;
 		height:100%;
 		background-color:#000;
+		padding-top:50px;
+		box-sizing:border-box;
 	}
 
 	#cinderDocument > div.container-fluid {

@@ -423,6 +423,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				el[ 0 ].innerHTML = view( data.view.data );
 
 				if ( data.system === true ) {
+					this.bindLinks( doc );
+
 					doc.show( );
 				}
 

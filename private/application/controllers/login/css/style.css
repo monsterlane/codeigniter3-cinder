@@ -1,8 +1,12 @@
 
 #loginForm {
-	width:250px;
+	width:275px;
 	margin:0 auto;
 }
+	#loginForm > header > hgroup > h1 {
+		font-size:2em;
+	}
+
 	#loginForm > p {
 		text-align:center;
 	}

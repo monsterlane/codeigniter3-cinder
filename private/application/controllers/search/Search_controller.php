@@ -4,6 +4,11 @@ class Search_controller extends MY_Controller {
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Search',
+			'view' => array(
+				'data' => array(
+					'body' => 'Please enter a search term.',
+				),
+			),
 		) );
 	}
 
@@ -43,7 +48,7 @@ class Search_controller extends MY_Controller {
 				'name' => false,
 				'view' => array(
 					'path' => 'users.html',
-					'container' => '#cinderSearchResults',
+					'container' => '#searchResults',
 					'data' => $data,
 				),
 				'callback' => 'bindSearchResults',

@@ -3,7 +3,7 @@
 $config['version'] = '0.6';
 $config['verbose'] = false;
 $config['log_database'] = true;
-$config['maintenance'] = true;
+$config['maintenance'] = false;
 
 $config['require_auth'] = true;
 $config['require_https'] = true;

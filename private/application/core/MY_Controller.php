@@ -15,8 +15,8 @@ class MY_Controller extends CI_Controller {
 		$this->set_option( 'system', true );
 		$this->set_option( 'boot', $post[ 'system' ] );
 
-		$this->set_option( 'require_https', false );
-		$this->set_option( 'require_auth', false );
+		$this->set_option( 'require_https', $this->config->item( 'require_https' ) );
+		$this->set_option( 'require_auth', $this->config->item( 'require_auth' ) );
 
 		$this->_data = array(
 			'post' => $post,
@@ -77,7 +77,8 @@ class MY_Controller extends CI_Controller {
 			'view' => array(
 				'path' => 'system/views/index.html',
 				'css' => array(
-					'system/css/reset.css',
+					'system/css/bootstrap.min.css',
+					'system/css/bootstrap.theme.min.css',
 					'system/css/sprite.css',
 					'system/css/style.css',
 				),
@@ -100,7 +101,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/view.js',
 				),
 				'fonts' => array(
-					'google,families:[Open+Sans]',
+					'google,families:[Italiana]',
 				),
 				'data' => $data,
 			),
@@ -201,6 +202,7 @@ class MY_Controller extends CI_Controller {
 					'js' => array( ),
 					'fonts' => array( ),
 					'container' => $this->config->item( 'default_container' ),
+					'show_nav' => true,
 					'data' => array( ),
 					'hash' => false,
 				)

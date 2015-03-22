@@ -16,8 +16,16 @@
 </head>
 <body>
 
-<div class="purpose-message"></div>
-<div id="<?=str_replace( '#', '', $system[ 'data' ][ 'view' ][ 'container' ] )?>"></div>
+<div id="cinderDocument">
+	<div class="navbar navbar-fixed-top"></div>
+	<div class="sidebar"></div>
+
+	<div class="container-fluid">
+		<div class="purpose-message"></div>
+		<div id="<?=substr( $system[ 'data' ][ 'view' ][ 'container' ], 1 )?>"></div>
+	</div>
+</div>
+
 <?php
 if ( empty( $module[ 'data' ][ 'csrf' ] ) === false ) {
 	?><div class="purpose-hidden"><input id="cinderCsrf" name="<?=$module[ 'data' ][ 'csrf' ][ 'name' ]?>" value="" type="hidden" /></div><?php

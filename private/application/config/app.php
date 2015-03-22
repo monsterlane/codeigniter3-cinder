@@ -3,7 +3,10 @@
 $config['version'] = '0.6';
 $config['verbose'] = false;
 $config['log_database'] = true;
-$config['maintenance'] = false;
+$config['maintenance'] = true;
+
+$config['require_auth'] = true;
+$config['require_https'] = true;
 
 $config['default_container'] = '#cinderBodyArea';
 $config['validation_container'] = 'div.purpose-validation';

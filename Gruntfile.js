@@ -20,7 +20,8 @@ module.exports = function( grunt ) {
 		clean: {
 			deploy: [
 				'public/files/cache/build.txt',
-				'public/files/cache/system/css/reset.css',
+				'public/files/cache/system/css/bootstrap.min..css',
+				'public/files/cache/system/css/bootstrap.theme.min.css',
 				'public/files/cache/system/css/sprite.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
@@ -36,6 +37,13 @@ module.exports = function( grunt ) {
 		copy: {
 			images: {
 				files: grunt.file.expandMapping( [ 'private/application/controllers/**/img/*' ], 'public/files/cache/', {
+					rename: function( aBase, aPath ) {
+						return aPath.replace( 'private/application/controllers/', aBase );
+					}
+				})
+			},
+			fonts: {
+				files: grunt.file.expandMapping( [ 'private/application/controllers/**/font/*' ], 'public/files/cache/', {
 					rename: function( aBase, aPath ) {
 						return aPath.replace( 'private/application/controllers/', aBase );
 					}

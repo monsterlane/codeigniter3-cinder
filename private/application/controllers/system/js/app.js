@@ -90,7 +90,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				a = document.createElement( 'a' );
 				a.setAttribute( 'href', aUrl );
 
-				this.handleLinkClick( a );
+				this.handleLinkClick( a, true );
 			}
 		},
 
@@ -364,7 +364,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, csrf, el, view;
+				module, csrf, el, view, doc;
 
 			this.verbose( 'app: set pending data' );
 
@@ -408,7 +408,23 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				}
 
 				el.empty( );
+
+				doc = $( '#cinderDocument' );
+
+				if ( data.view.show_nav === true ) {
+					if ( doc.hasClass( 'hide-nav' ) === true ) {
+						doc.removeClass( 'hide-nav' );
+					}
+				}
+				else if ( doc.hasClass( 'hide-nav' ) === false ) {
+					doc.addClass( 'hide-nav' );
+				}
+
 				el[ 0 ].innerHTML = view( data.view.data );
+
+				if ( data.system === true ) {
+					doc.show( );
+				}
 
 				this.bindLinks( el );
 				this.bindForms( el );
@@ -624,7 +640,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 			container.find( 'a.cinder' ).on( 'click.cinder', function( aEvent ) {
 				aEvent.preventDefault( );
-				self.handleLinkClick( this );
+				self.handleLinkClick( this, false );
 			});
 
 			return this;
@@ -633,14 +649,16 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		/**
 		 * Method: handleLinkCLick
 		 * @param {DOMelement} aLink
+		 * @param {Bool} aRedirect
 		 */
 
-		handleLinkClick: function( aLink ) {
+		handleLinkClick: function( aLink, aRedirect ) {
 			var link = aLink || document.createElement( 'a' ),
+				redirect = aRedirect || false,
 				data = $( link ).data( ),
 				url, self = this;
 
-			if ( link.href !== window.location.href ) {
+			if ( link.href !== window.location.href || redirect === true ) {
 				url = link.href.replace( '//', '' );
 				url = url.substr( url.indexOf( '/' ) );
 

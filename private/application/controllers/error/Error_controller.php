@@ -22,6 +22,7 @@ class Error_controller extends MY_Controller {
 		$this->load->partial( array(
 			'title' => '404 Not Found',
 			'view' => array(
+				'show_nav' => false,
 				'path' => 'index.html',
 				'data' => array(
 					'body' => '404 Not Found: ' . current_url( ),

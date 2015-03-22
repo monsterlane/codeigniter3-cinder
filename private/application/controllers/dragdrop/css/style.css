@@ -1,4 +1,20 @@
 
-body {
-	background-color:#bebebe;
+.purpose-dragdrop {
+	border:2px dotted black;
+	padding:1em;
 }
+	.purpose-dragdrop.drop {
+		border:2px dotted red;
+	}
+
+	.purpose-dragdrop .purpose-message {
+		margin:0;
+	}
+	.purpose-dragdrop .purpose-progress {
+		display:none;
+		margin:0;
+	}
+	.purpose-dragdrop .purpose-dragover {
+		display:none;
+		margin:0;
+	}

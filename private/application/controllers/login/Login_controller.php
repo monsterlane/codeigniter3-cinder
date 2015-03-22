@@ -18,6 +18,7 @@ class Login_controller extends MY_Controller {
 		$this->load->partial( array(
 			'title' => 'Login',
 			'view' => array(
+				'show_nav' => false,
 				'data' => array(
 					'body' => 'Please login',
 				),

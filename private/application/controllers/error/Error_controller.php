@@ -25,6 +25,7 @@ class Error_controller extends MY_Controller {
 				'show_nav' => false,
 				'path' => 'index.html',
 				'data' => array(
+					'title' => 'An error has occured.',
 					'body' => '404 Not Found: ' . current_url( ),
 				),
 			),

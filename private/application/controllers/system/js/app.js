@@ -300,6 +300,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 					this.verbose( 'app: unload ' + last.name );
 
 					requirejs.undef( last.name );
+
+					$( 'li.selected > a[href$="' + last.url + '"]' ).parent( ).removeClass( 'selected' );
 				}
 			}
 
@@ -332,6 +334,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				this.setPendingData( data );
 
 				dependencies.unshift( data.name );
+
+				$( 'li:not(.selected) > a[href$="' + data.url + '"]' ).parent( ).addClass( 'selected' );
 
 				require( dependencies, function( Module ) {
 					self.setModule( new Module( options ) );

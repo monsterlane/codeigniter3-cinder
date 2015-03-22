@@ -86,18 +86,28 @@ h1 {
 	#cinderDocument > div.navbar {
 		background-color:#fff;
 	}
+		#cinderDocument > div.navbar > ul.toolbar {
+			margin:0.65em 1em 0 0;
+		}
 
 	#cinderDocument > div.sidebar {
-		position:absolute;
-		width:60px;
+		position:fixed;
+		top:0; left:0;
+		width:150px;
 		height:100%;
 		background-color:#000;
 		padding-top:50px;
 		box-sizing:border-box;
 	}
+		#cinderDocument > div.sidebar > ul.toolbar > li {
+			display:block;
+		}
+			#cinderDocument > div.sidebar > ul.toolbar > li.selected > a {
+				color:white;
+			}
 
 	#cinderDocument > div.container-fluid {
-		margin:0 0 0 60px;
+		margin:0 0 0 150px;
 		padding-top:65px;
 	}
 
@@ -111,7 +121,7 @@ h1 {
 	display:none;
 }
 
-#cinderDocument.hide-nav > div.container {
+#cinderDocument.hide-nav > div.container-fluid {
 	margin:0;
 	padding:0;
 }

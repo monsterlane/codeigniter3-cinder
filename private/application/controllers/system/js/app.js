@@ -27,6 +27,15 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 			this._model = new Model( this );
 			this._view = new View( this );
 
+			this._container = document.getElementById( 'cinderDocument' );
+			this.$container = $( this._container );
+
+			this._templates = document.getElementById( 'cinderTemplates' );
+			this.$templates = $( this._templates );
+
+			this.$overlay = this.$templates.find( '> div.overlay' );
+			this._overlay = this.$overlay[ 0 ];
+
 			this.setData( 'system.options', options );
 			this.setData( 'system.views', [ ] );
 
@@ -368,7 +377,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, csrf, el, view, doc;
+				module, csrf, el, view;
 
 			this.verbose( 'app: set pending data' );
 
@@ -413,23 +422,21 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 				el.empty( );
 
-				doc = $( '#cinderDocument' );
-
 				if ( data.view.show_nav === true ) {
-					if ( doc.hasClass( 'hide-nav' ) === true ) {
-						doc.removeClass( 'hide-nav' );
+					if ( this.$container.hasClass( 'hide-nav' ) === true ) {
+						this.$container.removeClass( 'hide-nav' );
 					}
 				}
-				else if ( doc.hasClass( 'hide-nav' ) === false ) {
-					doc.addClass( 'hide-nav' );
+				else if ( this.$container.hasClass( 'hide-nav' ) === false ) {
+					this.$container.addClass( 'hide-nav' );
 				}
 
 				el[ 0 ].innerHTML = view( data.view.data );
 
 				if ( data.system === true ) {
-					this.bindLinks( doc );
+					this.bindLinks( this.$container );
 
-					doc.show( );
+					this.$container.show( );
 				}
 
 				this.bindLinks( el );
@@ -636,6 +643,28 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		},
 
 		/**
+		 * Method: showProgress
+		 * @param {DOMelement} aContainer
+		 */
+
+		showProgress: function( aContainer ) {
+			var container = $( aContainer );
+
+			container.append( this.$overlay.clone( ) );
+		},
+
+		/**
+		 * Method: hideProgress
+		 * @param {DOMelement} aContainer
+		 */
+
+		hideProgress: function( aContainer ) {
+			var container = $( aContainer );
+
+			container.find( 'div.overlay' ).remove( );
+		},
+
+		/**
 		 * Method: bindLinks
 		 * @param {DOMelement} aContainer
 		 */
@@ -659,10 +688,15 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		 */
 
 		handleLinkClick: function( aLink, aRedirect ) {
-			var link = aLink || document.createElement( 'a' ),
+			var container = $( this.getData( 'module.data.view.container' ) ),
+				link = aLink || document.createElement( 'a' ),
 				redirect = aRedirect || false,
-				data = $( link ).data( ),
+				attr = $( link ).data( ),
 				url, self = this;
+
+			if ( container.length > 0 && container.find( '> div.overlay' ).length == 0 ) {
+				this.showProgress( container );
+			}
 
 			if ( link.href !== window.location.href || redirect === true ) {
 				url = link.href.replace( '//', '' );
@@ -670,7 +704,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 				this.getConduit( url ).ajax({
 					url: url,
-					data: data,
+					data: attr,
 					success: function( response ) {
 						self.load( response );
 					}

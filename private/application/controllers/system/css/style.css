@@ -59,6 +59,39 @@ ul.toolbar {
 		display:inline-block;
 	}
 
+div.overlay {
+	position:absolute;
+	top:0; left:0;
+	z-index:1000;
+	width:100%;
+	height:100%;
+}
+	div.overlay > div.background {
+		width:100%;
+		height:100%;
+		background-color:#dadada;
+		opacity:0.2;
+	}
+
+	div.overlay > span.role-icon {
+		position:absolute;
+		top:50%; left:50%;
+		margin:-16px 0 0 -16px;
+	}
+
+span.icon-loader {
+	display:inline-block;
+	width:30px;
+	height:30px;
+	background:url(../img/loader.png) 0 0;
+	animation:loader 1s steps(18) infinite;
+}
+
+@keyframes loader {
+	from { background-position:0 0; }
+	to { background-position:-540px 0; }
+}
+
 /* document style */
 
 html {
@@ -107,6 +140,8 @@ h1 {
 			}
 
 	#cinderDocument > div.container-fluid {
+		position:relative;
+		height:100%;
 		margin:0 0 0 150px;
 		padding-top:65px;
 	}

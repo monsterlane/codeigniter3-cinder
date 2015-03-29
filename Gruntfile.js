@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
 		},
 		concurrent: {
 			lint: [ 'jshint', 'csslint' ],
-			minify: [ 'cssmin', 'imagemin' ]
+			minify: [ 'cssmin', 'newer:imagemin' ]
 		},
 		clean: {
 			deploy: [
@@ -182,9 +182,10 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-imagemin' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
+	grunt.loadNpmTasks( 'grunt-newer' );
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
-	grunt.registerTask( 'dev', [ 'concurrent:lint', 'sprite', 'copy' ] );
+	grunt.registerTask( 'dev', [ 'concurrent:lint', 'sprite', 'newer:copy' ] );
 	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean', 'concurrent:minify' ] );
 };

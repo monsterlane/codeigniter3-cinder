@@ -8,7 +8,7 @@ $config['maintenance'] = false;
 $config['require_auth'] = true;
 $config['require_https'] = true;
 
-$config['default_container'] = '#cinderBodyArea';
+$config['default_container'] = '#cinderModule';
 $config['validation_container'] = 'div.purpose-validation';
 $config['flashdata_container'] = 'div.purpose-flashdata';
 

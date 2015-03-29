@@ -39,6 +39,13 @@
 	</div>
 </div>
 
+<div id="cinderTemplates" class="purpose-hidden">
+	<div class="overlay">
+		<div class="background"></div>
+		<span class="role-icon icon-loader"></span>
+	</div>
+</div>
+
 <?php
 if ( empty( $module[ 'data' ][ 'csrf' ] ) === false ) {
 	?><div class="purpose-hidden"><input id="cinderCsrf" name="<?=$module[ 'data' ][ 'csrf' ][ 'name' ]?>" value="" type="hidden" /></div><?php

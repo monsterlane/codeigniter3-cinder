@@ -53,18 +53,20 @@ module.exports = function( grunt ) {
 		csslint: {
 			modules: {
 				options: {
-					'ids': false,
-					'adjoining-classes': false,
-					'duplicate-background-images': false,
 					'import': false,
 					'universal-selector': false,
+					'ids': false,
+					'adjoining-classes': false,
 					'unqualified-attributes': false,
+					'overqualified-elements': false,
+					'duplicate-background-images': false,
 					'zero-units': false,
 					'box-sizing': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',
-					'!private/application/controllers/system/css/reset.css'
+					'!private/application/controllers/system/css/bootstrap.min.css',
+					'!private/application/controllers/system/css/bootstrap.theme.min.css'
 				]
 			}
 		},

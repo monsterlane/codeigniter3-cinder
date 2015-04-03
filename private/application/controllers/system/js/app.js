@@ -702,7 +702,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 					url: url,
 					data: attr,
 					beforeSend: function( ) {
-						if ( container.length > 0 && container.find( '> div.overlay' ).length == 0 ) {
+						if ( container.length > 0 && container.find( '> div.overlay' ).length === 0 ) {
 							self.showProgress( container );
 						}
 					},

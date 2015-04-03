@@ -694,10 +694,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				attr = $( link ).data( ),
 				url, self = this;
 
-			if ( container.length > 0 && container.find( '> div.overlay' ).length == 0 ) {
-				this.showProgress( container );
-			}
-
 			if ( link.href !== window.location.href || redirect === true ) {
 				url = link.href.replace( '//', '' );
 				url = url.substr( url.indexOf( '/' ) );
@@ -705,6 +701,11 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				this.getConduit( url ).ajax({
 					url: url,
 					data: attr,
+					beforeSend: function( ) {
+						if ( container.length > 0 && container.find( '> div.overlay' ).length == 0 ) {
+							self.showProgress( container );
+						}
+					},
 					success: function( response ) {
 						self.load( response );
 					}

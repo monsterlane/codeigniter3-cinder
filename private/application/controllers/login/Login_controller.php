@@ -20,7 +20,7 @@ class Login_controller extends MY_Controller {
 			'view' => array(
 				'show_nav' => false,
 				'data' => array(
-					'title' => 'Cinder Demo',
+					'title' => 'Sign into Cinder',
 				),
 			),
 		) );

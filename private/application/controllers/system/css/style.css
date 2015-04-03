@@ -38,14 +38,33 @@ section + * {
 header + * {
 	margin-top:1em;
 }
-
-hgroup > * + * {
-	margin-top:0.5em;
-}
+	header > hgroup > * + * {
+		margin-top:0.5em;
+	}
+		header > hgroup > h1 {
+			margin-top:0;
+		}
 
 fieldset * + label {
 	margin-top:1em;
 }
+
+.vertical-center {
+	width:100%;
+	height:100%;
+	text-align:center;
+}
+	.vertical-center:before {
+		content:' ';
+		display:inline-block;
+		vertical-align:middle;
+		height:100%;
+	}
+	.vertical-center > :first-child {
+		display:inline-block;
+		vertical-align:middle;
+		max-width:100%;
+	}
 
 .purpose-hidden {
 	display:none;
@@ -100,15 +119,16 @@ html {
 }
 
 body {
-	font:17px/1.5 "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
-	color:#33333d;
-	background-color:#f2f4f8;
+	font-family:"Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+	color:#454e59;
+	background-color:#ebeef2;
 	width:100%;
 	height:100%;
 }
 
 h1 {
 	font-family:'Italiana', serif;
+	letter-spacing:2px;
 }
 
 #cinderDocument {
@@ -117,18 +137,21 @@ h1 {
 	height:100%;
 }
 	#cinderDocument > div.navbar {
-		background-color:#fff;
+		background-color:#5ccdde;
 	}
 		#cinderDocument > div.navbar > ul.toolbar {
 			margin:0.65em 1em 0 0;
 		}
+			#cinderDocument > div.navbar > ul.toolbar > li > a {
+				color:white;
+			}
 
 	#cinderDocument > div.sidebar {
 		position:fixed;
 		top:0; left:0;
 		width:150px;
 		height:100%;
-		background-color:#000;
+		background-color:#454e59;
 		padding-top:50px;
 		box-sizing:border-box;
 	}
@@ -143,8 +166,16 @@ h1 {
 		position:relative;
 		height:100%;
 		margin:0 0 0 150px;
-		padding-top:65px;
 	}
+		#cinderDocument > div.container-fluid > div.content {
+			height:100%;
+		}
+
+#cinderModule {
+	width:100%;
+	height:100%;
+	margin:0;
+}
 
 /* hide nav */
 

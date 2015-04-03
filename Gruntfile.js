@@ -61,7 +61,8 @@ module.exports = function( grunt ) {
 					'overqualified-elements': false,
 					'duplicate-background-images': false,
 					'zero-units': false,
-					'box-sizing': false
+					'box-sizing': false,
+					'box-model': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',

@@ -1,10 +1,16 @@
 
-<section id="errorPage">
-	<header>
-		<hgroup>
-			<h1>{{=it.title}}</h1>
-		</hgroup>
-	</header>
+<div class="vertical-center">
+	<section id="errorPage">
+		<header>
+			<hgroup>
+				<h1>{{=it.title}}</h1>
+			</hgroup>
+		</header>
 
-	<p>{{=it.body}}</p>
-</section>
+		<p>{{=it.body}}</p>
+
+		<footer>
+			<p><a href="{{=it.previous_page}}" class="cinder">Click here</a> to go back to the previous page.</p>
+		</footer>
+	</section>
+</div>

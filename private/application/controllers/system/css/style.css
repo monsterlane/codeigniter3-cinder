@@ -71,7 +71,9 @@ fieldset * + label {
 }
 
 ul.toolbar {
+	display:inline-block;
 	list-style-type:none;
+	margin:0;
 	padding:0;
 }
 	ul.toolbar > li {
@@ -137,10 +139,12 @@ h1 {
 	height:100%;
 }
 	#cinderDocument > div.navbar {
+		margin:0;
 		background-color:#5ccdde;
 	}
 		#cinderDocument > div.navbar > ul.toolbar {
-			margin:0.65em 1em 0 0;
+			float:right;
+			margin:12px 15px 0 0;
 		}
 			#cinderDocument > div.navbar > ul.toolbar > li > a {
 				color:white;
@@ -151,8 +155,9 @@ h1 {
 		top:0; left:0;
 		width:150px;
 		height:100%;
+		margin:0;
+		padding:65px 15px 15px 15px;
 		background-color:#454e59;
-		padding-top:50px;
 		box-sizing:border-box;
 	}
 		#cinderDocument > div.sidebar > ul.toolbar > li {
@@ -166,6 +171,7 @@ h1 {
 		position:relative;
 		height:100%;
 		margin:0 0 0 150px;
+		padding-top:65px;
 	}
 		#cinderDocument > div.container-fluid > div.content {
 			height:100%;

@@ -12,6 +12,8 @@ class Error_controller extends MY_Controller {
 	}
 
 	public function index( ) {
+		$this->load->library( 'user_agent' );
+
 		$data = array(
 			'error_type_id' => 3,
 			'message' => current_url( ),
@@ -25,8 +27,9 @@ class Error_controller extends MY_Controller {
 				'show_nav' => false,
 				'path' => 'index.html',
 				'data' => array(
-					'title' => 'An error has occured.',
-					'body' => '404 Not Found: ' . current_url( ),
+					'title' => 'Well, that\'s embarrassing.',
+					'body' => 'We couldn\'t find a page at ' . current_url( ) . '.<br/>If you typed in the address, check your spelling.',
+					'previous_page' => $this->agent->referrer( ),
 				),
 			),
 		) );

@@ -1,17 +1,25 @@
 
-<form id="searchForm" method="post" action="/search/users" class="cinder">
-	<p>{{=it.body}}</p>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h1 class="panel-title">{{=it.title}}</h1>
+	</div>
 
-	<fieldset class="form-group">
-		<label for="searchKeywordsTextbox">Keywords</label>
-		<input id="searchKeywordsTextbox" name="keywords" value="" placeholder="Keyword(s)" type="text" class="form-control" />
-	</fieldset>
+	<div class="panel-body">
+		<p>{{=it.body}}</p>
 
-	<button type="submit" data-label="Searching" class="btn btn-primary">Search</button>
-</form>
+		<div class="purpose-validation"></div>
 
-<div class="purpose-validation"></div>
+		<form id="searchForm" method="post" action="/search/users" class="cinder">
+			<div class="form-group">
+				<label for="searchKeywordsTextbox">Keywords</label>
+				<input id="searchKeywordsTextbox" name="keywords" value="" placeholder="Keyword(s)" type="text" class="form-control" />
+			</div>
 
-<table width="50%" cellpadding="0" cellspacing="0" class="table table-striped">
-	<tbody id="searchResults"></tbody>
-</table>
+			<button type="submit" data-label="Searching" class="btn btn-primary">Search</button>
+		</form>
+	</div>
+
+	<table width="50%" cellpadding="0" cellspacing="0" class="table table-striped">
+		<tbody id="searchResults"></tbody>
+	</table>
+</div>

@@ -1,33 +1,33 @@
 
 <div class="vertical-center">
-	<form id="loginForm" name="login" action="/login/authenticate" method="post" class="cinder">
-		<header>
-			<hgroup>
-				<h1>{{=it.title}}</h1>
-			</hgroup>
-		</header>
-
-		<div class="purpose-validation"></div>
-
-		<div class="input-group">
-			<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-			<input id="loginUsernameTextbox" name="username" value="demo@user.com" placeholder="Email address" type="email" class="form-control" />
+	<form id="loginForm" name="login" action="/login/authenticate" method="post" class="panel panel-default cinder">
+		<div class="panel-heading">
+			<h1 class="panel-title">{{=it.title}}</h1>
 		</div>
 
-		<div class="input-group">
-			<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-			<input id="loginPasswordTextbox" name="password" value="demo" placeholder="Password" type="password" class="form-control" />
+		<div class="panel-body">
+			<div class="purpose-validation"></div>
+
+			<div class="input-group">
+				<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+				<input id="loginUsernameTextbox" name="username" value="demo@user.com" placeholder="Email address" type="email" class="form-control" />
+			</div>
+
+			<div class="input-group">
+				<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+				<input id="loginPasswordTextbox" name="password" value="demo" placeholder="Password" type="password" class="form-control" />
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input id="loginRememberCheckbox" name="remember" value="1" type="checkbox" />
+					Remember me
+				</label>
+			</div>
 		</div>
 
-		<div class="checkbox">
-			<label>
-				<input id="loginRememberCheckbox" name="remember" value="1" type="checkbox" />
-				Remember me
-			</label>
-		</div>
-
-		<footer>
+		<div class="panel-footer">
 			<button type="submit" class="btn btn-primary">Sign in</button>
-		</footer>
+		</div>
 	</form>
 </div>

@@ -1,13 +1,11 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class Login_controller extends MY_Controller {
-	private $_after_auth = 'main';
-
 	public function __construct( ) {
 		parent::__construct( );
 
 		if ( $this->session->userdata( 'authenticated' ) === true ) {
-			$this->redirect( $this->_after_auth );
+			$this->redirect( substr( $this->router->default_controller, 0, strpos( $this->router->default_controller, '_' ) ) );
 		}
 		else {
 			$this->set_option( 'require_https', true );
@@ -46,7 +44,7 @@ class Login_controller extends MY_Controller {
 			$url = $this->session->userdata( 'previous_page' );
 
 			if ( $url === null ) {
-				$url = $this->_after_auth;
+				$url = substr( $this->router->default_controller, 0, strpos( $this->router->default_controller, '_' ) );
 			}
 
 			$this->redirect( $url );

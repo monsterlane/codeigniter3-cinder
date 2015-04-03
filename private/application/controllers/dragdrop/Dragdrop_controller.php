@@ -16,6 +16,7 @@ class Dragdrop_controller extends MY_Controller {
 					'system/js/upload.js',
 				),
 				'data' => array(
+					'title' => 'Drag/drop upload class example',
 					'body' => 'Drag a file into the dotted area.'
 				),
 			),

@@ -10,6 +10,7 @@ class Plugin_controller extends MY_Controller {
 					'jquery.hotkeys.min.js',
 				),
 				'data' => array(
+					'title' => 'jQuery plugin example',
 					'body' => 'Adding a jQuery plugin using a RequireJS wrapper. Press shift+w together.'
 				),
 			),

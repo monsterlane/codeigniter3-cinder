@@ -4,11 +4,11 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 
 	/*
 	===============================================================================
-	Class: Main
+	Class: Debug
 	===============================================================================
 	*/
 
-	var Main = Module._extend({
+	var Debug = Module._extend({
 
 		/**
 		 * Method: init
@@ -18,7 +18,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		init: function init( aOptions ) {
 			init._super.call( this, aOptions );
 
-			this.verbose( 'module: main' );
+			this.verbose( 'module: debug' );
 
 			this.bindEventListeners( );
 		},
@@ -53,5 +53,5 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		}
 	});
 
-	return Main;
+	return Debug;
 });

@@ -141,11 +141,7 @@ module.exports = function( grunt ) {
 							exclude: [ 'system/js/app' ]
 						},
 						{
-							name: 'main/js/module',
-							exclude: [ 'system/js/app', 'system/js/module' ]
-						},
-						{
-							name: 'search/js/module',
+							name: 'debug/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
 						},
 						{
@@ -154,6 +150,10 @@ module.exports = function( grunt ) {
 						},
 						{
 							name: 'plugin/js/module',
+							exclude: [ 'system/js/app', 'system/js/module' ]
+						},
+						{
+							name: 'search/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
 						}
 					]

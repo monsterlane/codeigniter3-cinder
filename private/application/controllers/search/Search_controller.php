@@ -6,6 +6,7 @@ class Search_controller extends MY_Controller {
 			'title' => 'Search',
 			'view' => array(
 				'data' => array(
+					'title' => 'Search form example',
 					'body' => 'Please enter a search term.',
 				),
 			),

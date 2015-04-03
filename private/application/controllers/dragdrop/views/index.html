@@ -1,8 +1,16 @@
 
-<p>{{=it.body}}</p>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h1 class="panel-title">{{=it.title}}</h1>
+	</div>
 
-<div data-action="/dragdrop/upload" class="purpose-dragdrop">
-	<div class="purpose-message">Drag &amp; drop</div>
-	<div class="purpose-progress">Uploading...</div>
-	<div class="purpose-dragover">Release file</div>
+	<div class="panel-body">
+		<p>{{=it.body}}</p>
+
+		<div data-action="/dragdrop/upload" class="purpose-dragdrop">
+			<div class="purpose-message">Drag &amp; drop</div>
+			<div class="purpose-progress">Uploading...</div>
+			<div class="purpose-dragover">Release file</div>
+		</div>
+	</div>
 </div>

@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 
-$route['default_controller'] = 'main_controller';
+$route['default_controller'] = 'dashboard_controller';
 $route['login_controller'] = 'login_controller';
 
 $route['404_override'] = '';

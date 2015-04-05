@@ -116,7 +116,6 @@ h1 {
 		background-color:#5ccdde;
 	}
 		#cinderDocument > div.navbar > ul.toolbar {
-			float:right;
 			margin:12px 15px 0 0;
 		}
 			#cinderDocument > div.navbar > ul.toolbar > li > a {

@@ -150,9 +150,10 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		 * @param {String} aKey
 		 */
 
-		message: function( aMessage, aKey ) {
+		message: function( aMessage, aKey, aClasses ) {
 			var msg = aMessage || false,
 				key = aKey || 'system.options.flashdata_container',
+				classes = aClasses || 'success',
 				selector = this.getData( key ),
 				data = this.getData( 'module.data' ),
 				el;
@@ -164,7 +165,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 					el = $( selector );
 				}
 
-				el.html( aMessage ).show( );
+				el.html( '<div class="alert alert-' + classes + '" role="alert">' + aMessage + '</div>' ).show( );
 			}
 			else {
 				$( selector ).empty( );

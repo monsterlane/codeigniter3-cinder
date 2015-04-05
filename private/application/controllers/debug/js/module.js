@@ -50,6 +50,8 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 			var parent = this.getParent( );
 
 			parent.clearCache( );
+
+			parent.message( 'View cache has been cleared.' );
 		}
 	});
 

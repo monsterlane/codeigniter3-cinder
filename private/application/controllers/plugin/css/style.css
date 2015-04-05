@@ -1,4 +1,8 @@
 
+#cinderModule {
+	display:block;
+}
+
 .colourPreview {
 	display:inline-block;
 	width:200px;

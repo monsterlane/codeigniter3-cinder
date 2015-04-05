@@ -35,7 +35,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 
 			this.verbose( 'module: bindEventListeners' );
 
-			container.find( 'button.purpose-clearcache' ).on( 'click', function( aEvent ) {
+			container.find( 'a.purpose-clearcache' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );
 				self.handleClearCacheButtonClick( this );
 			});

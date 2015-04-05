@@ -441,6 +441,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 				this.bindLinks( el );
 				this.bindForms( el );
+
+				this.hideProgress( el );
 			}
 
 			this._cache.free( );
@@ -650,7 +652,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		showProgress: function( aContainer ) {
 			var container = $( aContainer );
 
-			container.append( this.$overlay.clone( ) );
+			container.parent( ).append( this.$overlay.clone( ) );
 		},
 
 		/**
@@ -661,7 +663,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		hideProgress: function( aContainer ) {
 			var container = $( aContainer );
 
-			container.find( 'div.overlay' ).remove( );
+			container.parent( ).find( '> div.overlay' ).remove( );
 		},
 
 		/**

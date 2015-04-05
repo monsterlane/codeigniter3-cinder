@@ -30,7 +30,6 @@
 			<li><a href="/dragdrop" class="cinder" data-id="3">Drag/drop</a></li>
 			<li><a href="/plugin" class="cinder" data-id="4">jQuery Plugin</a></li>
 			<li><a href="/debug" class="cinder" data-id="5">Debug</a></li>
-			<li><a href="/anyinvalidpath" class="cinder" data-id="6">404</a></li>
 		</ul>
 	</div>
 
@@ -42,7 +41,7 @@
 	</div>
 </div>
 
-<div id="cinderTemplates" class="purpose-hidden">
+<div id="cinderTemplates" class="hidden">
 	<div class="overlay">
 		<div class="background"></div>
 		<span class="role-icon icon-loader"></span>
@@ -51,7 +50,7 @@
 
 <?php
 if ( empty( $module[ 'data' ][ 'csrf' ] ) === false ) {
-	?><div class="purpose-hidden"><input id="cinderCsrf" name="<?=$module[ 'data' ][ 'csrf' ][ 'name' ]?>" value="" type="hidden" /></div><?php
+	?><div class="hidden"><input id="cinderCsrf" name="<?=$module[ 'data' ][ 'csrf' ][ 'name' ]?>" value="" type="hidden" /></div><?php
 }
 ?>
 

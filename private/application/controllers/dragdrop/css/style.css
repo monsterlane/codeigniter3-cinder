@@ -1,4 +1,8 @@
 
+#cinderModule {
+	display:block;
+}
+
 .purpose-dragdrop {
 	border:2px dotted black;
 	padding:1em;

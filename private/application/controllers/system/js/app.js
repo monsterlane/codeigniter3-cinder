@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Font, Cache, Conduit, Model, View ) {
+define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/timer', 'system/js/view' ], function( Class, $, Plugins, Font, Cache, Conduit, Model, Timer, View ) {
 	'use strict';
 
 	/*
@@ -20,6 +20,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 			this._verbose = false;
 			this._module = null;
+			this._loaded = null;
+			this._timer = null;
 
 			this._cache = new Cache( this );
 			this._conduit = [ ];
@@ -35,6 +37,9 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 			this.$overlay = this.$templates.find( '> div.overlay' );
 			this._overlay = this.$overlay[ 0 ];
+
+			this.$loading = this.$container.find( '> div.loading' );
+			this._loading = this.$loading[ 0 ];
 
 			this.setData( 'system.options', options );
 			this.setData( 'system.views', [ ] );
@@ -240,13 +245,63 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 		},
 
 		/**
+		 * Method: unload
+		 */
+
+		unload: function( ) {
+			var module = this.getData( 'module.data' ),
+				link, fp, ff, el,
+				i, len;
+
+			this._loaded = -1;
+
+			if ( module !== false ) {
+				for ( i = 0, len = module.view.fonts.length; i < len; i++ ) {
+					link = module.view.fonts[ i ];
+
+					this.verbose( 'app: unload ' + link );
+
+					fp = link.substring( 0, link.indexOf( ',' ) );
+
+					ff = link.substring( link.indexOf( '[' ) + 1, module.lastIndexOf( ']' ) );
+					ff = ff.replace( ',', '|' );
+					ff = encodeURIComponent( ff );
+
+					el = $( 'link[href*="' + fp + '"][href*="' + ff + '"]' );
+
+					el.prop( 'disabled', true );
+					el.remove( );
+
+					requirejs.undef( 'system/js/require.webfont!' + link );
+				}
+
+				for ( i = 0, len = module.view.css.length; i < len; i++ ) {
+					link = module.view.css[ i ].substr( 0, module.view.css[ i ].length - 4 );
+
+					this.verbose( 'app: unload ' + link );
+
+					el = $( 'link[href*="' + link + '.css"]' );
+
+					el.prop( 'disabled', true );
+					el.remove( );
+
+					requirejs.undef( 'system/js/require.css.min!' + link );
+				}
+
+				this.verbose( 'app: unload ' + module.name );
+
+				requirejs.undef( module.name );
+			}
+		},
+
+		/**
 		 * Method: load
 		 * @param {Object} aData
 		 */
 
 		load: function( aData ) {
 			var data = aData || { },
-				last, link, fp, ff, el, i, len,
+				link, i, len,
 				dependencies = [ ],
 				options = { },
 				redir = false,
@@ -269,49 +324,15 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				}
 			}, data );
 
-			if ( this._module !== null ) {
-				last = this.getData( 'module.data' );
+			this._loaded = -1;
 
-				if ( last.name !== false && data.name !== false ) {
+			if ( this._module !== null ) {
+				link = this.getData( 'module.data.name' );
+
+				if ( link !== false && link.name !== false ) {
 					redir = true;
 
-					for ( i = 0, len = last.view.fonts.length; i < len; i++ ) {
-						link = last.view.fonts[ i ];
-
-						this.verbose( 'app: unload ' + link );
-
-						fp = link.substring( 0, link.indexOf( ',' ) );
-
-						ff = link.substring( link.indexOf( '[' ) + 1, link.lastIndexOf( ']' ) );
-						ff = ff.replace( ',', '|' );
-						ff = encodeURIComponent( ff );
-
-						el = $( 'link[href*="' + fp + '"][href*="' + ff + '"]' );
-
-						el.prop( 'disabled', true );
-						el.remove( );
-
-						requirejs.undef( 'system/js/require.webfont!' + link );
-					}
-
-					for ( i = 0, len = last.view.css.length; i < len; i++ ) {
-						link = last.view.css[ i ].substr( 0, last.view.css[ i ].length - 4 );
-
-						this.verbose( 'app: unload ' + link );
-
-						el = $( 'link[href*="' + link + '.css"]' );
-
-						el.prop( 'disabled', true );
-						el.remove( );
-
-						requirejs.undef( 'system/js/require.css.min!' + link );
-					}
-
-					this.verbose( 'app: unload ' + last.name );
-
-					requirejs.undef( last.name );
-
-					$( 'li.selected > a[href$="' + last.url + '"]' ).parent( ).removeClass( 'selected' );
+					this.unload( );
 				}
 			}
 
@@ -331,6 +352,13 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 					dependencies.push( link );
 				}
+
+				if ( data.view.css.length === 0 ) {
+					this._loaded += 1;
+				}
+			}
+			else {
+				this._loaded += 1;
 			}
 
 			if ( data.name !== false ) {
@@ -341,20 +369,53 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 
 				this.verbose( 'app: load ' + data.name );
 
-				this.setPendingData( data );
-
 				dependencies.unshift( data.name );
 
-				$( 'li:not(.selected) > a[href$="' + data.url + '"]' ).parent( ).addClass( 'selected' );
+				$( 'li.selected' ).removeClass( 'selected' );
+				$( 'li > a[href$="' + data.url + '"]' ).parent( ).addClass( 'selected' );
 
 				require( dependencies, function( Module ) {
 					self.setModule( new Module( options ) );
-					self.callback( data );
+
+					self._loaded += 1;
 				});
+
+				if ( this._timer instanceof Timer ) {
+					this._timer._callbacks.stop = function( ) {
+						self.setPendingData( data );
+						self.callback( data );
+					};
+
+					this._timer.start( );
+				}
+				else {
+					this._timer = new Timer({
+						think: function( ) {
+							if ( window.getComputedStyle( self._loading ).backgroundColor === 'rgb(0, 0, 0)' ) {
+								self._loaded += 1;
+							}
+
+							if ( self._loaded > 0 ) {
+								return false;
+							}
+
+							return true;
+						},
+						stop: function( ) {
+							self.setPendingData( data );
+							self.callback( data );
+						}
+					});
+				}
 			}
 			else if ( this._module !== null ) {
-				this.setPendingData( data );
-				this.callback( data );
+				if ( this._timer instanceof Timer && this._timer.running( ) === true ) {
+					this._timer.stop( );
+				}
+				else {
+					this.setPendingData( data );
+					this.callback( data );
+				}
 			}
 		},
 

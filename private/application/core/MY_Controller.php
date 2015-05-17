@@ -79,6 +79,8 @@ class MY_Controller extends CI_Controller {
 				'css' => array(
 					'system/css/bootstrap.min.css',
 					'system/css/bootstrap.theme.min.css',
+					'system/css/loading.css',
+					'system/css/loaded.css',
 					'system/css/sprite.css',
 					'system/css/style.css',
 				),
@@ -98,6 +100,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/conduit.js',
 					'system/js/model.js',
 					'system/js/module.js',
+					'system/js/timer.js',
 					'system/js/view.js',
 				),
 				'fonts' => array(
@@ -239,12 +242,14 @@ class MY_Controller extends CI_Controller {
 				$data[ 'view' ][ 'css' ] = array_values( $data[ 'view' ][ 'css' ] );
 			}
 			else if ( ENVIRONMENT === 'development' ) {
-				foreach ( $data[ 'view' ][ 'css' ] as &$style ) {
+				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
 					if ( strpos( $style, '/' ) === false ) {
 						$style = $this->router->directory . 'css/' . $style;
 					}
 
 					if ( file_exists( $dest . $style ) === false || filemtime( VIEWPATH . $style ) !== filemtime( $dest . $style ) ) {
+						$data[ 'view' ][ 'css' ][ $k ] = $style;
+
 						$dir = $dest . substr( $style, 0, strrpos( $style, '/' ) );
 
 						if ( file_exists( $dir ) === false ) {
@@ -252,6 +257,10 @@ class MY_Controller extends CI_Controller {
 						}
 
 						copy( VIEWPATH . $style, $dest . $style );
+					}
+
+					if ( $style === 'system/css/loaded.css' || $style === 'system/css/loading.css' ) {
+						unset( $data[ 'view' ][ 'css' ][ $k ] );
 					}
 				}
 				unset( $style );

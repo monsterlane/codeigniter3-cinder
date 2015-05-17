@@ -1,7 +1,5 @@
 
-#cinderModule {
-	display:block;
-}
+@import url( '../../system/css/loaded.css' );
 
 .purpose-dragdrop {
 	border:2px dotted black;

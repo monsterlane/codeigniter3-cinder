@@ -2,6 +2,7 @@
 
 @import url( 'bootstrap.min.css' );
 @import url( 'bootstrap.theme.min.css' );
+@import url( 'loading.css' );
 @import url( 'sprite.css' );
 
 /* webfont classes */
@@ -153,7 +154,6 @@ h1 {
 		}
 
 #cinderModule {
-	display:none;
 	width:100%;
 	height:100%;
 	margin:0;

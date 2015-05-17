@@ -23,6 +23,8 @@ module.exports = function( grunt ) {
 				'public/files/cache/system/css/bootstrap.min..css',
 				'public/files/cache/system/css/bootstrap.theme.min.css',
 				'public/files/cache/system/css/sprite.css',
+				'public/files/cache/system/css/loaded.css',
+				'public/files/cache/system/css/loading.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
@@ -62,7 +64,8 @@ module.exports = function( grunt ) {
 					'duplicate-background-images': false,
 					'zero-units': false,
 					'box-sizing': false,
-					'box-model': false
+					'box-model': false,
+					'important': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',
@@ -139,6 +142,10 @@ module.exports = function( grunt ) {
 						},
 						{
 							name: 'system/js/upload',
+							exclude: [ 'system/js/app' ]
+						},
+						{
+							name: 'system/js/timer',
 							exclude: [ 'system/js/app' ]
 						},
 						{

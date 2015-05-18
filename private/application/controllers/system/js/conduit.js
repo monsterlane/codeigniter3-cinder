@@ -157,7 +157,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 					else if ( aResponse.hasOwnProperty( 'validation' ) === true ) {
 						parent.verbose( 'app: validation failed' );
 
-						parent.message( aResponse.validation, 'system.options.validation_container' );
+						parent.message( aResponse.validation, 'system.options.validation_container', 'danger' );
 
 						necb( aResponse );
 					}

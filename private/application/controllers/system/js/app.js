@@ -390,6 +390,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 				}
 				else {
 					this._timer = new Timer({
+						parent: this,
 						think: function( ) {
 							if ( window.getComputedStyle( self._loading ).backgroundColor === 'rgb(0, 0, 0)' ) {
 								self._loaded += 1;

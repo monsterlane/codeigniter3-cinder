@@ -9,8 +9,9 @@ require.config({
 	paths: {
 		domready: 'system/js/require.domready.min',
 		font: 'system/js/require.webfont',
+		jclass: 'system/js/jclass.min',
 		jquery: 'system/js/jquery.min',
 		plugins: 'system/js/jquery.plugins',
-		jclass: 'system/js/jclass.min'
+		timer: 'system/js/timer'
 	}
 });

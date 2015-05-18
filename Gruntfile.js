@@ -28,6 +28,7 @@ module.exports = function( grunt ) {
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
+				'!public/files/cache/system/js/timer.js',
 				'!public/files/cache/system/js/upload.js',
 				'!public/files/cache/system/js/require.config.js',
 				'!public/files/cache/system/js/require.js.min.js',

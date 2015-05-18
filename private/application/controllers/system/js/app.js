@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/timer', 'system/js/view' ], function( Class, $, Plugins, Font, Cache, Conduit, Model, Timer, View ) {
+define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Font, Timer, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*

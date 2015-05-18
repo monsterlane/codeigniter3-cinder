@@ -111,7 +111,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._running = false;
 				this._callbacks.stop( );
 
-				this.getParent( ).verbose( 'app: think ' + parseInt( this._stop - this._start, 10 ) + 'ms' );
+				this.getParent( ).verbose( 'app: waited for css ' + parseInt( this._stop - this._start, 10 ) + 'ms' );
 			}
 		},
 

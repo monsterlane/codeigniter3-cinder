@@ -329,7 +329,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'system/js/cache', 'system/js/c
 			if ( this._module !== null ) {
 				link = this.getData( 'module.data.name' );
 
-				if ( link !== false && link.name !== false ) {
+				if ( link !== false && link.name !== false && data.name !== false ) {
 					redir = true;
 
 					this.unload( );

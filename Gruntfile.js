@@ -114,8 +114,7 @@ module.exports = function( grunt ) {
 		postcss: {
 			options: {
 				map: {
-					inline: false,
-					annotation: 'public/files/cache/'
+					inline: false
 				},
 				processors: [
 					require( 'autoprefixer' )({
@@ -127,11 +126,11 @@ module.exports = function( grunt ) {
 				]
 			},
 			cache: {
-				cwd: 'public/files/cache/',
-				src: [
-					'**/css/*.css',
-					'**/css/!*.min.css'
-				]
+				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css', '!public/files/cache/**/css/*.min.css' ], '', {
+					rename: function( aBase, aPath ) {
+						return aPath;
+					}
+				})
 			}
 		},
 		requirejs: {

@@ -1,8 +1,10 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
+require_once( APPPATH . 'third_party/dot/Dot.php' );
+
 class MY_Controller extends CI_Controller {
 	private $_options = array( );
-	private $_data = array( );
+	private $_data;
 
 	public function __construct( ) {
 		parent::__construct( );
@@ -18,7 +20,7 @@ class MY_Controller extends CI_Controller {
 		$this->set_option( 'require_https', $this->config->item( 'require_https' ) );
 		$this->set_option( 'require_auth', $this->config->item( 'require_auth' ) );
 
-		$this->_data = array(
+		$this->_data = new Dot( array(
 			'post' => $post,
 			'system' => array(
 				'options' => array( ),
@@ -35,7 +37,7 @@ class MY_Controller extends CI_Controller {
 				),
 				'messages' => array( ),
 			),
-		);
+		));
 	}
 
 	/* public methods */
@@ -144,53 +146,11 @@ class MY_Controller extends CI_Controller {
 	}
 
 	public function get_data( $key = null ) {
-		$root = $this->_data;
-
-		if ( $key !== null ) {
-			$keys = explode( '.', $key );
-
-			foreach ( $keys as $key ) {
-				if ( isset( $root[ $key ] ) === true ) {
-					$root = $root[ $key ];
-				}
-				else {
-					return null;
-				}
-			}
-		}
-
-		return $root;
+		return $this->_data->get( $key );
 	}
 
 	public function set_data( $key, $data = array( ) ) {
-		$keys = explode( '.', $key );
-		$root = &$this->_data;
-
-		while ( count( $keys ) > 1 ) {
-			$key = array_shift( $keys );
-
-			if ( isset( $root[ $key ] ) === false ) {
-				$root[ $key ] = array( );
-			}
-
-			$root = &$root[ $key ];
-		}
-
-		$key = reset( $keys );
-
-		if ( empty( $data ) === false && isset( $root[ $key ] ) === true && is_array( $root[ $key ] ) === true ) {
-			foreach ( $data as $k => $v ) {
-				if ( array_key_exists( $k, $root[ $key ] ) === true && is_array( $root[ $key ][ $k ] ) === true && is_array( $v ) == true ) {
-					$root[ $key ][ $k ] = array_merge_recursive( $root[ $key ][ $k ], $v );
-				}
-				else {
-					$root[ $key ][ $k ] = $v;
-				}
-			}
-		}
-		else {
-			$root[ $key ] = $data;
-		}
+		$this->_data->set( $key, $data );
 	}
 
 	public function set_view( $data = array( ), $key = 'module.data' ) {

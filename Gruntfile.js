@@ -66,11 +66,7 @@ module.exports = function( grunt ) {
 		},
 		cssmin: {
 			all: {
-				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css' ], '', {
-					rename: function( aBase, aPath ) {
-						return aPath;
-					}
-				})
+				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css' ] )
 			}
 		},
 		imagemin: {
@@ -126,11 +122,7 @@ module.exports = function( grunt ) {
 				]
 			},
 			cache: {
-				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css', '!public/files/cache/**/css/*.min.css' ], '', {
-					rename: function( aBase, aPath ) {
-						return aPath;
-					}
-				})
+				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css', '!public/files/cache/**/css/*.min.css' ] )
 			}
 		},
 		requirejs: {
@@ -211,6 +203,6 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
-	grunt.registerTask( 'dev', [ 'concurrent:lint', 'sprite', 'newer:copy' ] );
+	grunt.registerTask( 'assets', [ 'sprite', 'newer:copy' ] );
 	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean:deploy', 'postcss', 'concurrent:minify' ] );
 };

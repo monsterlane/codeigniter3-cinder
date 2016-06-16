@@ -1,12 +1,14 @@
 # project
+node_modules
 private/application/config/development/database.php
 private/application/config/testing/database.php
 private/application/config/production/database.php
 public/.htaccess
 public/files/*
+!public/files/index.html
+!public/files/cache
 public/files/cache/*
 !public/files/cache/index.html
-node_modules
 
 # ide
 .settings

@@ -10,10 +10,11 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
     window.requestAnimationFrame = ( function( ) {
 		return (
+			window.requestAnimationFrame ||
 			window.webkitRequestAnimationFrame ||
 			window.mozRequestAnimationFrame ||
 			window.oRequestAnimationFrame ||
-			window.msRequestAnimaationFrame ||
+			window.msRequestAnimationFrame ||
 			function( aCallback, aElement ) {
 				window.setTimeout( aCallback, 1000 / 60 );
 			}
@@ -25,10 +26,10 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 	window.performance.now = ( function( ) {
 		return (
 			window.performance.now ||
-			window.performance.mozNow ||
-			window.performance.msNow ||
-			window.performance.oNow ||
 			window.performance.webkitNow ||
+			window.performance.mozNow ||
+			window.performance.oNow ||
+			window.performance.msNow ||
 			function( ) {
                 return new Date( ).getTime( );
             }

@@ -12,9 +12,10 @@ module.exports = function( grunt ) {
 				'public/files/cache/build.txt',
 				'public/files/cache/system/css/bootstrap.min..css',
 				'public/files/cache/system/css/bootstrap.theme.min.css',
-				'public/files/cache/system/css/sprite.css',
 				'public/files/cache/system/css/loaded.css',
 				'public/files/cache/system/css/loading.css',
+				'public/files/cache/system/css/sprite.css',
+				'public/files/cache/system/css/icons.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
@@ -24,17 +25,17 @@ module.exports = function( grunt ) {
 				'!public/files/cache/system/js/require.js.min.js',
 				'!public/files/cache/system/js/require.css.min.js',
 				'!public/files/cache/system/js/require.domready.min.js',
-				'public/files/cache/plugin/js/jquery.hotkeys.min.js'
+				'public/files/cache/plugin/js/jquery.hotkeys.min.js',
+				'public/files/cache/system/font/*/',
+				'public/files/cache/system/img/*/'
 			],
 			dist: [
 				'dist/*.zip',
 				'dist/*.tar.gz'
 			],
 			fonts: [
-				'public/files/cache/system/font/*/'
-			],
-			sprites: [
-				'public/files/cache/system/img/*/'
+				'private/application/controllers/system/font/system*.*',
+				'public/files/cache/system/font/system*.*'
 			]
 		},
 		copy: {
@@ -199,6 +200,24 @@ module.exports = function( grunt ) {
 			}
 		},
 		webfont: {
+			icons: {
+				src: 'private/application/controllers/system/font/svg/*.svg',
+				dest: 'private/application/controllers/system/font',
+				destCss: 'private/application/controllers/system/css',
+				options: {
+					fontFilename: 'system-{hash}',
+					relativeFontPath: '/files/cache/system/font',
+					engine: 'node',
+					types: 'eot,woff,ttf',
+					hashes: true,
+					templateOptions: {
+						baseClass: 'svg',
+						classPrefix: 'svg-',
+						mixinPrefix: 'svg-',
+						htmlDemo: false
+					}
+				}
+			}
 		}
 	});
 
@@ -217,5 +236,5 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
 	grunt.registerTask( 'assets', [ 'sprite', 'newer:copy' ] );
-	grunt.registerTask( 'deploy', [ 'clean:dist', 'concurrent:lint', 'sprite', 'requirejs', 'clean:build', 'clean:sprites', 'postcss', 'concurrent:minify' ] );
+	grunt.registerTask( 'deploy', [ 'clean:dist', 'concurrent:lint', 'sprite', 'clean:fonts', 'webfont', 'requirejs', 'clean:build', 'postcss', 'concurrent:minify' ] );
 };

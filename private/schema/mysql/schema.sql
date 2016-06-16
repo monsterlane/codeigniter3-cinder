@@ -6,7 +6,7 @@ CREATE TABLE `migration` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `version` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `error_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

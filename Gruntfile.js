@@ -8,7 +8,7 @@ module.exports = function( grunt ) {
 			minify: [ 'cssmin', 'newer:imagemin' ]
 		},
 		clean: {
-			deploy: [
+			build: [
 				'public/files/cache/build.txt',
 				'public/files/cache/system/css/bootstrap.min..css',
 				'public/files/cache/system/css/bootstrap.theme.min.css',
@@ -25,6 +25,16 @@ module.exports = function( grunt ) {
 				'!public/files/cache/system/js/require.css.min.js',
 				'!public/files/cache/system/js/require.domready.min.js',
 				'public/files/cache/plugin/js/jquery.hotkeys.min.js'
+			],
+			dist: [
+				'dist/*.zip',
+				'dist/*.tar.gz'
+			],
+			fonts: [
+				'public/files/cache/system/font/*/'
+			],
+			sprites: [
+				'public/files/cache/system/img/*/'
 			]
 		},
 		copy: {
@@ -187,6 +197,8 @@ module.exports = function( grunt ) {
 					}
 				}
 			}
+		},
+		webfont: {
 		}
 	});
 
@@ -201,8 +213,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-newer' );
 	grunt.loadNpmTasks( 'grunt-postcss' );
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
+	grunt.loadNpmTasks( 'grunt-webfont' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
 	grunt.registerTask( 'assets', [ 'sprite', 'newer:copy' ] );
-	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean:deploy', 'postcss', 'concurrent:minify' ] );
+	grunt.registerTask( 'deploy', [ 'clean:dist', 'concurrent:lint', 'sprite', 'requirejs', 'clean:build', 'clean:sprites', 'postcss', 'concurrent:minify' ] );
 };

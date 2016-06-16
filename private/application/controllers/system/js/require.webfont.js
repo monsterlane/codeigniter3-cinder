@@ -1,5 +1,5 @@
 
-define( [ 'system/js/webfont.min' ], function( ) {
+define( [ 'system/js/webfont.min' ], function( Webfont ) {
 	'use strict';
 
 	/*
@@ -79,7 +79,7 @@ define( [ 'system/js/webfont.min' ], function( ) {
 					aLoad( false );
 				};
 
-				WebFont.load( data );
+				Webfont.load( data );
 			}
 		}
 	};

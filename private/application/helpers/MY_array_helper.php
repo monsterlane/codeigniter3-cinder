@@ -2,7 +2,7 @@
 
 function trim_array( $arr ) {
 	foreach ( $arr as $k => $v ) {
-		if ( is_string( $v ) && strlen( $v ) > 0 ) {
+		if ( is_scalar( $v ) ) {
 			$arr[ $k ] = trim( $v );
 		}
 		else if ( is_array( $v ) ) {
@@ -18,17 +18,26 @@ function trim_array( $arr ) {
 
 function merge_array( ) {
 	$args = func_get_args( );
-	$result = $args[ 0 ];
+	$result = array( );
+	$trim = true;
 
-	foreach ( $args as $arg ) {
-		foreach ( $arg as $k => $v ) {
-			if ( is_array( $v ) === true && isset( $result[ $k ] ) === true && is_array( $result[ $k ] ) === true ) {
-				$result[ $k ] = merge_array( $result[ $k ], $v );
-			}
-			else {
-				$result[ $k ] = $v;
-			}
+	if ( count( $args ) > 0 ) {
+		if ( is_bool( $args[ 0 ] ) == true ) {
+			$trim = $args[ 0 ];
+
+			array_shift( $args );
 		}
+	}
+
+	foreach ( $args as $arr ) {
+		if ( is_array( $arr ) && $trim == true ) {
+			$arr = trim_array( $arr );
+		}
+		else if ( is_array( $arr ) == false ) {
+			$arr = array( );
+		}
+
+		$result = array_merge( $result, $arr );
 	}
 
 	return $result;
@@ -38,15 +47,7 @@ function clean_array( $arr ) {
 	if ( !is_array( $arr ) ) $arr = array( );
 
 	foreach ( $arr as &$param ) {
-		if ( $param == 'null' || $param == '' ) {
-			$param = null;
-		}
-		else if ( $param == 'true' ) {
-			$param = true;
-		}
-		else if ( $param == 'false' ) {
-			$param = false;
-		}
+		if ( $param == 'null' || $param == '' ) $param = null;
 	}
 	unset( $param );
 

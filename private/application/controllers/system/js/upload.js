@@ -8,10 +8,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 	===============================================================================
 	*/
 
-	$.event.fixHooks.drop = {
-		props: [ 'dataTransfer' ]
-	};
-
 	var Upload = Class._extend({
 
 		/**
@@ -142,8 +138,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				files = [ ],
 				file, i, len;
 
-			if ( aEvent.dataTransfer !== undefined ) {
-				files = aEvent.dataTransfer.files;
+			if ( aEvent.originalEvent.dataTransfer !== undefined ) {
+				files = aEvent.originalEvent.dataTransfer.files;
 			}
 			else if ( aEvent.target.files !== undefined ) {
 				files = aEvent.target.files;

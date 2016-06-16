@@ -3,10 +3,44 @@
 class MY_Router extends CI_Router {
 	public $login_controller;
 
+	/* overloaded methods */
+
 	protected function _set_routing( ) {
 		parent::_set_routing( );
 
 		$this->login_controller = $this->routes[ 'login_controller' ];
+	}
+
+	protected function _set_request( $segments = array( ) ) {
+		$segments = $this->_validate_request( $segments );
+
+		if ( empty( $segments ) ) {
+			$this->_set_default_controller( );
+			return;
+		}
+
+		if ( $this->translate_uri_dashes === TRUE ) {
+			$segments[ 0 ] = str_replace( '-', '_', $segments[ 0 ] );
+
+			if ( isset( $segments[ 1 ] ) ) {
+				$segments[ 1 ] = str_replace( '-', '_', $segments[ 1 ] );
+			}
+		}
+
+		$this->set_directory( $segments[ 0 ] );
+		$this->set_class( $segments[ 0 ] . '_controller' );
+
+		if ( isset( $segments[ 1 ] ) ) {
+			$this->set_method( $segments[ 1 ] );
+		}
+		else {
+			$segments[ 1 ] = 'index';
+		}
+
+		array_unshift( $segments, NULL );
+		unset( $segments[ 0 ] );
+
+		$this->uri->rsegments = $segments;
 	}
 
 	protected function _set_default_controller( ) {
@@ -50,38 +84,6 @@ class MY_Router extends CI_Router {
 		}
 
 		return $segments;
-	}
-
-	protected function _set_request( $segments = array( ) ) {
-		$segments = $this->_validate_request( $segments );
-
-		if ( empty( $segments ) ) {
-			$this->_set_default_controller( );
-			return;
-		}
-
-		if ( $this->translate_uri_dashes === TRUE ) {
-			$segments[ 0 ] = str_replace( '-', '_', $segments[ 0 ] );
-
-			if ( isset( $segments[ 1 ] ) ) {
-				$segments[ 1 ] = str_replace( '-', '_', $segments[ 1 ] );
-			}
-		}
-
-		$this->set_directory( $segments[ 0 ] );
-		$this->set_class( $segments[ 0 ] . '_controller' );
-
-		if ( isset( $segments[ 1 ] ) ) {
-			$this->set_method( $segments[ 1 ] );
-		}
-		else {
-			$segments[ 1 ] = 'index';
-		}
-
-		array_unshift( $segments, NULL );
-		unset( $segments[ 0 ] );
-
-		$this->uri->rsegments = $segments;
 	}
 
 	public function set_class( $class ) {

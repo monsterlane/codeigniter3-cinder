@@ -7,11 +7,7 @@ define( [ 'jquery' ], function( $ ) {
 	Helpers: jQuery
 	===============================================================================
 	*/
-
-	$.event.fixHooks.click = {
-		props: [ 'detail' ]
-	};
-
+	
 	$.fn.serializeObject = function( ) {
 		var o = { },
 			a = this.serializeArray( );

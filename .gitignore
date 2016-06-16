@@ -1,4 +1,4 @@
-# project files
+# project
 private/application/config/development/database.php
 private/application/config/testing/database.php
 private/application/config/production/database.php
@@ -6,12 +6,14 @@ public/.htaccess
 public/files/*
 public/files/cache/*
 !public/files/cache/index.html
-node_modules/*
+node_modules
 
-# eclipse files
+# ide
+.settings
+.idea
 .project
 
-# os files
+# os
 .DS_Store
 .DS_Store?
 ._*
@@ -19,3 +21,8 @@ node_modules/*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# elastic beanstalk
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -8,6 +8,8 @@ class MY_Email extends CI_Email {
 		$this->from( $ci->config->item( 'mail_from_address' ), $ci->config->item( 'mail_from_name' ) );
 	}
 
+	/* public methods */
+
 	public function clear( $clear_attachments = false ) {
 		parent::clear( $clear_attachments );
 

@@ -3,16 +3,6 @@ module.exports = function( grunt ) {
 	'use strict';
 
 	grunt.initConfig({
-		autoprefixer: {
-			options: {
-				browsers: [ 'last 2 versions', '> 5%' ],
-				cascade: false
-			},
-			all: {
-				cwd: 'public/files/cache/',
-				src: '**/css/*.css'
-			}
-		},
 		concurrent: {
 			lint: [ 'jshint', 'csslint' ],
 			minify: [ 'cssmin', 'newer:imagemin' ]
@@ -119,6 +109,21 @@ module.exports = function( grunt ) {
 			},
 			all: [ 'Gruntfile.js', 'private/application/controllers/**/js/*.js' ]
 		},
+		postcss: {
+			options: {
+				map: {
+					inline: false,
+					annotation: 'public/files/cache/'
+				},
+				processors: [
+					require( 'autoprefixer' )({ browsers: [ 'last 2 versions', '> 5%' ] })
+				]
+			},
+			all: {
+				cwd: 'public/files/cache/',
+				src: '**/css/*.css'
+			}
+		},
 		requirejs: {
 			compile: {
 				options: {
@@ -184,7 +189,6 @@ module.exports = function( grunt ) {
 		}
 	});
 
-	grunt.loadNpmTasks( 'grunt-autoprefixer' );
 	grunt.loadNpmTasks( 'grunt-concurrent' );
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
@@ -194,6 +198,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
 	grunt.loadNpmTasks( 'grunt-newer' );
+	grunt.loadNpmTasks( 'grunt-postcss' );
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );

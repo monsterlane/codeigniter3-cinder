@@ -3,6 +3,8 @@
 class MY_Log extends CI_Log {
 	private $_database = false;
 
+	/* public methods */
+
 	public function database( $mode ) {
 		$this->_database = $mode;
 	}

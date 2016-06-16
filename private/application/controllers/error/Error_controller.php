@@ -11,6 +11,8 @@ class Error_controller extends MY_Controller {
 		}
 	}
 
+	/* public methods */
+
 	public function index( ) {
 		$this->load->library( 'user_agent' );
 

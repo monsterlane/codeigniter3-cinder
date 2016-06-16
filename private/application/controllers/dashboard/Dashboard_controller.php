@@ -1,6 +1,8 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class Dashboard_controller extends MY_Controller {
+	/* public methods */
+	
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Dashboard',

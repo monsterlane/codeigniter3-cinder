@@ -12,6 +12,8 @@ class Login_controller extends MY_Controller {
 		}
 	}
 
+	/* public methods */
+
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Login',

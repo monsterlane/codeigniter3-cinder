@@ -7,6 +7,8 @@ class Dragdrop_controller extends MY_Controller {
 		$this->set_option( 'require_auth', true );
 	}
 
+	/* public methods */
+
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Drag/drop',
@@ -30,7 +32,6 @@ class Dragdrop_controller extends MY_Controller {
 		$config = array(
 			'upload_path' => $this->config->item( 'files_file_path' ) . 'photos',
 			'allowed_types' => 'gif|jpg|jpeg|png',
-			'max_size' => get_upload_max_filesize( ),
 			'max_width' => 1000,
 			'max_height' => 1000,
 		);

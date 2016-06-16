@@ -10,6 +10,7 @@ class Cron_controller extends MY_Controller {
 		parent::__construct( );
 
 		$this->set_option( 'system', false );
+		$this->set_option( 'require_auth', false );
 
 		if ( $this->input->is_cli_request( ) === true ) {
 			$this->_cli = true;

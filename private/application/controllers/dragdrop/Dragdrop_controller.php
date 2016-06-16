@@ -1,12 +1,6 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
 class Dragdrop_controller extends MY_Controller {
-	public function __construct( ) {
-		parent::__construct( );
-
-		$this->set_option( 'require_auth', true );
-	}
-
 	/* public methods */
 
 	public function index( ) {

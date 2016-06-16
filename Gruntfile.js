@@ -60,8 +60,7 @@ module.exports = function( grunt ) {
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',
-					'!private/application/controllers/system/css/bootstrap.min.css',
-					'!private/application/controllers/system/css/bootstrap.theme.min.css'
+					'!private/application/controllers/system/css/*.min.css'
 				]
 			}
 		},
@@ -107,7 +106,10 @@ module.exports = function( grunt ) {
 					'private/application/controllers/system/js/require.webfont.js'
 				]
 			},
-			all: [ 'Gruntfile.js', 'private/application/controllers/**/js/*.js' ]
+			all: [
+				'Gruntfile.js',
+				'private/application/controllers/**/js/*.js'
+			]
 		},
 		postcss: {
 			options: {
@@ -116,12 +118,20 @@ module.exports = function( grunt ) {
 					annotation: 'public/files/cache/'
 				},
 				processors: [
-					require( 'autoprefixer' )({ browsers: [ 'last 2 versions', '> 5%' ] })
+					require( 'autoprefixer' )({
+						browsers: [
+							'last 2 versions',
+							'> 5%'
+						]
+					})
 				]
 			},
-			all: {
+			cache: {
 				cwd: 'public/files/cache/',
-				src: '**/css/*.css'
+				src: [
+					'**/css/*.css',
+					'**/css/!*.min.css'
+				]
 			}
 		},
 		requirejs: {
@@ -203,5 +213,5 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
 	grunt.registerTask( 'dev', [ 'concurrent:lint', 'sprite', 'newer:copy' ] );
-	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean', 'concurrent:minify' ] );
+	grunt.registerTask( 'deploy', [ 'concurrent:lint', 'sprite', 'requirejs', 'clean:deploy', 'postcss', 'concurrent:minify' ] );
 };

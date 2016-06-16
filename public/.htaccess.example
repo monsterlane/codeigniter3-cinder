@@ -16,13 +16,6 @@ Header always append X-Frame-Options SAMEORIGIN
 RewriteEngine On
 RewriteBase /
 
-# force SSL
-RewriteCond %{HTTP_USER_AGENT} !^ELB-HealthChecker
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteCond %{REQUEST_URI} !^/health
-RewriteCond %{QUERY_STRING} !^/health
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
 # asset caching
 
 RewriteRule ^files/cache/([0-9]+)/(.*)$ /files/cache/$2 [L]

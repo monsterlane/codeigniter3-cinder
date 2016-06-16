@@ -183,7 +183,7 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 
-			if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
+			if ( ENVIRONMENT !== 'development' ) {
 				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
 					if ( strpos( $style, '/' ) !== false ) {
 						$name = substr( $style, strrpos( $style, '/' ) + 1 );
@@ -202,7 +202,7 @@ class MY_Controller extends CI_Controller {
 
 				$data[ 'view' ][ 'css' ] = array_values( $data[ 'view' ][ 'css' ] );
 			}
-			else if ( ENVIRONMENT === 'development' ) {
+			else {
 				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
 					if ( strpos( $style, '/' ) === false ) {
 						$style = $this->router->directory . 'css/' . $style;

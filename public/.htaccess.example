@@ -4,12 +4,15 @@ SetEnv CI_ENV "development"
 
 Header always append X-Frame-Options SAMEORIGIN
 
-# set long expire headers
-# <IfModule mod_expires.c>
-# ExpiresActive On
-# ExpiresByType text/css "access 1 month”
-# ExpiresByType application/javascript "access plus 1 month"
-# </IfModule>
+<If "%{ENV:CI_ENV} != 'development'">
+	# set long expire headers
+
+	<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresByType text/css "access 1 month”
+	ExpiresByType application/javascript "access plus 1 month"
+	</IfModule>
+</If>
 
 # rewrite rules
 

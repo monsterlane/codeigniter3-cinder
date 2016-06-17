@@ -511,7 +511,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				this.hideProgress( el );
 			}
 
-			this._cache.free( );
+			this._cache.available( );
 
 			return this;
 		},
@@ -689,9 +689,9 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			this.setData( 'system.views', [ ] );
 
 			this._view.empty( );
-			this._cache.empty( );
 
-			this._cache.free( );
+			this._cache.empty( );
+			this._cache.available( );
 		},
 
 		/**

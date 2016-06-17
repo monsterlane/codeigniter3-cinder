@@ -133,22 +133,28 @@ define( [ 'jclass' ], function( Class ) {
 		},
 
 		/**
-		 * Method: empty
+		 * Method: available
 		 */
 
-		empty: function( ) {
-			var i;
+		available: function( ) {
+			var parent = this.getParent( ),
+				used = this.used( ),
+				free = ( this._total - used ),
+				us = 'KB', fs = 'KB';
 
-			if ( this._storage.hasOwnProperty( 'clear' ) == true ) {
-				this._storage.clear( );
+			if ( used > 1024 ) {
+				used = used / 1024;
+
+				us = 'MB';
 			}
-			else {
-				for ( i in this._storage ) {
-					if ( this._storage.hasOwnProperty( i ) ) {
-						this._storage.removeItem( i );
-					}
-				}
+
+			if ( free > 1024 ) {
+				free = free / 1024;
+
+				fs = 'MB';
 			}
+
+			parent.verbose( 'cache: ' + used.toFixed( 2 ) + us + ' / ' + free.toFixed( 2 ) + fs + ' used' );
 
 			return this;
 		},
@@ -171,30 +177,21 @@ define( [ 'jclass' ], function( Class ) {
 		},
 
 		/**
-		 * Method: free
+		 * Method: empty
 		 */
 
-		free: function( ) {
-			var parent = this.getParent( ),
-				used = this.used( ),
-				free = ( this._total - used );
+		empty: function( ) {
+			var i;
 
-			if ( used > 1024 ) {
-				used = used / 1024;
-
-				parent.verbose( 'cache: ' + used.toFixed( 2 ) + 'MB used' );
+			if ( this._storage.hasOwnProperty( 'clear' ) == true ) {
+				this._storage.clear( );
 			}
 			else {
-				parent.verbose( 'cache: ' + used.toFixed( 2 ) + 'KB used' );
-			}
-
-			if ( free > 1024 ) {
-				free = free / 1024;
-
-				parent.verbose( 'cache: ' + free.toFixed( 2 ) + 'MB free' );
-			}
-			else {
-				parent.verbose( 'cache: ' + free.toFixed( 2 ) + 'KB free' );
+				for ( i in this._storage ) {
+					if ( this._storage.hasOwnProperty( i ) ) {
+						this._storage.removeItem( i );
+					}
+				}
 			}
 
 			return this;

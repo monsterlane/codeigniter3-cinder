@@ -90,13 +90,23 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		},
 
 		/**
+		 * Method: runtime
+		 */
+
+		runtime: function( ) {
+			return parseInt( this._stop - this._start, 10 );
+		},
+		
+		/**
 		 * Method: start
 		 */
 
 		start: function( ) {
 			if ( this._running === false ) {
 				this._start = window.performance.now( );
+				this._stop = window.performance.now( );
 				this._running = true;
+
 				this._callbacks.start( );
 
 				this.think( );
@@ -112,8 +122,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._stop = window.performance.now( );
 				this._running = false;
 				this._callbacks.stop( );
-
-				this.getParent( ).verbose( 'app: waited ' + parseInt( this._stop - this._start, 10 ) + 'ms for css' );
 			}
 		},
 

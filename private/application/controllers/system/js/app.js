@@ -383,6 +383,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 				if ( this._timer instanceof Timer ) {
 					this._timer._callbacks.stop = function( ) {
+						self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for css' );
+
 						self.setPendingData( data );
 						self.callback( data );
 					};
@@ -404,6 +406,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 							return true;
 						},
 						stop: function( ) {
+							self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for css' );
+
 							self.setPendingData( data );
 							self.callback( data );
 						}

@@ -18,7 +18,7 @@ define( [ 'jclass' ], function( Class ) {
 		init: function( aParent ) {
 			this._parent = aParent;
 			this._storage = localStorage;
-			this._total = 5120;
+			this._max_size = 5120;
 		},
 
 		/**
@@ -98,10 +98,10 @@ define( [ 'jclass' ], function( Class ) {
 
 				used += this.getBytes( json );
 
-				if ( used > this._total ) {
+				if ( used > this._max_size ) {
 					all = this.getAll( );
 
-					while ( used > this._total && all.length > 0 ) {
+					while ( used > this._max_size && all.length > 0 ) {
 						del = all.shift( );
 
 						this.remove( del._key );
@@ -139,7 +139,7 @@ define( [ 'jclass' ], function( Class ) {
 		available: function( ) {
 			var parent = this.getParent( ),
 				used = this.used( ),
-				free = ( this._total - used ),
+				free = ( this._max_size - used ),
 				us = 'KB', fs = 'KB';
 
 			if ( used > 1024 ) {

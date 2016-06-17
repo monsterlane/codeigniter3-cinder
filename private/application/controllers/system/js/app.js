@@ -53,7 +53,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					for ( i = 0, len = options.fonts.length; i < len; i++ ) {
 						link = 'font!' + options.fonts[ i ];
 
-						this.verbose( 'app: load ' + link );
+						this.verbose( 'app: load ' + link.replace( 'font!', '' ) );
 
 						require( [ link ] );
 					}
@@ -278,7 +278,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				for ( i = 0, len = module.view.css.length; i < len; i++ ) {
 					link = module.view.css[ i ].substr( 0, module.view.css[ i ].length - 4 );
 
-					this.verbose( 'app: unload ' + link );
+					this.verbose( 'app: unload ' + link.replace( 'css!', '' ) );
 
 					el = $( 'link[href*="' + link + '.css"]' );
 
@@ -341,7 +341,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				for ( i = 0, len = data.view.fonts.length; i < len; i++ ) {
 					link = 'font!' + data.view.fonts[ i ];
 
-					this.verbose( 'app: load ' + link );
+					this.verbose( 'app: load ' + link.replace( 'font!', '' ) );
 
 					dependencies.push( link );
 				}
@@ -349,7 +349,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				for ( i = 0, len = data.view.css.length; i < len; i++ ) {
 					link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
 
-					this.verbose( 'app: load ' + link );
+					this.verbose( 'app: load ' + link.replace( 'css!', '' ) );
 
 					dependencies.push( link );
 				}

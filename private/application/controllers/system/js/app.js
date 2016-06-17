@@ -289,6 +289,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				}
 
 				this.verbose( 'app: unload ' + module.name );
+				this.verbose( '~===~' );
 
 				requirejs.undef( module.name );
 			}
@@ -505,6 +506,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				this.bindLinks( el );
 				this.bindForms( el );
 
+				this._module.bindMainEventListeners( );
+
 				this.hideProgress( el );
 			}
 
@@ -610,12 +613,11 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 			if ( view === false ) {
 				cache = this.getCache( aHash );
-				cache = false;
 
 				if ( cache !== false ) {
 					this.verbose( 'app: view cache found' );
 
-					view = this._view.create( JSON.parse( cache ) );
+					view = this._view.create( cache );
 				}
 			}
 			else {
@@ -641,7 +643,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 			this.setData( key, [ aView.path + '|' + aView.hash ] );
 
-			this.setCache( aView.hash, JSON.stringify( aView ) );
+			this.setCache( aView.hash, aView );
 
 			return this._view.create( aView );
 		},

@@ -19,21 +19,19 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'system/js/upload' ], function
 			init._super.call( this, aOptions );
 
 			this.verbose( 'module: dragdrop' );
-
-			this.bindEventListeners( );
 		},
 
 		/**
-		 * Method: bindEventListeners
+		 * Method: bindMainEventListeners
 		 */
 
-		bindEventListeners: function( ) {
+		bindMainEventListeners: function( ) {
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
 				container = $( data.view.container ),
 				upload = new Upload( this );
 
-			this.verbose( 'module: bindEventListeners' );
+			this.verbose( 'module: bindMainEventListeners' );
 
 			upload.bind({
 				container: container.find( 'div.purpose-dragdrop' )

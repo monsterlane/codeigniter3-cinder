@@ -19,21 +19,19 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'plugin/js/jquery.hotkeys.min'
 			init._super.call( this, aOptions );
 
 			this.verbose( 'module: plugin' );
-
-			this.bindEventListeners( );
 		},
 
 		/**
-		 * Method: bindEventListeners
+		 * Method: bindMainEventListeners
 		 */
 
-		bindEventListeners: function( ) {
+		bindMainEventListeners: function( ) {
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
 				container = $( data.view.container ),
 				preview = container.find( 'div.colourPreview' );
 
-			this.verbose( 'module: bindEventListeners' );
+			this.verbose( 'module: bindMainEventListeners' );
 
 			$( document ).on( 'keydown', null, 'shift+w', function( ) {
 				preview.toggleClass( 'on' );

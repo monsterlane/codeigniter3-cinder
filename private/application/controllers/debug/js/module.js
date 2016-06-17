@@ -19,21 +19,19 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 			init._super.call( this, aOptions );
 
 			this.verbose( 'module: debug' );
-
-			this.bindEventListeners( );
 		},
 
 		/**
-		 * Method: bindEventListeners
+		 * Method: bindMainEventListeners
 		 */
 
-		bindEventListeners: function( ) {
+		bindMainEventListeners: function( ) {
 			var parent = this.getParent( ),
 				data = parent.getData( 'module.data' ),
 				container = $( data.view.container ),
 				self = this;
 
-			this.verbose( 'module: bindEventListeners' );
+			this.verbose( 'module: bindMainEventListeners' );
 
 			container.find( 'a.purpose-clearcache' ).on( 'click', function( aEvent ) {
 				aEvent.preventDefault( );

@@ -47,6 +47,14 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		},
 
 		/**
+		 * Method: bindMainEventListeners
+		 */
+
+		bindMainEventListeners: function( ) {
+
+		},
+
+		/**
 		 * Method: verbose
 		 * @param {String} aMessage
 		 */

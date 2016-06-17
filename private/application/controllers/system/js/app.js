@@ -478,7 +478,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					});
 
 					if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
-						this.verbose( 'app: invalidate ' + data.view.invalidate );
+						this.verbose( 'app: invalidate cached view ' + data.view.path );
 
 						this.removeCache( data.view.invalidate );
 					}

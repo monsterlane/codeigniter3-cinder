@@ -52,7 +52,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				limit: Infinity,
 				start: function( ) { },
 				stop: function( ) { },
-				think: function( ) { return true; }
+				think: function( ) { }
 			}, options );
 
 			this._parent = this._options.parent;
@@ -98,6 +98,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._start = window.performance.now( );
 				this._running = true;
 				this._callbacks.start( );
+
 				this.think( );
 			}
 		},

@@ -47,7 +47,7 @@ define( [ 'jclass' ], function( Class ) {
 			var json = this._storage.getItem( aKey ),
 				data = false;
 
-			if ( json != null ) {
+			if ( json !== null ) {
 				data = JSON.parse( json );
 			}
 
@@ -63,7 +63,7 @@ define( [ 'jclass' ], function( Class ) {
 				key, val;
 
 			for ( key in this._storage ) {
-				if ( this._storage.hasOwnProperty( key ) == true ) {
+				if ( this._storage.hasOwnProperty( key ) === true ) {
 					val = this.get( key );
 					val._key = key;
 
@@ -72,7 +72,7 @@ define( [ 'jclass' ], function( Class ) {
 			}
 
 			data.sort( function( a, b ) {
-				return a[ '_timestamp' ] < b[ '_timestamp' ];
+				return a._timestamp < b._timestamp;
 			});
 
 			return data;
@@ -91,7 +91,7 @@ define( [ 'jclass' ], function( Class ) {
 				used = this.used( ),
 				json, all, del, b;
 
-			if ( key != null ) {
+			if ( key !== null ) {
 				data._timestamp = new Date( ).getTime( );
 
 				json = JSON.stringify( data );
@@ -168,7 +168,7 @@ define( [ 'jclass' ], function( Class ) {
 				key;
 
 			for ( key in this._storage ) {
-				if ( this._storage.hasOwnProperty( key ) ) {
+				if ( this._storage.hasOwnProperty( key ) === true ) {
 					str += this._storage[ key ];
 				}
 			}
@@ -183,12 +183,12 @@ define( [ 'jclass' ], function( Class ) {
 		empty: function( ) {
 			var i;
 
-			if ( this._storage.hasOwnProperty( 'clear' ) == true ) {
+			if ( this._storage.hasOwnProperty( 'clear' ) === true ) {
 				this._storage.clear( );
 			}
 			else {
 				for ( i in this._storage ) {
-					if ( this._storage.hasOwnProperty( i ) ) {
+					if ( this._storage.hasOwnProperty( i ) === true ) {
 						this._storage.removeItem( i );
 					}
 				}

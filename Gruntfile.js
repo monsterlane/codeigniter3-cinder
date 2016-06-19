@@ -28,7 +28,7 @@ module.exports = function( grunt ) {
 					s3: {
 						bucket: 'cr-versions'
 					},
-					accessKeyId: ',
+					accessKeyId: '',
 					secretAccessKey: ''
 				}
 			},

@@ -84,7 +84,7 @@ class MY_Controller extends CI_Controller {
 					'system/css/loading.css',
 					'system/css/loaded.css',
 					'system/css/sprite.css',
-					'system/css/icons.css',
+					'system/css/svg.css',
 					'system/css/style.css',
 				),
 				'js' => array(

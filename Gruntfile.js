@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
 				'public/files/cache/system/css/loaded.css',
 				'public/files/cache/system/css/loading.css',
 				'public/files/cache/system/css/sprite.css',
-				'public/files/cache/system/css/icons.css',
+				'public/files/cache/system/css/svg.css',
 				'public/files/cache/system/js/*.js',
 				'!public/files/cache/system/js/app.js',
 				'!public/files/cache/system/js/module.js',
@@ -200,15 +200,17 @@ module.exports = function( grunt ) {
 			}
 		},
 		webfont: {
-			icons: {
+			svg: {
 				src: 'private/application/controllers/system/font/svg/*.svg',
 				dest: 'private/application/controllers/system/font',
 				destCss: 'private/application/controllers/system/css',
 				options: {
+					font: 'svg',
 					fontFilename: 'system-{hash}',
 					relativeFontPath: '/files/cache/system/font',
 					engine: 'node',
 					types: 'eot,woff,ttf',
+					styles: 'font,icon,bootstrap',
 					hashes: true,
 					templateOptions: {
 						baseClass: 'svg',

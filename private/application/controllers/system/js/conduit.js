@@ -191,7 +191,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		 */
 
 		running: function( ) {
-			return ( this._xhr !== null ) ? true : false;
+			return ( this._xhr !== null );
 		},
 
 		/**

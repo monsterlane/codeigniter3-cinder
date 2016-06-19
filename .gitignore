@@ -23,6 +23,7 @@ public/files/cache/*
 .Trashes
 ehthumbs.db
 Thumbs.db
+public/NetBoot
 
 # elastic beanstalk
 .elasticbeanstalk/*

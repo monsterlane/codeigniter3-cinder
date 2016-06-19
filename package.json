@@ -1,19 +1,45 @@
 {
 	"name": "CI3-Cinder",
+	"title": "CI3-Cinder",
+	"description": "",
+	"version": "0.8.0",
+	"author": {
+		"name": "Jonathan Down",
+		"url": "https://github.com/monsterlane"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/monsterlane/codeigniter3-cinder"
+	},
+	"keywords": [
+		"codeigniter",
+		"javascript",
+		"library"
+	],
+	"bugs": {
+		"url": "https://github.com/monsterlane/codeigniter3-cinder/issues"
+	},
+	"license": "MIT",
+	"dependencies": { },
 	"devDependencies": {
 		"autoprefixer": "~6.3.6",
 		"grunt": "~1.0.1",
+		"grunt-awsebtdeploy": "~0.2.1",
 		"grunt-concurrent": "~2.3.0",
 		"grunt-contrib-clean": "~1.0.0",
+		"grunt-contrib-compress": "~1.2.0",
 		"grunt-contrib-copy": "~1.0.0",
 		"grunt-contrib-csslint": "~1.0.0",
 		"grunt-contrib-cssmin": "~1.0.1",
 		"grunt-contrib-imagemin": "~1.0.1",
 		"grunt-contrib-jshint": "~1.0.0",
 		"grunt-contrib-requirejs": "~1.0.0",
+		"grunt-git": "~1.0.0",
+		"grunt-githash": "~0.1.3",
 		"grunt-newer": "~1.2.0",
 		"grunt-postcss": "~0.8.0",
 		"grunt-spritesmith": "~6.3.1",
+		"grunt-text-replace": "~0.4.0",
 		"grunt-webfont": "~1.3.1"
 	}
 }

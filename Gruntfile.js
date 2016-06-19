@@ -2,7 +2,79 @@
 module.exports = function( grunt ) {
 	'use strict';
 
+	var version = grunt.file.read( 'private/application/config/app.php' ),
+		new_version, cur_version;
+
+	new_version = version.match( /\['version'] = '([0-9.]*)'/ );
+	new_version = new_version[ 1 ];
+	cur_version = new_version;
+
+	new_version = new_version.split( '.' );
+	new_version[ 2 ] = parseInt( new_version[ 2 ], 10 ) + 1;
+	new_version = new_version.join( '.' );
+
 	grunt.initConfig({
+		awsebtdeploy: {
+			staging: {
+				options: {
+					region: 'us-east-1',
+					applicationName: 'Cinder',
+					environmentCNAME: 'cinder-staging.us-east-1.elasticbeanstalk.com',
+					environmentName: 'cr-staging',
+					sourceBundle: 'dist/' + cur_version + '.zip',
+					versionLabel: cur_version + '-staging-' + Date.now( ),
+					healthPage: '/health',
+					healthPageContents: new RegExp( 'Cinder is healthy.', 'ig' ),
+					s3: {
+						bucket: 'cr-versions'
+					},
+					accessKeyId: ',
+					secretAccessKey: ''
+				}
+			},
+			production: {
+				options: {
+					region: 'us-east-1',
+					applicationName: 'Cinder',
+					environmentCNAME: 'cinder-production.us-east-1.elasticbeanstalk.com',
+					environmentName: 'cr-production',
+					sourceBundle: 'dist/' + cur_version + '.zip',
+					versionLabel: cur_version + '-production-' + Date.now( ),
+					healthPage: '/health',
+					healthPageContents: new RegExp( 'Cinder is healthy.', 'ig' ),
+					s3: {
+						bucket: 'cr-versions'
+					},
+					accessKeyId: '',
+					secretAccessKey: ''
+				}
+			}
+		},
+		compress: {
+			app: {
+				options: {
+					archive: 'dist/' + cur_version + '.zip',
+					mode: 'zip',
+					pretty: true
+				},
+				files: [
+					{
+						src: [
+							'.ebextensions/**',
+							'private/**',
+							'!private/application/logs/*.php',
+							'!private/schema/**',
+							'!private/session/**',
+							'public/**',
+							'public/.htaccess',
+							'!public/.htaccess.example',
+							'public/.htpasswd',
+							'!public/NetBoot/**'
+						]
+					}
+				]
+			}
+		},
 		concurrent: {
 			lint: [ 'jshint', 'csslint' ],
 			minify: [ 'cssmin', 'newer:imagemin' ]
@@ -80,6 +152,72 @@ module.exports = function( grunt ) {
 				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css' ] )
 			}
 		},
+		gitadd: {
+			repo: {
+				options: {
+					force: true
+				},
+				files: {
+					src: [
+						'www/assets/fonts/*.eot',
+						'www/assets/fonts/*.ttf',
+						'www/assets/fonts/*.woff',
+						'www/files/cache/rss_*'
+					]
+				}
+			}
+		},
+		gitcommit: {
+			repo: {
+				options: {
+					message: 'Built application version ' + new_version + ' [Grunt]'
+				},
+				files: [
+					{
+						src: '.gitignore'
+					},
+					{
+						src: 'Gruntfile.js'
+					},
+					{
+						src: 'license.txt'
+					},
+					{
+						src: 'package.json'
+					},
+					{
+						src: 'private',
+						expand: true
+					},
+					{
+						src: 'public',
+						expand: true
+					},
+					{
+						src: 'readme.md'
+					}
+				]
+			}
+		},
+		githash: {
+			current: {
+				options: { }
+			}
+		},
+		gitpull: {
+			current: {
+				options: {
+					branch: '<%= githash.current.branch %>'
+				}
+			}
+		},
+		gitpush: {
+			current: {
+				options: {
+					branch: '<%= githash.current.branch %>'
+				}
+			}
+		},
 		imagemin: {
 			all: {
 				files: grunt.file.expandMapping( [ 'private/application/controllers/**/img/*.*' ], 'public/files/cache/', {
@@ -134,6 +272,62 @@ module.exports = function( grunt ) {
 			},
 			cache: {
 				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css', '!public/files/cache/**/css/*.min.css' ] )
+			}
+		},
+		replace: {
+			patch: {
+				src: [ 'private/application/config/app.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /\['version'] = '([0-9.]*)'/,
+					to: function( match ) {
+						var p = match.split( '\'' ),
+							v = p[ 3 ].split( '.' );
+
+						v[ 2 ] = parseInt( v[ 2 ], 10 ) + 1;
+
+						p[ 3 ] = v.join( '.' );
+
+						return p.join( '\'' );
+					}
+				}]
+			},
+			minor: {
+				src: [ 'private/application/config/app.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /\['version'] = '([0-9.]*)'/,
+					to: function( match ) {
+						var p = match.split( '\'' ),
+							v = p[ 3 ].split( '.' );
+
+						v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+						v[ 2 ] = 0;
+
+						p[ 3 ] = v.join( '.' );
+
+						return p.join( '\'' );
+					}
+				}]
+			},
+			major: {
+				src: [ 'private/application/config/app.php' ],
+				overwrite: true,
+				replacements: [{
+					from: /\['version'] = '([0-9.]*)'/,
+					to: function( match ) {
+						var p = match.split( '\'' ),
+							v = p[ 3 ].split( '.' );
+
+						v[ 0 ] = parseInt( v[ 0 ], 10 ) + 1;
+						v[ 1 ] = 0;
+						v[ 2 ] = 0;
+
+						p[ 3 ] = v.join( '.' );
+
+						return p.join( '\'' );
+					}
+				}]
 			}
 		},
 		requirejs: {
@@ -223,20 +417,31 @@ module.exports = function( grunt ) {
 		}
 	});
 
+	grunt.loadNpmTasks( 'grunt-awsebtdeploy' );
 	grunt.loadNpmTasks( 'grunt-concurrent' );
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
+	grunt.loadNpmTasks( 'grunt-contrib-compress' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 	grunt.loadNpmTasks( 'grunt-contrib-csslint' );
 	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
 	grunt.loadNpmTasks( 'grunt-contrib-imagemin' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
+	grunt.loadNpmTasks( 'grunt-git' );
+	grunt.loadNpmTasks( 'grunt-githash' );
 	grunt.loadNpmTasks( 'grunt-newer' );
 	grunt.loadNpmTasks( 'grunt-postcss' );
 	grunt.loadNpmTasks( 'grunt-spritesmith' );
+	grunt.loadNpmTasks( 'grunt-text-replace' );
 	grunt.loadNpmTasks( 'grunt-webfont' );
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
 	grunt.registerTask( 'assets', [ 'sprite', 'newer:copy' ] );
-	grunt.registerTask( 'deploy', [ 'clean:dist', 'concurrent:lint', 'sprite', 'clean:fonts', 'webfont', 'requirejs', 'clean:build', 'postcss', 'concurrent:minify' ] );
+	grunt.registerTask( 'build', [ 'concurrent:lint', 'githash', 'gitpull', 'replace:patch', 'sprite', 'clean:fonts', 'webfont', 'requirejs', 'clean:build', 'postcss', 'concurrent:minify', 'gitadd', 'gitcommit', 'gitpush' ] );
+	grunt.registerTask( 'deploy', [ 'clean:dist', 'compress:app' ] );
+
+	grunt.registerTask( 'bump', [ 'replace:patch' ] );
+	grunt.registerTask( 'patch', [ 'replace:patch' ] );
+	grunt.registerTask( 'minor', [ 'replace:minor' ] );
+	grunt.registerTask( 'major', [ 'replace:major' ] );
 };

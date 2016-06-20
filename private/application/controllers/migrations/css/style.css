@@ -11,9 +11,9 @@
 		display:none;
 	}
 
-	#cinderMigrationsArea > div.panel-body > ol > li > a.purpose-current {
+	#cinderMigrationsArea > div.panel-body > ol > li.current > a {
 		font-style:italic;
 	}
-		#cinderMigrationsArea > div.panel-body > ol > li > a.purpose-current:before {
+		#cinderMigrationsArea > div.panel-body > ol > li.current > a:before {
 			content: '** ';
 		}

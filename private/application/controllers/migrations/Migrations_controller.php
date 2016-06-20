@@ -59,35 +59,52 @@ class Migrations_controller extends MY_Controller {
 	public function current( ) {
 		$this->load->library( 'migration' );
 
-		// TODO run over ajax
-
 		$version = $this->migration->current( );
 
 		if ( $version == false ) {
-			$this->session->set_flashdata( 'message', '<p class="error">' . $this->migration->error_string( ) . '</p>' );
+			$data = array(
+				'status' => false,
+				'message' => $this->migration->error_string( ),
+			);
 		}
 		else {
-			$this->session->set_flashdata( 'message', '<p class="success">You are now using the default branch version.</p>' );
+			$data = array(
+				'status' => true,
+				'current_id' => $version,
+				'message' => 'You are now using the default branch version.',
+			);
 		}
 
-		$this->redirect( 'migrations' );
+		$this->set_data( 'module.data', $data );
 	}
 
 	public function version( $version_id ) {
 		$this->load->library( 'migration' );
 
-		// TODO run over ajax
-
 		$version = $this->migration->version( $version_id );
 
 		if ( $version == false ) {
-			$this->session->set_flashdata( 'message', '<p class="error">' . $this->migration->error_string( ) . '</p>' );
+			$data = array(
+				'status' => false,
+				'message' => $this->migration->error_string( ),
+			);
 		}
 		else {
-			$this->session->set_flashdata( 'message', '<p class="success">You are now using version ' . $version . '.</p>' );
+			if ( $version == $this->migration->get_current_id( ) ) {
+				$message = 'You are now using the default branch version.';
+			}
+			else {
+				$message = 'You are now using version ' . $version . '.';
+			}
+
+			$data = array(
+				'status' => true,
+				'current_id' => $version,
+				'message' => $message,
+			);
 		}
 
-		$this->redirect( 'migrations' );
+		$this->set_data( 'module.data', $data );
 	}
 
 	public function maintenance( ) {

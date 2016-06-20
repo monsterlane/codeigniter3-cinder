@@ -155,6 +155,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		 * @param {String} aKey
 		 */
 
+		// TODO swap aKey and aClasses?
+
 		message: function( aMessage, aKey, aClasses ) {
 			var msg = aMessage || false,
 				key = aKey || 'system.options.flashdata_container',
@@ -181,6 +183,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		 * Method: clear
 		 * @param {String} aKey
 		 */
+
+		// TODO rename to clearMessage?
 
 		clear: function( aKey ) {
 			var key = aKey || 'system.options.flashdata_container',

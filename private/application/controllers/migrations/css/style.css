@@ -1,0 +1,19 @@
+
+@import url( '../../system/css/loaded.css' );
+
+#cinderMigrationsArea {
+}
+	#cinderMigrationsArea > div.panel-heading > ul.toolbar {
+		float:right;
+	}
+
+	#cinderMigrationsArea > div.panel-body > hr:last-child {
+		display:none;
+	}
+
+	#cinderMigrationsArea > div.panel-body > ol > li > a.purpose-current {
+		font-style:italic;
+	}
+		#cinderMigrationsArea > div.panel-body > ol > li > a.purpose-current:before {
+			content: '** ';
+		}

@@ -8,6 +8,8 @@ CREATE TABLE `migration` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `migration` VALUES (1,'20160617101306');
+
 CREATE TABLE `error_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(16) NOT NULL,

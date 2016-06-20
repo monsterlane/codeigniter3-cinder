@@ -11,7 +11,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | and disable it back when you're done.
 |
 */
-$config['migration_enabled'] = FALSE;
+$ci =& get_instance( );
+
+if ( ENVIRONMENT == 'development' ) {
+	$config['migration_enabled'] = TRUE;
+}
+else if ( ENVIRONMENT == 'production' && $ci->config->item( 'maintenance' ) == true ) {
+	$config['migration_enabled'] = TRUE;
+}
+else if ( ENVIRONMENT == 'testing' && $ci->session->userdata( 'authenticated' ) === true ) {
+	$config['migration_enabled'] = TRUE;
+}
+else {
+	$config['migration_enabled'] = FALSE;
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +56,7 @@ $config['migration_type'] = 'timestamp';
 | will migrate up. This must be set.
 |
 */
-$config['migration_table'] = 'migrations';
+$config['migration_table'] = 'migration';
 
 /*
 |--------------------------------------------------------------------------
@@ -69,7 +82,7 @@ $config['migration_auto_latest'] = FALSE;
 | be upgraded / downgraded to.
 |
 */
-$config['migration_version'] = 0;
+$config['migration_version'] = 20160617101306;
 
 /*
 |--------------------------------------------------------------------------

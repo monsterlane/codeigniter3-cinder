@@ -159,6 +159,9 @@ h1 {
 	height:100%;
 	margin:0;
 }
+	#cinderModule > div.panel > div.panel-heading > h1 {
+		display:inline-block;
+	}
 
 /* hide nav */
 

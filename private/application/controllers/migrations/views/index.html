@@ -1,0 +1,38 @@
+
+<div id="cinderMigrationsArea" class="panel panel-default">
+	<div class="panel-heading">
+		<h1 class="panel-title">{{=it.title}}</h1>
+
+		<ul class="toolbar">
+			<li><span>{{=it.timestamp}}</span></li>
+		</ul>
+	</div>
+
+	<div class="panel-body">
+		{{? it.current_id !== it.branch_id }}
+			<p>Click <a href="/migrations/current">here</a> to swap to the default branch version.</p>
+
+			<hr/>
+		{{?}}
+
+		{{? it.environment === 'development' }}
+			{{ for(var version_id in it.migrations) { }}
+				<p>{{=version_id}}</p>
+
+				{{? it.migrations[version_id].length }}
+					<ol>
+						{{~ it.migrations[version_id] :file }}
+							{{? file.id === it.current_id }}
+								<li><a href="/migrations/version/{{=file.id}}" class="purpose-current">{{=file.name}}</a></li>
+							{{??}}
+								<li><a href="/migrations/version/{{=file.id}}">{{=file.name}}</a></li>
+							{{?}}
+						{{~}}
+					</ol>
+				{{?}}
+
+				<hr/>
+			{{ } }}
+		{{?}}
+	</div>
+</div>

@@ -36,8 +36,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		ajax: function( aOptions ) {
 			var parent = this.getParent( ),
 				opt = aOptions || { },
-				regex = new RegExp( '^(https?:\/\/)' ),
-				obcb, nbcb, oscb, nscb, oecb, necb, views, csrf, i, len,
+				obcb, nbcb, oscb, nscb, oecb, necb,
+				views, csrf, i, len,
 				jsonp = false,
 				self = this;
 
@@ -46,9 +46,14 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 				jsonp = true;
 			}
-			else if ( regex.test( opt.url ) === false ) {
+			else {
 				opt.type = 'post';
 				opt.dataType = 'json';
+
+				if ( opt.url.indexOf( '//' ) !== -1 ) {
+					opt.url = opt.url.replace( '//', '' );
+					opt.url = opt.url.substr( opt.url.indexOf( '/' ) );
+				}
 
 				views = parent.getViews( opt.url );
 

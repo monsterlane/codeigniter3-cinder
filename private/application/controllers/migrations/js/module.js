@@ -61,7 +61,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 							// TODO remove swap to current p if user is now on current branch
 
 							container.find( '> ol > li.current' ).removeClass( 'current' );
-							container.find( '> ol > li[data-id="' + response.current_id + '"' ).addClass( 'current' );
+							container.find( '> ol > li[data-id="' + response.current_id + '"]' ).addClass( 'current' );
 
 							parent.message( response.message, 'system.options.flashdata_container', 'success' );
 						}

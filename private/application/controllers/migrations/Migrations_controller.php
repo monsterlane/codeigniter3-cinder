@@ -6,29 +6,29 @@ class Migrations_controller extends MY_Controller {
 
 		$url = $this->uri->uri_string( );
 
-		if ( ENVIRONMENT != 'development' ) {
-			if ( ENVIRONMENT == 'production' ) {
+		if ( ENVIRONMENT !== 'development' ) {
+			if ( ENVIRONMENT === 'production' ) {
 				if ( $this->config->item( 'maintenance' ) === true ) {
 					if ( $url != 'migrations/maintenance' ) {
 						$this->redirect( 'migrations/maintenance' );
 					}
 				}
-				else if ( $url == 'migrations/maintenance' ) {
+				else if ( $url === 'migrations/maintenance' ) {
 					$this->redirect( 'migrations' );
 				}
 			}
-			else if ( ENVIRONMENT == 'testing' ) {
+			else if ( ENVIRONMENT === 'testing' ) {
 				if ( $this->session->userdata( 'authenticated' ) !== true ) {
-					if ( $url != 'migrations/maintenance' ) {
+					if ( $url !== 'migrations/maintenance' ) {
 						$this->redirect( 'migrations/maintenance' );
 					}
 				}
-				else if ( $url == 'migrations/maintenance' ) {
+				else if ( $url === 'migrations/maintenance' ) {
 					$this->redirect( 'migrations' );
 				}
 			}
 		}
-		else if ( $url == 'migrations/maintenance' ) {
+		else if ( $url === 'migrations/maintenance' ) {
 			$this->redirect( 'migrations' );
 		}
 	}
@@ -61,13 +61,17 @@ class Migrations_controller extends MY_Controller {
 
 		$version = $this->migration->current( );
 
-		if ( $version == false ) {
+		if ( $version === false ) {
 			$data = array(
 				'status' => false,
 				'message' => $this->migration->error_string( ),
 			);
 		}
 		else {
+			if ( $version === true ) {
+				$version = $this->migration->get_current_id( );
+			}
+
 			$data = array(
 				'status' => true,
 				'current_id' => $version,
@@ -83,14 +87,19 @@ class Migrations_controller extends MY_Controller {
 
 		$version = $this->migration->version( $version_id );
 
-		if ( $version == false ) {
+		if ( $version === false ) {
 			$data = array(
 				'status' => false,
 				'message' => $this->migration->error_string( ),
 			);
 		}
 		else {
-			if ( $version == $this->migration->get_current_id( ) ) {
+			if ( $version === true ) {
+				$message = 'You are now using the default branch version.';
+
+				$version = $this->migration->get_current_id( );
+			}
+			else if ($version === $this->migration->get_current_id( ) ) {
 				$message = 'You are now using the default branch version.';
 			}
 			else {

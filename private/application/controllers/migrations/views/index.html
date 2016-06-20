@@ -9,38 +9,44 @@
 	</div>
 
 	<div class="panel-body">
-		<div class="purpose-flashdata"></div>
-
-		{{? it.current_id !== it.branch_id }}
-			{{##def.current="current hidden"#}}
-		{{??}}
-			{{##def.current="current"#}}
-		{{?}}
-
-		<div class="{{#def.current}}">
-			<p>Click <a href="/migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
-
-			<hr/>
+		<div class="purpose-flashdata">
+			{{? it.invalid_id === true }}
+				<div class="alert alert-danger" role="alert">You are running an unknown version for this branch. Migrations have been blocked to prevent erroneous database changes.<br/><br/>Switch back to the last branch you ran migrations from and select the base branch.</div>
+			{{?}}
 		</div>
 
-		{{? it.environment === 'development' }}
-			{{ for(var version_id in it.migrations) { }}
-				<p>{{=version_id}}</p>
+		{{? it.invalid_id === false }}
+			{{? it.current_id !== it.branch_id }}
+				{{##def.current="current hidden"#}}
+			{{??}}
+				{{##def.current="current"#}}
+			{{?}}
 
-				{{? it.migrations[version_id].length }}
-					<ol>
-						{{~ it.migrations[version_id] :file }}
-							{{? file.id === it.current_id }}
-								<li data-id="{{=file.id}}" class="current"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
-							{{??}}
-								<li data-id="{{=file.id}}"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
-							{{?}}
-						{{~}}
-					</ol>
-				{{?}}
+			<div class="{{#def.current}}">
+				<p>Click <a href="/migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
 
 				<hr/>
-			{{ } }}
+			</div>
+
+			{{? it.environment === 'development' }}
+				{{ for(var version_id in it.migrations) { }}
+					<p>{{=version_id}}</p>
+
+					{{? it.migrations[version_id].length }}
+						<ol>
+							{{~ it.migrations[version_id] :file }}
+								{{? file.id === it.current_id }}
+									<li data-id="{{=file.id}}" class="current"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
+								{{??}}
+									<li data-id="{{=file.id}}"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
+								{{?}}
+							{{~}}
+						</ol>
+					{{?}}
+
+					<hr/>
+				{{ } }}
+			{{?}}
 		{{?}}
 	</div>
 </div>

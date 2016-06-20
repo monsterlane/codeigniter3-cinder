@@ -38,8 +38,19 @@ class Migrations_controller extends MY_Controller {
 	public function index( ) {
 		$this->load->library( 'migration' );
 
-		// TODO check if current_id exists in list of migrations
-		// <p class="error">You are running an unknown version for this branch. Migrations have been blocked to prevent erroneous database changes.<br/><br/>Switch back to the last branch you made database changes from and select the base version.</p>
+		$migrations = $this->migration->get_migrations( );
+		$current_id = $this->migration->get_current_id( );
+
+		$invalid_id = true;
+		foreach ( $migrations as $version_id => $files ) {
+			foreach ( $files as $file ) {
+				if ( $file[ 'id' ] === $current_id ) {
+					$invalid_id = false;
+
+					break 2;
+				}
+			}
+		}
 
 		$this->load->partial( array(
 			'title' => 'Database Migrations',
@@ -48,9 +59,10 @@ class Migrations_controller extends MY_Controller {
 					'title' => 'Database Migrations',
 					'environment' => ENVIRONMENT,
 					'timestamp' => date( 'YmdHis' ),
-					'current_id' => $this->migration->get_current_id( ),
+					'invalid_id' => $invalid_id,
+					'current_id' => $current_id,
 					'branch_id' => $this->migration->get_branch_id( ),
-					'migrations' => $this->migration->get_migrations( ),
+					'migrations' => $migrations,
 				),
 			),
 		) );

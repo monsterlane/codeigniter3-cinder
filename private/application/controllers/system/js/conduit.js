@@ -132,7 +132,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			}
 
 			nbcb = function( aXhr, aOptions ) {
-				parent.message( false );
+				parent.clearMessage( );
 
 				self.abort( );
 
@@ -162,7 +162,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 					else if ( aResponse.hasOwnProperty( 'validation' ) === true ) {
 						parent.verbose( 'app: validation failed' );
 
-						parent.message( aResponse.validation, 'system.options.validation_container', 'danger' );
+						parent.message( aResponse.validation, 'danger', 'system.options.validation_container' );
 
 						necb( aResponse );
 					}

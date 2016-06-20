@@ -54,7 +54,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 				conduit.ajax({
 					url: aButton.href,
 					beforeSend: function( ) {
-						parent.clear( 'system.options.flashdata_container' );
+						parent.clearMessage( );
 					},
 					success: function( response ) {
 						if ( response.status === true ) {
@@ -63,10 +63,10 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 							container.find( '> ol > li.current' ).removeClass( 'current' );
 							container.find( '> ol > li[data-id="' + response.current_id + '"]' ).addClass( 'current' );
 
-							parent.message( response.message, 'system.options.flashdata_container', 'success' );
+							parent.message( response.message, 'success' );
 						}
 						else {
-							parent.message( response.message, 'system.options.flashdata_container', 'danger' );
+							parent.message( response.message, 'danger' );
 						}
 					}
 				});

@@ -152,15 +152,14 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		/**
 		 * Method: message
 		 * @param {String} aMessage
+		 * @param {String} aClasses
 		 * @param {String} aKey
 		 */
 
-		// TODO swap aKey and aClasses?
-
-		message: function( aMessage, aKey, aClasses ) {
+		message: function( aMessage, aClasses, aKey ) {
 			var msg = aMessage || false,
-				key = aKey || 'system.options.flashdata_container',
 				classes = aClasses || 'success',
+				key = aKey || 'system.options.flashdata_container',
 				selector = this.getData( key ),
 				data = this.getData( 'module.data' ),
 				el;
@@ -180,13 +179,11 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		},
 
 		/**
-		 * Method: clear
+		 * Method: clearMessage
 		 * @param {String} aKey
 		 */
 
-		// TODO rename to clearMessage?
-
-		clear: function( aKey ) {
+		clearMessage: function( aKey ) {
 			var key = aKey || 'system.options.flashdata_container',
 				selector = this.getData( key ),
 				data = this.getData( 'module.data' ),
@@ -841,7 +838,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			view = this.getData( 'module.data.view.container' );
 
 			options.beforeSend = function( ) {
-				self.clear( 'system.options.validation_container' );
+				self.clearMessage( 'system.options.validation_container' );
 
 				if ( view !== self.getData( 'system.options.default_container' ) ) {
 					$( view ).empty( );

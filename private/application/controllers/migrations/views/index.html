@@ -12,10 +12,16 @@
 		<div class="purpose-flashdata"></div>
 
 		{{? it.current_id !== it.branch_id }}
+			{{##def.current="current hidden"#}}
+		{{??}}
+			{{##def.current="current"#}}
+		{{?}}
+
+		<div class="{{#def.current}}">
 			<p>Click <a href="/migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
 
 			<hr/>
-		{{?}}
+		</div>
 
 		{{? it.environment === 'development' }}
 			{{ for(var version_id in it.migrations) { }}

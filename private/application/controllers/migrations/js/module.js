@@ -57,12 +57,22 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 						parent.clearMessage( );
 					},
 					success: function( response ) {
+						var data;
+
 						if ( response.status === true ) {
-							// TODO remove swap to current p if user is now on current branch
+							data = parent.getData( 'module.data.view.data' );
+
+							if ( data.current_id === response.current_id ) {
+								container.find( '> div.current' ).addClass( 'hidden' );
+							}
+							else {
+								container.find( '> div.current' ).removeClass( 'hidden' );
+							}
 
 							container.find( '> ol > li.current' ).removeClass( 'current' );
 							container.find( '> ol > li[data-id="' + response.current_id + '"]' ).addClass( 'current' );
 
+							parent.setData( 'module.data.view.data.current_id', response.current_id );
 							parent.message( response.message, 'success' );
 						}
 						else {

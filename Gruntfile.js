@@ -369,6 +369,10 @@ module.exports = function( grunt ) {
 							exclude: [ 'system/js/app', 'system/js/module', 'system/js/upload' ]
 						},
 						{
+							name: 'migrations/js/module',
+							exclude: [ 'system/js/app', 'system/js/module' ]
+						},
+						{
 							name: 'plugin/js/module',
 							exclude: [ 'system/js/app', 'system/js/module' ]
 						},

@@ -129,17 +129,20 @@ module.exports = function( grunt ) {
 		csslint: {
 			modules: {
 				options: {
-					'import': false,
-					'universal-selector': false,
-					'ids': false,
 					'adjoining-classes': false,
-					'unqualified-attributes': false,
-					'overqualified-elements': false,
-					'duplicate-background-images': false,
-					'zero-units': false,
-					'box-sizing': false,
 					'box-model': false,
-					'important': false
+					'box-sizing': false,
+					'duplicate-background-images': false,
+					'empty-rules': false,
+					'ids': false,
+					'import': false,
+					'important': false,
+					'overqualified-elements': false,
+					'qualified-headings': false,
+					'unique-headings': false,
+					'universal-selector': false,
+					'unqualified-attributes': false,
+					'zero-units': false
 				},
 				src: [
 					'private/application/controllers/**/css/*.css',
@@ -229,14 +232,14 @@ module.exports = function( grunt ) {
 		},
 		jshint: {
 			options: {
+				browser: true,
 				curly: true,
 				eqeqeq: true,
-				undef: true,
-				unused: 'vars',
 				loopfunc: false,
 				plusplus: false,
 				strict: true,
-				browser: true,
+				undef: true,
+				unused: 'vars',
 				globals: {
 					alert: true,
 					console: true,

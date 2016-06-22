@@ -20,14 +20,6 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 			this._parent = aOptions.parent;
 			this._parent.setData( 'module.options', options );
-
-			this._url = '/';
-
-			if ( Object.keys( options ).length > 0 ) {
-				if ( options.hasOwnProperty( 'url' ) ) {
-					this._url = options.url;
-				}
-			}
 		},
 
 		/**

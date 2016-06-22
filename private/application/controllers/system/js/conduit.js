@@ -47,6 +47,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				jsonp = true;
 			}
 			else {
+				csrf = parent.getData( 'system.options.csrf' );
+
 				opt.type = 'post';
 				opt.dataType = 'json';
 
@@ -62,7 +64,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						if ( opt.data instanceof FormData ) {
 							opt.data.append( 'system', false );
 
-							if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+							if ( csrf !== false ) {
 								opt.data.append( csrf.name, csrf.value );
 							}
 
@@ -74,7 +76,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 							opt.data.system = false;
 							opt.data.views = views;
 
-							if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+							if ( csrf !== false ) {
 								opt.data[ csrf.name ] = csrf.value;
 							}
 						}
@@ -82,7 +84,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 					else if ( typeof opt.data === 'string' ) {
 						opt.data += '&system=false';
 
-						if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+						if ( csrf !== false ) {
 							opt.data += '&' + csrf.name + '=' + csrf.value;
 						}
 
@@ -97,7 +99,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 						views: views
 					};
 
-					if ( ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
+					if ( csrf !== false ) {
 						opt.data[ csrf.name ] = csrf.value;
 					}
 				}

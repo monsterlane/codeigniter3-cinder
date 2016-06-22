@@ -446,7 +446,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, csrf, el, view;
+				module, el, view;
 
 			this.verbose( 'app: set pending data' );
 
@@ -463,10 +463,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			}
 			else if ( data.redirect === true ) {
 				this.history( data.title, data.url, data );
-			}
-
-			if ( data.hasOwnProperty( 'csrf' ) === true && $.isEmptyObject( data.csrf ) === false && ( csrf = document.getElementById( 'cinderCsrf' ) ) !== null ) {
-				csrf.value = data.csrf.hash;
 			}
 
 			el = $( data.view.container );

@@ -53,6 +53,13 @@ class MY_Controller extends CI_Controller {
 			'flashdata_container' => $this->config->item( 'flashdata_container' ),
 		);
 
+		if ( $this->config->item( 'csrf_protection' ) === true ) {
+			$data[ 'csrf' ] = array(
+				'name' => $this->security->get_csrf_token_name( ),
+				'value' => $this->security->get_csrf_hash( ),
+			);
+		}
+
 		$this->set_data( 'system.options', $data );
 
 		$config = file_get_contents( APPPATH . 'controllers/system/js/require.config.js' );
@@ -122,13 +129,6 @@ class MY_Controller extends CI_Controller {
 		$data = array(
 			'system' => true,
 		);
-
-		if ( $this->config->item( 'csrf_protection' ) === true ) {
-			$data[ 'csrf' ] = array(
-				'name' => $this->security->get_csrf_token_name( ),
-				'hash' => $this->security->get_csrf_hash( ),
-			);
-		}
 
 		$this->set_data( 'module.data', $data );
 	}

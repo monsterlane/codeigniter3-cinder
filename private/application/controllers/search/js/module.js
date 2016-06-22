@@ -45,11 +45,10 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		 */
 
 		handleDeleteButtonClick: function( aButton ) {
-			var container = $( aButton ).closest( 'tr' ),
-				id = container[ 0 ].getAttribute( 'data-id' );
+			var container = $( aButton ).closest( 'tr' );
 
 			this.getConduit( 'delete' ).ajax({
-				url: this._url + '/user/delete/' + id,
+				url: aButton.href,
 				success: function( response ) {
 					container.remove( );
 				}

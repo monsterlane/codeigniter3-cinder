@@ -4,3 +4,7 @@
 #searchForm {
 	width:300px;
 }
+
+#searchResults > tr > td {
+	width:25%;
+}

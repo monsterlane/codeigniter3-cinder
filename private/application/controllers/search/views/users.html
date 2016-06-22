@@ -1,8 +1,8 @@
-{{~it :value:index}}
+{{~it.users :value:index}}
 <tr data-id="{{=value.id}}">
 	<td>{{=value.id}}</td>
 	<td>{{=value.first_name}}</td>
 	<td>{{=value.last_name}}</td>
-	<td><a href="/search/user/delete/{{=value.id}}" class="purpose-delete">Delete</a></td>
+	<td><a href="{{=it._base_url}}search/user/delete/{{=value.id}}" class="purpose-delete">Delete</a></td>
 </tr>
 {{~}}

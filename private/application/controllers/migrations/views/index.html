@@ -23,7 +23,7 @@
 			{{?}}
 
 			<div class="{{#def.current}}">
-				<p>Click <a href="/migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
+				<p>Click <a href="{{=it._base_url}}migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
 
 				<hr/>
 			</div>
@@ -36,9 +36,9 @@
 						<ol>
 							{{~ it.migrations[version_id] :file }}
 								{{? file.id === it.current_id }}
-									<li data-id="{{=file.id}}" class="current"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
+									<li data-id="{{=file.id}}" class="current"><a href="{{=it._base_url}}migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
 								{{??}}
-									<li data-id="{{=file.id}}"><a href="/migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
+									<li data-id="{{=file.id}}"><a href="{{=it._base_url}}migrations/version/{{=file.id}}" class="purpose-migration">{{=file.name}}</a></li>
 								{{?}}
 							{{~}}
 						</ol>

@@ -167,7 +167,10 @@ class MY_Controller extends CI_Controller {
 					'fonts' => array( ),
 					'container' => $this->config->item( 'default_container' ),
 					'show_nav' => true,
-					'data' => array( ),
+					'data' => array(
+						'_site_url' => site_url( ),
+						'_base_url' => base_url( ),
+					),
 					'hash' => false,
 				)
 			), $data );

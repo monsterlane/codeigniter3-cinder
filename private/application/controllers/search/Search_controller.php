@@ -2,7 +2,7 @@
 
 class Search_controller extends MY_Controller {
 	/* public methods */
-	
+
 	public function index( ) {
 		$this->load->partial( array(
 			'title' => 'Search',
@@ -29,7 +29,7 @@ class Search_controller extends MY_Controller {
 			$this->set_data( 'module.data', $data );
 		}
 		else {
-			$data = array(
+			$results = array(
 				array(
 					'id' => 1,
 					'first_name' => 'Mr.',
@@ -52,7 +52,9 @@ class Search_controller extends MY_Controller {
 				'view' => array(
 					'path' => 'users.html',
 					'container' => '#searchResults',
-					'data' => $data,
+					'data' => array(
+						'users' => $results,
+					),
 				),
 				'callback' => 'bindSearchResults',
 			) );

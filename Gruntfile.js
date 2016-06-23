@@ -3,7 +3,9 @@ module.exports = function( grunt ) {
 	'use strict';
 
 	var version = grunt.file.read( 'private/application/config/app.php' ),
-		new_version, cur_version;
+		controllers = grunt.file.expand( 'private/application/controllers/**/js' ),
+		new_version, cur_version, modules = [ ], module,
+		t, m, a, i, len1, j, len2;
 
 	new_version = version.match( /\['version'] = '([0-9.]*)'/ );
 	new_version = new_version[ 1 ];
@@ -12,6 +14,59 @@ module.exports = function( grunt ) {
 	new_version = new_version.split( '.' );
 	new_version[ 2 ] = parseInt( new_version[ 2 ], 10 ) + 1;
 	new_version = new_version.join( '.' );
+
+	modules.push({
+		name: 'system/js/app'
+	});
+
+	for ( i = 0, len1 = controllers.length; i < len1; i++ ) {
+		if ( controllers[ i ].indexOf( 'system/js' ) !== -1 ) {
+			module = {
+				name: controllers[ i ].replace( 'private/application/controllers/', '' ) + '/module',
+				exclude: [ 'system/js/app' ]
+			};
+
+			modules.push( module );
+
+			module = {
+				name: 'system/js/upload',
+				exclude: [ 'system/js/app' ]
+			};
+
+			modules.push( module );
+
+			module = {
+				name: 'system/js/timer',
+				exclude: [ 'system/js/app' ]
+			};
+
+			modules.push( module );
+		}
+		else {
+			module = {
+				name: controllers[ i ].replace( 'private/application/controllers/', '' ) + '/module',
+				exclude: [ 'system/js/app' ]
+			};
+
+			t = grunt.file.read( controllers[ i ] + '/module.js' );
+			m = t.match( /define\((.*)],/g );
+
+			if ( m !== null ) {
+				m[ 0 ] = m[ 0 ].replace( ']', '' );
+				a = m[ 0 ].split( ',' );
+
+				for ( j = 0, len2 = a.length; j < len2; j++ ) {
+					a[ j ] = a[ j ].replace( /'/g, '' ).trim( );
+
+					if ( a[ j ].indexOf( 'system/js/' ) !== -1 ) {
+						module.exclude.push( a[ j ] );
+					}
+				}
+			}
+
+			modules.push( module );
+		}
+	}
 
 	grunt.initConfig({
 		awsebtdeploy: {
@@ -347,43 +402,7 @@ module.exports = function( grunt ) {
 					paths: {
 						'requirejs': 'system/js/require.js.min'
 					},
-					modules: [
-						{
-							name: 'system/js/app'
-						},
-						{
-							name: 'system/js/module',
-							exclude: [ 'system/js/app' ]
-						},
-						{
-							name: 'system/js/upload',
-							exclude: [ 'system/js/app' ]
-						},
-						{
-							name: 'system/js/timer',
-							exclude: [ 'system/js/app' ]
-						},
-						{
-							name: 'debug/js/module',
-							exclude: [ 'system/js/app', 'system/js/module' ]
-						},
-						{
-							name: 'dragdrop/js/module',
-							exclude: [ 'system/js/app', 'system/js/module', 'system/js/upload' ]
-						},
-						{
-							name: 'migrations/js/module',
-							exclude: [ 'system/js/app', 'system/js/module' ]
-						},
-						{
-							name: 'plugin/js/module',
-							exclude: [ 'system/js/app', 'system/js/module' ]
-						},
-						{
-							name: 'search/js/module',
-							exclude: [ 'system/js/app', 'system/js/module' ]
-						}
-					]
+					modules: modules
 				}
 			}
 		},

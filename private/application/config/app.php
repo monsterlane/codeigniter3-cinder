@@ -1,6 +1,6 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
-$config['version'] = '0.8.2';
+$config['version'] = '0.8.3';
 $config['verbose'] = false;
 $config['log_database'] = true;
 $config['maintenance'] = false;

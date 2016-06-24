@@ -61,7 +61,7 @@ class Storage {
 	}
 
 	public function get_default_bucket( ) {
-		return $this->_prefix . ( ENVIRONMENT == 'testing' ? 'staging' : ENVIRONMENT );
+		return $this->_prefix . ENVIRONMENT;
 	}
 
 	public function get_buckets( ) {

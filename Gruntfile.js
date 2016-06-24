@@ -330,6 +330,7 @@ module.exports = function( grunt ) {
 			patch: {
 				src: [
 					'package.json',
+					'readme.md',
 					'private/application/config/app.php'
 				],
 				overwrite: true,
@@ -364,13 +365,14 @@ module.exports = function( grunt ) {
 			minor: {
 				src: [
 					'package.json',
+					'readme.md',
 					'private/application/config/app.php'
 				],
 				overwrite: true,
 				replacements: [{
 						from: /"version": "([0-9.]*)",/,
 						to: function( match ) {
-							var p = match.split( '\'' ),
+							var p = match.split( '"' ),
 								v = p[ 3 ].split( '.' );
 
 							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
@@ -378,7 +380,7 @@ module.exports = function( grunt ) {
 
 							p[ 3 ] = v.join( '.' );
 
-							return p.join( '\'' );
+							return p.join( '"' );
 						}
 					},
 					{
@@ -400,13 +402,14 @@ module.exports = function( grunt ) {
 			major: {
 				src: [
 					'package.json',
+					'readme.md',
 					'private/application/config/app.php'
 				],
 				overwrite: true,
 				replacements: [{
 						from: /"version": "([0-9.]*)",/,
 						to: function( match ) {
-							var p = match.split( '\'' ),
+							var p = match.split( '"' ),
 								v = p[ 3 ].split( '.' );
 
 							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
@@ -414,7 +417,7 @@ module.exports = function( grunt ) {
 
 							p[ 3 ] = v.join( '.' );
 
-							return p.join( '\'' );
+							return p.join( '"' );
 						}
 					},
 					{

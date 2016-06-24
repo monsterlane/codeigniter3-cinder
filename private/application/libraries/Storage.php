@@ -10,11 +10,13 @@ class Storage {
 	private $_secret_key;
 	private $_access_key;
 	private $_region;
+	private $_prefix;
 	private $_bucket;
 
 	public function __construct( $config = array( ) ) {
 		$this->_secret_key = $config[ 'storage_secret_key' ];
 		$this->_access_key = $config[ 'storage_access_key' ];
+		$this->_prefix = $config[ 'storage_prefix' ];
 		$this->_region = $config[ 'storage_region' ];
 
 		$this->_bucket = $this->get_default_bucket( );
@@ -59,7 +61,7 @@ class Storage {
 	}
 
 	public function get_default_bucket( ) {
-		return 'py-' . ( ENVIRONMENT == 'testing' ? 'staging' : ENVIRONMENT );
+		return $this->_prefix . ( ENVIRONMENT == 'testing' ? 'staging' : ENVIRONMENT );
 	}
 
 	public function get_buckets( ) {
@@ -78,7 +80,7 @@ class Storage {
 
 	public function set_bucket( $bucket = null ) {
 		if ( $bucket != null ) {
-			$this->_bucket = $bucket;
+			$this->_bucket = $this->_prefix . $bucket;
 		}
 	}
 

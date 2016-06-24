@@ -4,6 +4,8 @@ class Dragdrop_controller extends MY_Controller {
 	/* public methods */
 
 	public function index( ) {
+		$this->session->sess_write_close( );
+
 		$this->load->partial( array(
 			'title' => 'Drag/drop',
 			'view' => array(
@@ -20,6 +22,8 @@ class Dragdrop_controller extends MY_Controller {
 	}
 
 	public function upload( ) {
+		$this->session->sess_write_close( );
+		
 		$this->load->library( 'upload' );
 		$this->load->helper( 'upload' );
 

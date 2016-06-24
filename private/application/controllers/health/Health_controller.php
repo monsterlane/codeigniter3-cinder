@@ -4,6 +4,8 @@ class Health_controller extends MY_Controller {
 	/* public methods */
 
 	public function index( ) {
+		$this->session->sess_write_close( );
+		
 		$this->load->partial( array(
 			'title' => 'Health',
 			'view' => array(

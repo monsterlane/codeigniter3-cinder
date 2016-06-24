@@ -49,6 +49,7 @@ class MY_Migration extends CI_Migration {
 			$name = array_pop( $path );
 			$name = str_replace( $version_id . '_', '', $name );
 			$name = str_replace( '.php', '', $name );
+			$name = preg_replace( '/_([0-9]+)/', ' branch', $name );
 			$name = str_replace( '_', ' ', $name );
 
 			$version = array_pop( $path );

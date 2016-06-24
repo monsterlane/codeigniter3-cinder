@@ -9,6 +9,8 @@ class Cron_controller extends MY_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
+		$this->session->sess_write_close( );
+
 		$this->set_option( 'system', false );
 		$this->set_option( 'require_auth', false );
 

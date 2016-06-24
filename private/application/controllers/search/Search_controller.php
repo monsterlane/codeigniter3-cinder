@@ -4,6 +4,8 @@ class Search_controller extends MY_Controller {
 	/* public methods */
 
 	public function index( ) {
+		$this->session->sess_write_close( );
+
 		$this->load->partial( array(
 			'title' => 'Search',
 			'view' => array(
@@ -16,6 +18,8 @@ class Search_controller extends MY_Controller {
 	}
 
 	public function users( ) {
+		$this->session->sess_write_close( );
+
 		$this->load->library( 'form_validation' );
 
 		$this->form_validation->set_rules( 'keywords', 'Keywords', 'trim|required' );
@@ -62,6 +66,8 @@ class Search_controller extends MY_Controller {
 	}
 
 	public function user( $action = null ) {
+		$this->session->sess_write_close( );
+		
 		if ( $action == 'delete' ) {
 			$data = array(
 				'status' => (bool)rand( 0, 1 ),

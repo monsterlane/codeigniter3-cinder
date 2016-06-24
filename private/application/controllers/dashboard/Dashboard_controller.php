@@ -2,8 +2,10 @@
 
 class Dashboard_controller extends MY_Controller {
 	/* public methods */
-	
+
 	public function index( ) {
+		$this->session->sess_write_close( );
+		
 		$this->load->partial( array(
 			'title' => 'Dashboard',
 			'view' => array(

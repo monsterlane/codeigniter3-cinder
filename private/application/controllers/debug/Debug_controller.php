@@ -2,8 +2,10 @@
 
 class Debug_controller extends MY_Controller {
 	/* public methods */
-	
+
 	public function index( ) {
+		$this->session->sess_write_close( );
+		
 		$this->load->partial( array(
 			'title' => 'Debug',
 			'view' => array(

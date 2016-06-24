@@ -36,6 +36,8 @@ class Migrations_controller extends MY_Controller {
 	/* public methods */
 
 	public function index( ) {
+		$this->session->sess_write_close( );
+
 		$this->load->library( 'migration' );
 
 		$migrations = $this->migration->get_migrations( );
@@ -69,6 +71,8 @@ class Migrations_controller extends MY_Controller {
 	}
 
 	public function current( ) {
+		$this->session->sess_write_close( );
+
 		$this->load->library( 'migration' );
 
 		$version = $this->migration->current( );
@@ -95,6 +99,8 @@ class Migrations_controller extends MY_Controller {
 	}
 
 	public function version( $version_id ) {
+		$this->session->sess_write_close( );
+
 		$this->load->library( 'migration' );
 
 		$version = $this->migration->version( $version_id );
@@ -129,6 +135,8 @@ class Migrations_controller extends MY_Controller {
 	}
 
 	public function maintenance( ) {
+		$this->session->sess_write_close( );
+		
 		$this->load->partial( array(
 			'title' => 'Database Migrations',
 			'view' => array(

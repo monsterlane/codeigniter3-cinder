@@ -2,10 +2,13 @@
 module.exports = function( grunt ) {
 	'use strict';
 
-	var version = grunt.file.read( 'private/application/config/app.php' ),
+	var browsers = [ 'last 2 versions', '> 5%' ],
+		version = grunt.file.read( 'private/application/config/app.php' ),
 		controllers = grunt.file.expand( 'private/application/controllers/**/js' ),
-		new_version, cur_version, modules = [ ], module,
-		t, m, a, i, len1, j, len2;
+		new_version, cur_version,
+		modules = [ ], module,
+		i, len1, j, len2,
+		t, m, a;
 
 	new_version = version.match( /\['version'] = '([0-9.]*)'/ );
 	new_version = new_version[ 1 ];
@@ -21,26 +24,20 @@ module.exports = function( grunt ) {
 
 	for ( i = 0, len1 = controllers.length; i < len1; i++ ) {
 		if ( controllers[ i ].indexOf( 'system/js' ) !== -1 ) {
-			module = {
-				name: controllers[ i ].replace( 'private/application/controllers/', '' ) + '/module',
+			modules.push({
+				name: 'system/js/module',
 				exclude: [ 'system/js/app' ]
-			};
+			});
 
-			modules.push( module );
-
-			module = {
+			modules.push( {
 				name: 'system/js/upload',
 				exclude: [ 'system/js/app' ]
-			};
+			});
 
-			modules.push( module );
-
-			module = {
+			modules.push( {
 				name: 'system/js/timer',
 				exclude: [ 'system/js/app' ]
-			};
-
-			modules.push( module );
+			});
 		}
 		else {
 			module = {
@@ -228,7 +225,7 @@ module.exports = function( grunt ) {
 		gitcommit: {
 			repo: {
 				options: {
-					message: 'Built application version ' + new_version + ' [Grunt]'
+					message: 'built application version ' + new_version + ' [grunt]'
 				},
 				files: [
 					{
@@ -321,10 +318,7 @@ module.exports = function( grunt ) {
 				},
 				processors: [
 					require( 'autoprefixer' )({
-						browsers: [
-							'last 2 versions',
-							'> 5%'
-						]
+						browsers: browsers
 					})
 				]
 			},
@@ -334,58 +328,110 @@ module.exports = function( grunt ) {
 		},
 		replace: {
 			patch: {
-				src: [ 'private/application/config/app.php' ],
+				src: [
+					'package.json',
+					'private/application/config/app.php'
+				],
 				overwrite: true,
 				replacements: [{
-					from: /\['version'] = '([0-9.]*)'/,
-					to: function( match ) {
-						var p = match.split( '\'' ),
-							v = p[ 3 ].split( '.' );
+						from: /"version": "([0-9.]*)",/,
+						to: function( match ) {
+							var p = match.split( '"' ),
+								v = p[ 3 ].split( '.' );
 
-						v[ 2 ] = parseInt( v[ 2 ], 10 ) + 1;
+							v[ 2 ] = parseInt( v[ 2 ], 10 ) + 1;
 
-						p[ 3 ] = v.join( '.' );
+							p[ 3 ] = v.join( '.' );
 
-						return p.join( '\'' );
+							return p.join( '"' );
+						}
+					},
+					{
+						from: /\['version'] = '([0-9.]*)'/,
+						to: function( match ) {
+							var p = match.split( '\'' ),
+								v = p[ 3 ].split( '.' );
+
+							v[ 2 ] = parseInt( v[ 2 ], 10 ) + 1;
+
+							p[ 3 ] = v.join( '.' );
+
+							return p.join( '\'' );
+						}
 					}
-				}]
+				]
 			},
 			minor: {
-				src: [ 'private/application/config/app.php' ],
+				src: [
+					'package.json',
+					'private/application/config/app.php'
+				],
 				overwrite: true,
 				replacements: [{
-					from: /\['version'] = '([0-9.]*)'/,
-					to: function( match ) {
-						var p = match.split( '\'' ),
-							v = p[ 3 ].split( '.' );
+						from: /"version": "([0-9.]*)",/,
+						to: function( match ) {
+							var p = match.split( '\'' ),
+								v = p[ 3 ].split( '.' );
 
-						v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
-						v[ 2 ] = 0;
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
 
-						p[ 3 ] = v.join( '.' );
+							p[ 3 ] = v.join( '.' );
 
-						return p.join( '\'' );
+							return p.join( '\'' );
+						}
+					},
+					{
+						from: /\['version'] = '([0-9.]*)'/,
+						to: function( match ) {
+							var p = match.split( '\'' ),
+								v = p[ 3 ].split( '.' );
+
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
+
+							p[ 3 ] = v.join( '.' );
+
+							return p.join( '\'' );
+						}
 					}
-				}]
+				]
 			},
 			major: {
-				src: [ 'private/application/config/app.php' ],
+				src: [
+					'package.json',
+					'private/application/config/app.php'
+				],
 				overwrite: true,
 				replacements: [{
-					from: /\['version'] = '([0-9.]*)'/,
-					to: function( match ) {
-						var p = match.split( '\'' ),
-							v = p[ 3 ].split( '.' );
+						from: /"version": "([0-9.]*)",/,
+						to: function( match ) {
+							var p = match.split( '\'' ),
+								v = p[ 3 ].split( '.' );
 
-						v[ 0 ] = parseInt( v[ 0 ], 10 ) + 1;
-						v[ 1 ] = 0;
-						v[ 2 ] = 0;
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
 
-						p[ 3 ] = v.join( '.' );
+							p[ 3 ] = v.join( '.' );
 
-						return p.join( '\'' );
+							return p.join( '\'' );
+						}
+					},
+					{
+						from: /\['version'] = '([0-9.]*)'/,
+						to: function( match ) {
+							var p = match.split( '\'' ),
+								v = p[ 3 ].split( '.' );
+
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
+
+							p[ 3 ] = v.join( '.' );
+
+							return p.join( '\'' );
+						}
 					}
-				}]
+				]
 			}
 		},
 		requirejs: {

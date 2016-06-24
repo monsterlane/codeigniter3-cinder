@@ -76,7 +76,7 @@ function delegate_array( $arr, $key ) {
 	return $results;
 }
 
-function array_changes( $old, $new ) {
+function diff_array( $old, $new ) {
 	$result = array(
 		'add' => array_diff( $new, $old ),
 		'delete' => array_diff( $old, $new ),

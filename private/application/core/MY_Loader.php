@@ -3,8 +3,8 @@
 class MY_Loader extends CI_Loader {
 	/* internal methods */
 
-	private function _compress( $arr ) {
-		if ( !is_array( $arr ) ) $arr = array( );
+	private function _compress( $arr = array( ) ) {
+		if ( is_array( $arr ) === false ) $arr = array( );
 
 		unset( $arr[ 'options' ] );
 		unset( $arr[ 'data' ][ 'view' ][ 'js' ] );

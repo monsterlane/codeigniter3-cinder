@@ -447,7 +447,7 @@ module.exports = function( grunt ) {
 							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
 							v[ 2 ] = 0;
 
-							return p.join( '.' ) + ' beta';
+							return v.join( '.' ) + ' beta';
 						}
 					},
 					{

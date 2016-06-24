@@ -104,7 +104,7 @@ class Storage {
 		$marker = '';
 		$size = 0;
 
-		while ( $done == false ) {
+		while ( $done === false ) {
 			$request = $this->_connection->listObjects([
 				'Bucket' => $this->_bucket,
 				'Marker' => $marker,
@@ -156,7 +156,7 @@ class Storage {
 			'Key' => $path,
 		]);
 
-		if ( $result[ '@metadata' ][ 'statusCode' ] == 200 ) {
+		if ( $result[ '@metadata' ][ 'statusCode' ] === 200 ) {
 			$result[ 'Content' ] = $result[ 'Body' ]->getContents( );
 		}
 
@@ -180,7 +180,7 @@ class Storage {
 			'Body' => $content,
 		]);
 
-		if ( $result[ '@metadata' ][ 'statusCode' ] == 200 ) {
+		if ( $result[ '@metadata' ][ 'statusCode' ] === 200 ) {
 			return true;
 		}
 		else {
@@ -194,7 +194,7 @@ class Storage {
 			'Key' => $path,
 		]);
 
-		if ( $result[ '@metadata' ][ 'statusCode' ] == 200 ) {
+		if ( $result[ '@metadata' ][ 'statusCode' ] === 200 ) {
 			return true;
 		}
 		else {
@@ -210,7 +210,7 @@ class Storage {
 				'Key' => $dest,
 			]);
 
-			if ( $result[ '@metadata' ][ 'statusCode' ] == 200 ) {
+			if ( $result[ '@metadata' ][ 'statusCode' ] === 200 ) {
 				return true;
 			}
 			else {
@@ -264,7 +264,7 @@ class Storage {
 		};
 
 		$fulfilled = function( $result ) use( $bucket, &$data ) {
-			if ( $result[ '@metadata' ][ 'statusCode' ] == 200 ) {
+			if ( $result[ '@metadata' ][ 'statusCode' ] === 200 ) {
 				$key = str_replace( 'https://s3.amazonaws.com/' . $bucket . '/', '', $result[ '@metadata' ][ 'effectiveUri' ] );
 
 				$data[ $key ] = $result[ 'Body' ]->getContents( );

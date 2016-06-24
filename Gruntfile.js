@@ -348,6 +348,16 @@ module.exports = function( grunt ) {
 						}
 					},
 					{
+						from: /([0-9.]*) beta/,
+						to: function( match ) {
+							var v = match.split( '.' );
+
+							v[ 2 ] = parseInt( v[ 2 ], 10 ) + 1;
+
+							return v.join( '.' ) + ' beta';
+						}
+					},
+					{
 						from: /\['version'] = '([0-9.]*)'/,
 						to: function( match ) {
 							var p = match.split( '\'' ),
@@ -384,6 +394,17 @@ module.exports = function( grunt ) {
 						}
 					},
 					{
+						from: /([0-9.]*) /,
+						to: function( match ) {
+							var v = match.split( '.' );
+
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
+
+							return v.join( '.' ) + ' beta';
+						}
+					},
+					{
 						from: /\['version'] = '([0-9.]*)'/,
 						to: function( match ) {
 							var p = match.split( '\'' ),
@@ -392,9 +413,7 @@ module.exports = function( grunt ) {
 							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
 							v[ 2 ] = 0;
 
-							p[ 3 ] = v.join( '.' );
-
-							return p.join( '\'' );
+							return v.join( '\'' );
 						}
 					}
 				]
@@ -418,6 +437,17 @@ module.exports = function( grunt ) {
 							p[ 3 ] = v.join( '.' );
 
 							return p.join( '"' );
+						}
+					},
+					{
+						from: /([0-9.]*) /,
+						to: function( match ) {
+							var v = match.split( '.' );
+
+							v[ 1 ] = parseInt( v[ 1 ], 10 ) + 1;
+							v[ 2 ] = 0;
+
+							return p.join( '.' ) + ' beta';
 						}
 					},
 					{

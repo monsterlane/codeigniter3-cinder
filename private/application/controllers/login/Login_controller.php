@@ -16,7 +16,7 @@ class Login_controller extends MY_Controller {
 
 	public function index( ) {
 		$this->session->sess_write_close( );
-		
+
 		$this->load->partial( array(
 			'title' => 'Login',
 			'view' => array(
@@ -35,6 +35,8 @@ class Login_controller extends MY_Controller {
 		$this->form_validation->set_rules( 'password', 'Password', 'trim|required' );
 
 		if ( $this->form_validation->run( ) === false ) {
+			$this->session->sess_write_close( );
+
 			$data = array(
 				'status' => false,
 				'validation' => validation_errors( ),
@@ -44,6 +46,8 @@ class Login_controller extends MY_Controller {
 		}
 		else {
 			$this->session->set_userdata( 'authenticated', true );
+
+			$this->session->sess_write_close( );
 
 			$url = $this->session->userdata( 'previous_page' );
 

@@ -1,0 +1,8 @@
+
+@import url( '../../system/css/loaded.css' );
+
+#cinderMaintenanceArea {
+}
+	#cinderMaintenanceArea > div.container-fluid > p {
+		text-align:center;
+	}

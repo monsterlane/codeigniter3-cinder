@@ -1,6 +1,8 @@
 
-define( [ 'jclass', 'system/js/dot.min' ], function( Class, Parser ) {
+define( [ 'jclass', 'dust' ], function( Class, Dust ) {
 	'use strict';
+
+	require( [ 'system/js/dust.helpers.min' ], function( ) { } );
 
 	/*
 	===============================================================================
@@ -52,9 +54,35 @@ define( [ 'jclass', 'system/js/dot.min' ], function( Class, Parser ) {
 				this._data[ aView.url ] = [ ];
 			}
 
-			this._data[ aView.url ][ aView.hash ] = Parser.template( aView.content );
+			this._data[ aView.url ][ aView.hash ] = this.compile( aView );
 
 			return this._data[ aView.url ][ aView.hash ];
+		},
+
+		/**
+		 * Method: compile
+		 * @param {Object} aView
+		 */
+
+		compile: function( aView ) {
+			Dust.loadSource( Dust.compile( aView.content, aView.url + '|' + aView.hash ) );
+
+			return this;
+		},
+
+		/**
+		 * Method: render
+		 * @param {String} aKey
+		 * @param {Object} aData
+		 * @param {Function} aCallback
+		 */
+
+		render: function( aKey, aData, aCallback ) {
+			var callback = aCallback || function( aOutput ) { };
+
+			Dust.render( aKey, aData, function( aError, aOutput ) {
+				callback( aOutput );
+			} );
 		},
 
 		/**
@@ -63,6 +91,8 @@ define( [ 'jclass', 'system/js/dot.min' ], function( Class, Parser ) {
 
 		empty: function( ) {
 			this._data = [ ];
+
+			return this;
 		}
 	});
 

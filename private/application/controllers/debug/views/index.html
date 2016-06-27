@@ -1,17 +1,17 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h1 class="panel-title">{{=it.title}}</h1>
+		<h1 class="panel-title">{title}</h1>
 	</div>
 
 	<div class="panel-body">
 		<div class="purpose-flashdata"></div>
 
-		<p>{{=it.body}}</p>
+		<p>{body}</p>
 
 		<ol>
 			<li><a href="#clearcache" class="purpose-clearcache">Clear view cache</a></li>
-			<li><a href="{{=it._base_url}}anyinvalidpath" class="cinder">Simulate 404</a></li>
+			<li><a href="{_base_url}anyinvalidpath" class="cinder">Simulate 404</a></li>
 		</ol>
 	</div>
 </div>

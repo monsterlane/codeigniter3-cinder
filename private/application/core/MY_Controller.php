@@ -44,6 +44,7 @@ class MY_Controller extends CI_Controller {
 
 	public function boot( ) {
 		$data = array(
+			'environment' => ENVIRONMENT,
 			'version' => $this->config->item( 'version' ),
 			'verbose' => $this->config->item( 'verbose' ),
 			'support_address' => $this->config->item( 'support_address' ),
@@ -70,7 +71,7 @@ class MY_Controller extends CI_Controller {
 			$config = str_replace( '/files/cache', '/files/cache/' . $vpath, $config );
 			$vpath .= '/';
 		}
-		else if ( ENVIRONMENT === 'development' ) {
+		else {
 			$config = substr_replace( $config, ",\n	urlArgs: 't=' + Date.now( )\n});", strrpos( $config, "\n" . '});' ), strlen( "\n});" ) );
 		}
 
@@ -103,7 +104,8 @@ class MY_Controller extends CI_Controller {
 					'system/js/jquery.min.js',
 					'system/js/jquery.plugins.js',
 					'system/js/jclass.min.js',
-					'system/js/dot.min.js',
+					'system/js/dust.full.min.js',
+					'system/js/dust.helpers.min.js',
 					'system/js/webfont.min.js',
 					'system/js/app.js',
 					'system/js/cache.js',

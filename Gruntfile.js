@@ -33,11 +33,6 @@ module.exports = function( grunt ) {
 				name: 'system/js/upload',
 				exclude: [ 'system/js/app' ]
 			});
-
-			modules.push( {
-				name: 'system/js/timer',
-				exclude: [ 'system/js/app' ]
-			});
 		}
 		else {
 			module = {

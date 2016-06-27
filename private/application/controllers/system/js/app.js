@@ -446,7 +446,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		setPendingData: function( aData ) {
 			var data = aData || { },
-				module, el, view;
+				module, el, view,
+				self = this;
 
 			this.verbose( 'app: set pending data' );
 
@@ -485,8 +486,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					}
 				}
 
-				el.empty( );
-
 				if ( data.view.show_nav === true ) {
 					if ( this.$container.hasClass( 'hide-nav' ) === true ) {
 						this.$container.removeClass( 'hide-nav' );
@@ -496,20 +495,22 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					this.$container.addClass( 'hide-nav' );
 				}
 
-				el[ 0 ].innerHTML = view( data.view.data );
+				view.render( data.url + '|' + data.view.hash, data.view.data, function( output ) {
+					el.html( output );
 
-				if ( data.system === true ) {
-					this.bindLinks( this.$container );
+					if ( data.system === true ) {
+						self.bindLinks( self.$container );
 
-					this.$container.show( );
-				}
+						self.$container.show( );
+					}
 
-				this.bindLinks( el );
-				this.bindForms( el );
+					self.bindLinks( el );
+					self.bindForms( el );
 
-				this._module.bindMainEventListeners( );
+					self._module.bindMainEventListeners( );
 
-				this.hideProgress( el );
+					self.hideProgress( el );
+				} );
 			}
 
 			this._cache.available( );

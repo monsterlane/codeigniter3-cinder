@@ -28,7 +28,7 @@
 
 					<ol>
 						{#$value}
-							<li data-id="{id}{@eq key=id value=current_id} class="current"{/eq}"><a href="{_base_url}migrations/version/{id}" class="purpose-migration">{name}</a></li>
+							<li data-id="{id}"{@eq key=id value=current_id} class="current"{/eq}><a href="{_base_url}migrations/version/{id}" class="purpose-migration">{name}</a></li>
 						{/$value}
 					</ol>
 				{/iterate}

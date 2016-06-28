@@ -80,7 +80,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				}
 			});
 
-			/*
 			if ( this._verbose === false ) {
 				window.onerror = function( aMessage, aFilename, aLine ) {
 					self.log( aMessage, aFilename, aLine );
@@ -88,7 +87,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					return true;
 				};
 			}
-			*/
 		},
 
 		/**

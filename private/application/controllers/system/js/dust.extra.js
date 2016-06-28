@@ -1,4 +1,6 @@
 (function(root, factory) {
+	'use strict';
+
 	if ( typeof define === 'function' && define.amd && define.amd.dust === true ) {
 		define( [ 'dust.core' ], factory );
 	}
@@ -9,6 +11,7 @@
 		factory( root.dust );
 	}
 }( this, function( dust ) {
+	'use strict';
 
 	function log( helper, msg, level ) {
 		level = level || "INFO";

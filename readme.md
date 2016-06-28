@@ -16,7 +16,7 @@ Cinder is built using a number of open source projects.
 * [jQuery] - jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers.
 * [RequireJS] - RequireJS is a JavaScript file and module loader. It is optimized for in-browser use, but it can be used in other JavaScript environments, like Rhino and Node. Using a modular script loader like RequireJS will improve the speed and quality of your code.
 * [RequireCSS] - A RequireJS CSS loader plugin to allow CSS requires and optimization
-* [doT.js] - The fastest + concise javascript template engine for nodejs and browsers. Partials, custom delimiters and more.
+* [Dust.js] - Dust is a Javascript templating engine. It inherits its look from the ctemplate family of languages, and is designed to run asynchronously on both the server and the browser.
 * [jclass] - Advanced but lightweight and fast Javascript inheritance model providing class members and prototype conversion.
 * [Grunt] - In one word: automation. The less work you have to do when performing repetitive tasks like minification, compilation, unit testing, linting, etc, the easier your job becomes.
 
@@ -58,7 +58,7 @@ THE SOFTWARE.
 [CodeIgniter]:http://www.codeigniter.com/
 [RequireJS]:http://requirejs.org/
 [RequireCSS]:https://github.com/guybedford/require-css
-[doT.js]:https://github.com/olado/doT
+[Dust.js]:http://www.dustjs.com/
 [jQuery]:http://jquery.com/
 [jclass]:https://github.com/riga/jclass
 [history]:https://developer.mozilla.org/en-US/docs/Web/API/History

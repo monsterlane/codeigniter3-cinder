@@ -5,7 +5,7 @@ class Maintenance_controller extends MY_Controller {
 		parent::__construct( );
 
 		if ( $this->config->item( 'maintenance' ) === false ) {
-			$this->redirect( '/' );
+			$this->redirect( str_replace( '_controller', '', $this->router->default_controller ) );
 		}
 	}
 
@@ -13,11 +13,15 @@ class Maintenance_controller extends MY_Controller {
 
 	public function index( ) {
 		$this->session->sess_write_close( );
-		
+
 		$this->load->partial( array(
 			'title' => 'Down for Maintenance',
 			'view' => array(
 				'show_nav' => false,
+				'data' => array(
+					'title' => 'We\'re performing system maintenance',
+					'body' => 'We\'ll be back up shortly! Sorry for the inconvenience.',
+				),
 			),
 		) );
 	}

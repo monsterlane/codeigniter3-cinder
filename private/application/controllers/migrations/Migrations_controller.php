@@ -136,7 +136,7 @@ class Migrations_controller extends MY_Controller {
 
 	public function maintenance( ) {
 		$this->session->sess_write_close( );
-		
+
 		$this->load->partial( array(
 			'title' => 'Database Migrations',
 			'view' => array(

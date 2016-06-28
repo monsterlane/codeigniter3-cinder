@@ -471,6 +471,7 @@ module.exports = function( grunt ) {
 					optimize: 'uglify2',
 					skipDirOptimize: true,
 					generateSourceMaps: true,
+					findNestedDependencies: true,
 					preserveLicenseComments: false,
 					fileExclusionRegExp: /^(\.|views)|(\.php)$/,
 					paths: {

@@ -440,6 +440,16 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		},
 
 		/**
+		 * Method: bindModule
+		 */
+
+		bindModule: function( ) {
+			if ( this._module !== null ) {
+				this._module.bindMainEventListeners( );
+			}
+		},
+
+		/**
 		 * Method: setPendingData
 		 * @param {Object} aData
 		 */
@@ -496,20 +506,12 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				}
 
 				view.render( data.url + '|' + data.view.hash, data.view.data, function( output ) {
-					el.html( output );
-
 					if ( data.system === true ) {
 						self.bindLinks( self.$container );
-
-						self.$container.show( );
+						self.bindForms( self.$container );
 					}
 
-					self.bindLinks( el );
-					self.bindForms( el );
-
-					self._module.bindMainEventListeners( );
-
-					self.hideProgress( el );
+					self.loadView( el, output );
 				} );
 			}
 
@@ -614,7 +616,9 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				cache;
 
 			if ( view === false ) {
+				// TODO this is broken
 				cache = this.getCache( aHash );
+				cache = false;
 
 				if ( cache !== false ) {
 					this.verbose( 'app: view cache found' );
@@ -648,6 +652,28 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			this.setCache( aView.hash, aView );
 
 			return this._view.create( aView );
+		},
+
+		/**
+		 * Method: loadView
+		 * @param {DOMelement} aContainer
+		 * @param {String} aContent
+		 */
+
+		loadView: function( aContainer, aContent ) {
+			var container = $( aContainer );
+
+			container.empty( ).html( aContent );
+
+			this.bindLinks( container );
+			this.bindForms( container );
+			this.bindModule( );
+
+			if ( this.$container.hasClass( 'hidden' ) ) {
+				this.$container.removeClass( 'hidden' );
+			}
+
+			this.hideProgress( container );
 		},
 
 		/**

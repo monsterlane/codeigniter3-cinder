@@ -2,7 +2,7 @@
 define( [ 'jclass', 'dust' ], function( Class, Dust ) {
 	'use strict';
 
-	require( [ 'system/js/dust.helpers.min', 'system/js/dust.extra' ], function( ) { } );
+	//require( [ 'system/js/dust.helpers.min', 'system/js/dust.extra' ], function( ) { } );
 
 	/*
 	===============================================================================

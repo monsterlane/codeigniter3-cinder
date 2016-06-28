@@ -10,15 +10,33 @@
 
 	<div class="panel-body">
 		<div class="purpose-flashdata">
-			{?invalid_id}
+			{@eq key=invalid_id value="true" type="boolean"}
 				<div class="alert alert-danger" role="alert">You are running an unknown version for this branch. Migrations have been blocked to prevent erroneous database changes.<br/><br/>Switch back to the last branch you ran migrations from and select the base branch.</div>
-			{/invalid_id}
+			{/eq}
 		</div>
 
-		{@eq key=environment value="development"}
-			{#migrations}
+		{@eq key=invalid_id value="false" type="boolean"}
+			<div class="current {@eq key=current_id value=branch_id}hidden{/eq}">
+				<p>Click <a href="{_base_url}migrations/current" class="purpose-migration">here</a> to swap to the default branch version.</p>
 
-			{/migrations}
+				<hr/>
+			</div>
+
+			{@eq key=environment value="development"}
+				{@iterate key=migrations}
+					<p>{$key}</p>
+
+					<ol>
+						{#$value}
+							{@eq key=id value=current_id}
+								<li data-id="{id}" class="current"><a href="{_base_url}migrations/version/{id}" class="purpose-migration">{name}</a></li>
+							{:else}
+								<li data-id="{id}"><a href="{_base_url}migrations/version/{id}" class="purpose-migration">{name}</a></li>
+							{/eq}
+						{/$value}
+					</ol>
+				{/iterate}
+			{/eq}
 		{/eq}
 	</div>
 </div>

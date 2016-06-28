@@ -106,6 +106,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/jclass.min.js',
 					'system/js/dust.full.min.js',
 					'system/js/dust.helpers.min.js',
+					'system/js/dust.extra.js',
 					'system/js/webfont.min.js',
 					'system/js/app.js',
 					'system/js/cache.js',
@@ -292,6 +293,10 @@ class MY_Controller extends CI_Controller {
 		$this->set_data( 'module.data', array(
 			'redirect' => $aUrl,
 		) );
+	}
+
+	public function dump( $data = array( ) ) {
+		die( var_dump( $data ) );
 	}
 }
 

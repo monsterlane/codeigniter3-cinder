@@ -2,7 +2,7 @@
 	"name": "CI3-Cinder",
 	"title": "CI3-Cinder",
 	"description": "Cinder is designed to provide a single page app like experience for websites, wep apps, or web based mobile apps.",
-	"version": "0.8.9",
+	"version": "0.8.10",
 	"author": {
 		"name": "Jonathan Down",
 		"url": "https://github.com/monsterlane"

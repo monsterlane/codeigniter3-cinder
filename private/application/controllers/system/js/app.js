@@ -644,7 +644,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				i, len, j;
 
 			for ( i = 0, len = cache.length; i < len; i++ ) {
-				if ( cache[ i ]._key.indexOf( '.html|' ) !== -1 ) {
+				if ( cache[ i ]._key.indexOf( '.dust|' ) !== -1 ) {
 					if ( keys[ cache[ i ].url ] === undefined ) {
 						keys[ cache[ i ].url ] = [ ];
 					}

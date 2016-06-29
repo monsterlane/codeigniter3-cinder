@@ -83,7 +83,7 @@ class MY_Loader extends CI_Loader {
 		}
 
 		if ( strpos( $view, '.' ) === false ) {
-			$view .= '.html';
+			$view .= '.dust';
 		}
 
 		if ( file_exists( VIEWPATH . $view ) === true && is_file( VIEWPATH . $view ) == true ) {

@@ -5,8 +5,10 @@ module.exports = function( grunt ) {
 	var browsers = [ 'last 2 versions', '> 5%' ],
 		version = grunt.file.read( 'private/application/config/app.php' ),
 		controllers = grunt.file.expand( 'private/application/controllers/**/js' ),
+		views = grunt.file.expand( 'private/application/controllers/**/views/*.dust' ),
 		new_version, cur_version,
 		modules = [ ], module,
+		templates = { },
 		i, len1, j, len2,
 		t, m, a;
 
@@ -58,6 +60,10 @@ module.exports = function( grunt ) {
 
 			modules.push( module );
 		}
+	}
+
+	for ( i = 0, len1 = views.length; i < len1; i++ ) {
+		templates[ views[ i ].replace( 'private/application/controllers', 'public/files/cache' ).replace( '.dust', '.js' ) ] = views[ i ];
 	}
 
 	grunt.initConfig({
@@ -200,6 +206,14 @@ module.exports = function( grunt ) {
 		cssmin: {
 			all: {
 				files: grunt.file.expandMapping( [ 'public/files/cache/**/css/*.css' ] )
+			}
+		},
+		dustjs: {
+			views: {
+				options: {
+					amd: true
+				},
+				files: templates
 			}
 		},
 		gitadd: {
@@ -528,6 +542,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-imagemin' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-requirejs' );
+	grunt.loadNpmTasks( 'grunt-dustjs' );
 	grunt.loadNpmTasks( 'grunt-git' );
 	grunt.loadNpmTasks( 'grunt-githash' );
 	grunt.loadNpmTasks( 'grunt-newer' );
@@ -538,7 +553,9 @@ module.exports = function( grunt ) {
 
 	grunt.registerTask( 'default', [ 'concurrent:lint' ] );
 	grunt.registerTask( 'assets', [ 'sprite', 'newer:copy' ] );
-	grunt.registerTask( 'build', [ 'concurrent:lint', 'githash', 'gitpull', 'replace:patch', 'sprite', 'clean:fonts', 'webfont', 'requirejs', 'clean:build', 'postcss', 'concurrent:minify', 'gitadd', 'gitcommit', 'gitpush' ] );
+	grunt.registerTask( 'views', [ 'dustjs' ] );
+
+	grunt.registerTask( 'build', [ 'concurrent:lint', 'githash', 'gitpull', 'replace:patch', 'sprite', 'clean:fonts', 'webfont', 'requirejs', 'clean:build', 'postcss', 'concurrent:minify', 'dustjs', 'gitadd', 'gitcommit', 'gitpush' ] );
 	grunt.registerTask( 'deploy', [ 'clean:dist', 'compress:app' ] );
 
 	grunt.registerTask( 'bump', [ 'replace:patch' ] );

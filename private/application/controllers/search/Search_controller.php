@@ -54,7 +54,7 @@ class Search_controller extends MY_Controller {
 			$this->load->partial( array(
 				'name' => false,
 				'view' => array(
-					'path' => 'users.html',
+					'path' => 'users.dust',
 					'container' => '#searchResults',
 					'data' => array(
 						'users' => $results,
@@ -67,7 +67,7 @@ class Search_controller extends MY_Controller {
 
 	public function user( $action = null ) {
 		$this->session->sess_write_close( );
-		
+
 		if ( $action == 'delete' ) {
 			$data = array(
 				'status' => (bool)rand( 0, 1 ),

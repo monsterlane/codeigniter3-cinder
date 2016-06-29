@@ -49,7 +49,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 
 			parent.clearCache( );
 
-			parent.message( 'View cache has been cleared.' );
+			parent.message( 'Local cache has been cleared.' );
 		}
 	});
 

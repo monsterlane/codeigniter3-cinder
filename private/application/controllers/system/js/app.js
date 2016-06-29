@@ -507,6 +507,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 				view.render( data.url + '|' + data.view.hash, data.view.data, function( output ) {
 					if ( data.system === true ) {
+						self.getCachedViews( );
+
 						self.bindLinks( self.$container );
 						self.bindForms( self.$container );
 					}
@@ -581,31 +583,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		},
 
 		/**
-		 * Method: getViews
-		 * @param {String} aUrl
-		 */
-
-		getViews: function( aUrl ) {
-			var url = aUrl || '',
-				a, views;
-
-			if ( url.indexOf( 'http' ) !== -1 ) {
-				a = document.createElement( a );
-				a.href = url;
-
-				url = a.pathname + a.search;
-				url = url.substring( 1 );
-			}
-			else if ( url.charAt( 0 ) === '/' ) {
-				url = url.substring( 1 );
-			}
-
-			views = this.getData( 'system.views.' + url );
-
-			return views;
-		},
-
-		/**
 		 * Method: getView
 		 * @param {String} aUrl
 		 * @param {String} aPath
@@ -630,6 +607,55 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			}
 
 			return view;
+		},
+
+		/**
+		 * Method: getDataViews
+		 * @param {String} aUrl
+		 */
+
+		getDataViews: function( aUrl ) {
+			var url = aUrl || '',
+				a, views;
+
+			if ( url.indexOf( 'http' ) !== -1 ) {
+				a = document.createElement( a );
+				a.href = url;
+
+				url = a.pathname + a.search;
+				url = url.substring( 1 );
+			}
+			else if ( url.charAt( 0 ) === '/' ) {
+				url = url.substring( 1 );
+			}
+
+			views = this.getData( 'system.views.' + url );
+
+			return views;
+		},
+
+		/**
+		 * Method: getCachedViews
+		 */
+
+		getCachedViews: function( ) {
+			var cache = this._cache.getAll( ),
+				keys = [ ],
+				i, len, j;
+
+			for ( i = 0, len = cache.length; i < len; i++ ) {
+				if ( cache[ i ]._key.indexOf( '.html|' ) !== -1 ) {
+					if ( keys[ cache[ i ].url ] === undefined ) {
+						keys[ cache[ i ].url ] = [ ];
+					}
+
+					keys[ cache[ i ].url ].push( cache[ i ].path + '|' + cache[ i ].hash );
+				}
+			}
+
+			for ( j in keys ) {
+				this.setData( 'system.views.' + j, keys[ j ] );
+			}
 		},
 
 		/**

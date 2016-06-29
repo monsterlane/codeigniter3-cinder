@@ -57,7 +57,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 					opt.url = opt.url.substr( opt.url.indexOf( '/' ) );
 				}
 
-				views = parent.getViews( opt.url );
+				views = parent.getDataViews( opt.url );
 
 				if ( opt.hasOwnProperty( 'data' ) && opt.data !== null ) {
 					if ( typeof opt.data === 'object' ) {

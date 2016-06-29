@@ -479,7 +479,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			el = $( data.view.container );
 
 			if ( el.length > 0 ) {
-				view = this.getView( data.url, data.view.hash );
+				view = this.getView( data.url, data.view.path, data.view.hash );
 
 				if ( view === false ) {
 					view = this.createView({
@@ -492,7 +492,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
 						this.verbose( 'app: invalidate cached view ' + data.view.path );
 
-						this.removeCache( data.view.invalidate );
+						this.removeCache( data.view.path + '|' + data.view.invalidate );
 					}
 				}
 
@@ -608,17 +608,16 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		/**
 		 * Method: getView
 		 * @param {String} aUrl
+		 * @param {String} aPath
 		 * @param {String} aHash
 		 */
 
-		getView: function( aUrl, aHash ) {
+		getView: function( aUrl, aPath, aHash ) {
 			var view = this._view.get( aUrl, aHash ),
 				cache;
 
 			if ( view === false ) {
-				// TODO this is broken
-				cache = this.getCache( aHash );
-				cache = false;
+				cache = this.getCache( aPath + '|' + aHash );
 
 				if ( cache !== false ) {
 					this.verbose( 'app: view cache found' );
@@ -639,17 +638,18 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		 */
 
 		createView: function( aView ) {
-			var key = 'system.views.' + aView.url;
+			var dkey = 'system.views.' + aView.url,
+				vkey = aView.path + '|' + aView.hash;
 
 			this.verbose( 'app: creating view' );
 
-			if ( this.getData( key ) === false ) {
-				this.setData( key, [ ] );
+			if ( this.getData( dkey ) === false ) {
+				this.setData( dkey, [ ] );
 			}
 
-			this.setData( key, [ aView.path + '|' + aView.hash ] );
+			this.setData( dkey, [ vkey ] );
 
-			this.setCache( aView.hash, aView );
+			this.setCache( vkey, aView );
 
 			return this._view.create( aView );
 		},

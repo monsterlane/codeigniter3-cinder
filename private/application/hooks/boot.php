@@ -20,6 +20,8 @@ function boot( ) {
 			$ci->session->set_userdata( 'previous_page', str_replace( '_controller', '', $ci->router->class ) );
 		}
 
+		$ci->session->set_flashdata( 'message', 'You have been signed out due to inactivity.' );
+
 		$ci->redirect( str_replace( '_controller', '', $ci->router->login_controller ) );
 	}
 	else if ( $ci->get_option( 'require_https' ) === true && $https === false ) {

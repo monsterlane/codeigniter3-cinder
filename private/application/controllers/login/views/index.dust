@@ -6,6 +6,7 @@
 		</div>
 
 		<div class="panel-body">
+			<div class="purpose-flashdata"></div>
 			<div class="purpose-validation"></div>
 
 			<div class="input-group">

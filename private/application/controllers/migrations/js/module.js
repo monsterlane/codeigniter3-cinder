@@ -23,12 +23,11 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 
 		/**
 		 * Method: bindMainEventListeners
+		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( ) {
-			var parent = this.getParent( ),
-				data = parent.getData( 'module.data' ),
-				container = $( data.view.container ),
+		bindMainEventListeners: function( aContainer ) {
+			var container = $( aContainer ),
 				self = this;
 
 			this.verbose( 'module: bindMainEventListeners' );

@@ -40,9 +40,10 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 		/**
 		 * Method: bindMainEventListeners
+		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( ) {
+		bindMainEventListeners: function( aContainer ) {
 
 		},
 

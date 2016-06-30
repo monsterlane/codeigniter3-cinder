@@ -2,7 +2,8 @@
 module.exports = function( grunt ) {
 	'use strict';
 
-	var browsers = [ 'last 2 versions', '> 5%' ],
+	var fs = require( 'fs' ),
+		browsers = [ 'last 2 versions', '> 5%' ],
 		version = grunt.file.read( 'private/application/config/app.php' ),
 		controllers = grunt.file.expand( 'private/application/controllers/**/js' ),
 		views = grunt.file.expand( 'private/application/controllers/**/views/*.dust' ),
@@ -211,7 +212,18 @@ module.exports = function( grunt ) {
 		dustjs: {
 			views: {
 				options: {
-					amd: true
+					amd: true,
+					fullname: function( filepath ) {
+						var name = filepath.replace( 'private/application/controllers/', '' ),
+							stat = fs.statSync( filepath ),
+							time = parseInt( stat.mtime.getTime( ) / 1000, 10 );
+
+						name = name.replace( '/views/', '/' );
+						name = name.replace( '/index.dust', '|' + time );
+						name = name.replace( '.dust', '|' + time );
+
+						return name;
+					}
 				},
 				files: templates
 			}

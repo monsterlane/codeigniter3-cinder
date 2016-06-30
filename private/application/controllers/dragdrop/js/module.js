@@ -23,12 +23,11 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'system/js/upload' ], function
 
 		/**
 		 * Method: bindMainEventListeners
+		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( ) {
-			var parent = this.getParent( ),
-				data = parent.getData( 'module.data' ),
-				container = $( data.view.container ),
+		bindMainEventListeners: function( aContainer ) {
+			var container = $( aContainer ),
 				upload = new Upload( this );
 
 			this.verbose( 'module: bindMainEventListeners' );

@@ -70,9 +70,14 @@ class MY_Controller extends CI_Controller {
 			$vpath = str_replace( '.', '', $this->config->item( 'version' ) );
 			$config = str_replace( '/files/cache', '/files/cache/' . $vpath, $config );
 			$vpath .= '/';
+
+			$dust = 'core';
 		}
 		else {
 			$config = substr_replace( $config, ",\n	urlArgs: 't=' + Date.now( )\n});", strrpos( $config, "\n" . '});' ), strlen( "\n});" ) );
+
+			$config = str_replace( 'dust.core.min', 'dust.full.min', $config );
+			$dust = 'full';
 		}
 
 		$data = array(
@@ -104,7 +109,7 @@ class MY_Controller extends CI_Controller {
 					'system/js/jquery.min.js',
 					'system/js/jquery.plugins.js',
 					'system/js/jclass.min.js',
-					'system/js/dust.full.min.js',
+					'system/js/dust.' . $dust . '.min.js',
 					'system/js/dust.helpers.min.js',
 					'system/js/dust.extra.js',
 					'system/js/webfont.min.js',
@@ -164,7 +169,8 @@ class MY_Controller extends CI_Controller {
 			$data = merge_array( array(
 				'name' => null,
 				'view' => array(
-					'path' => null,
+					'path' => false,
+					'module' => false,
 					'css' => array( ),
 					'js' => array( ),
 					'fonts' => array( ),

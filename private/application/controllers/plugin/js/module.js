@@ -23,12 +23,11 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'plugin/js/jquery.hotkeys.min'
 
 		/**
 		 * Method: bindMainEventListeners
+		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( ) {
-			var parent = this.getParent( ),
-				data = parent.getData( 'module.data' ),
-				container = $( data.view.container ),
+		bindMainEventListeners: function( aContainer ) {
+			var container = $( aContainer ),
 				preview = container.find( 'div.colourPreview' );
 
 			this.verbose( 'module: bindMainEventListeners' );

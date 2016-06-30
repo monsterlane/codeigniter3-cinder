@@ -10,7 +10,7 @@ require.config({
 	},
 	paths: {
 		domready: 'system/js/require.domready.min',
-		dust: 'system/js/dust.full.min',
+		dust: 'system/js/dust.core.min',
 		font: 'system/js/require.webfont',
 		jclass: 'system/js/jclass.min',
 		jquery: 'system/js/jquery.min',

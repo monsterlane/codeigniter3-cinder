@@ -65,7 +65,9 @@ define( [ 'jclass', 'dust' ], function( Class, Dust ) {
 		 */
 
 		compile: function( aView ) {
-			Dust.loadSource( Dust.compile( aView.content, aView.url + '|' + aView.hash ) );
+			if ( aView.hasOwnProperty( 'html' ) === true && aView.html !== undefined && aView.html.length > 0 ) {
+				Dust.loadSource( Dust.compile( aView.html, aView.url + '|' + aView.hash ) );
+			}
 
 			return this;
 		},

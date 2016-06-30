@@ -321,6 +321,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					fonts: [ ],
 					container: null,
 					path: null,
+					module: null,
 					hash: null,
 					data: [ ]
 				}
@@ -345,6 +346,12 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					this.verbose( 'app: load ' + link.replace( 'font!', '' ) );
 
 					dependencies.push( link );
+				}
+
+				if ( data.view.module !== null ) {
+					this.verbose( 'app: load ' + data.view.module );
+
+					dependencies.push( data.view.module );
 				}
 
 				for ( i = 0, len = data.view.css.length; i < len; i++ ) {
@@ -441,11 +448,12 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		/**
 		 * Method: bindModule
+		 * @param {DOMelement} aContainer
 		 */
 
-		bindModule: function( ) {
+		bindModule: function( aContainer ) {
 			if ( this._module !== null ) {
-				this._module.bindMainEventListeners( );
+				this._module.bindMainEventListeners( aContainer );
 			}
 		},
 
@@ -486,7 +494,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 						url: data.url,
 						path: data.view.path,
 						hash: data.view.hash,
-						content: data.view.html
+						module: data.view.module,
+						html: data.view.html
 					});
 
 					if ( data.view.hasOwnProperty( 'invalidate' ) === true ) {
@@ -693,7 +702,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 			this.bindLinks( container );
 			this.bindForms( container );
-			this.bindModule( );
+			this.bindModule( container );
 
 			if ( this.$container.hasClass( 'hidden' ) ) {
 				this.$container.removeClass( 'hidden' );

@@ -167,6 +167,7 @@ class MY_Controller extends CI_Controller {
 
 		if ( $key === 'system.data' || is_string( $module[ 'redirect' ] ) === false ) {
 			$data = merge_array( array(
+				'version' => $this->config->item( 'version' ),
 				'name' => null,
 				'view' => array(
 					'path' => false,

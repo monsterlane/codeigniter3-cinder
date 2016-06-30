@@ -54,17 +54,17 @@ define( [ 'jclass', 'dust' ], function( Class, Dust ) {
 				this._data[ aView.url ] = [ ];
 			}
 
-			this._data[ aView.url ][ aView.hash ] = this.compile( aView );
+			this._data[ aView.url ][ aView.hash ] = this.load( aView );
 
 			return this._data[ aView.url ][ aView.hash ];
 		},
 
 		/**
-		 * Method: compile
+		 * Method: load
 		 * @param {Object} aView
 		 */
 
-		compile: function( aView ) {
+		load: function( aView ) {
 			if ( aView.hasOwnProperty( 'html' ) === true && aView.html !== undefined && aView.html.length > 0 ) {
 				Dust.loadSource( Dust.compile( aView.html, aView.url + '|' + aView.hash ) );
 			}

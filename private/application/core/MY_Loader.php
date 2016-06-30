@@ -110,13 +110,11 @@ class MY_Loader extends CI_Loader {
 				}
 			}
 
-			if ( $skip === false ) {
-				if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
-					$data[ 'view' ][ 'module' ] = $this->router->directory . str_replace( '.dust', '', $view );
-				}
-				else {
-					$data[ 'view' ][ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ][ 'path' ], '_ci_return' => true ) );
-				}
+			if ( ENVIRONMENT === 'production' || ENVIRONMENT === 'testing' ) {
+				$data[ 'view' ][ 'module' ] = $this->router->directory . str_replace( '.dust', '', $view );
+			}
+			else if ( $skip === false ) {
+				$data[ 'view' ][ 'html' ] = $this->_ci_load( array( '_ci_view' => $data[ 'view' ][ 'path' ], '_ci_return' => true ) );
 			}
 		}
 		else {

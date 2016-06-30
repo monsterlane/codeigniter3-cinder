@@ -210,7 +210,7 @@ module.exports = function( grunt ) {
 			}
 		},
 		dustjs: {
-			views: {
+			compile: {
 				options: {
 					amd: true,
 					fullname: function( filepath ) {

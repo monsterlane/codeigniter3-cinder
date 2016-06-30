@@ -96,7 +96,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		runtime: function( ) {
 			return parseInt( this._stop - this._start, 10 );
 		},
-		
+
 		/**
 		 * Method: start
 		 */
@@ -141,7 +141,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			else if ( tick === true ) {
 				window.requestAnimationFrame( function( ) {
 					self.think( );
-				} );
+				});
 			}
 		}
 	});

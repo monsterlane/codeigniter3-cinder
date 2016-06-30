@@ -222,7 +222,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				success: function( response ) {
 					self.error( {
 						body: 'An error has occurred. ' + self.getData( 'system.options.support_message' )
-					} );
+					});
 				}
 			});
 		},
@@ -529,7 +529,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					}
 
 					self.loadView( el, output );
-				} );
+				});
 			}
 
 			this._cache.available( );

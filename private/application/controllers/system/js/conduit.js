@@ -118,7 +118,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 					parent.error( {
 						body: 'An error has occurred. ' + parent.getData( 'system.options.support_message' )
-					} );
+					});
 				}
 
 				oecb( aXhr, aStatus, aError );
@@ -157,7 +157,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 						parent.error( {
 							body: aResponse.message
-						} );
+						});
 
 						necb( aResponse );
 					}

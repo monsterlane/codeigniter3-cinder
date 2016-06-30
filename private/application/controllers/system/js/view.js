@@ -84,7 +84,7 @@ define( [ 'jclass', 'dust' ], function( Class, Dust ) {
 
 			Dust.render( aKey, aData, function( aError, aOutput ) {
 				callback( aOutput );
-			} );
+			});
 		},
 
 		/**

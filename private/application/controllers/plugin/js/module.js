@@ -34,7 +34,7 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'plugin/js/jquery.hotkeys.min'
 
 			$( document ).on( 'keydown', null, 'shift+w', function( ) {
 				preview.toggleClass( 'on' );
-			} );
+			});
 		}
 	});
 

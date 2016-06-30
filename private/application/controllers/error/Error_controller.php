@@ -29,7 +29,6 @@ class Error_controller extends MY_Controller {
 			'title' => '404 Not Found',
 			'view' => array(
 				'show_nav' => false,
-				'path' => 'index.html',
 				'data' => array(
 					'title' => 'Well, that\'s embarrassing.',
 					'body' => 'We couldn\'t find a page at ' . current_url( ) . '.<br/>If you typed in the address, check your spelling.',
@@ -41,7 +40,7 @@ class Error_controller extends MY_Controller {
 
 	public function javascript( ) {
 		$this->session->sess_write_close( );
-		
+
 		$data = $this->get_data( 'post' );
 		$data = extract_array( $data, array( 'message', 'filename', 'line' ) );
 		$data[ 'error_type_id' ] = 4;

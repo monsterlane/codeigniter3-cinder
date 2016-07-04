@@ -20,6 +20,12 @@ class MY_Controller extends CI_Controller {
 		$this->set_option( 'require_https', $this->config->item( 'require_https' ) );
 		$this->set_option( 'require_auth', $this->config->item( 'require_auth' ) );
 
+		$url = uri_string( );
+
+		if ( $url === '' ) {
+			$url = str_replace( '_controller', '', $this->router->default_controller );
+		}
+
 		$this->_data = new Dot( array(
 			'post' => $post,
 			'system' => array(
@@ -33,7 +39,7 @@ class MY_Controller extends CI_Controller {
 					'redirect' => false,
 					'name' => false,
 					'view' => false,
-					'url' => uri_string( ),
+					'url' => $url,
 				),
 				'messages' => array( ),
 			),

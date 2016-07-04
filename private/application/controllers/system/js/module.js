@@ -44,7 +44,11 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		 */
 
 		bindMainEventListeners: function( aContainer ) {
+			var parent = this.getParent( ),
+				data = parent.getData( 'module' );
 
+			parent.$container.find( '> div.sidebar > ul.toolbar > li.selected' ).removeClass( 'selected' );
+			parent.$container.find( '> div.sidebar > ul.toolbar > li > a[href$="' + data.options.url + '"]' ).parent( ).addClass( 'selected' )
 		},
 
 		/**

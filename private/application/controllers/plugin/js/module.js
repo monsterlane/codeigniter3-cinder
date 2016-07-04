@@ -26,9 +26,11 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'plugin/js/jquery.hotkeys.min'
 		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( aContainer ) {
+		bindMainEventListeners: function bindMainEventListeners( aContainer ) {
 			var container = $( aContainer ),
 				preview = container.find( 'div.colourPreview' );
+
+			bindMainEventListeners._super.call( this, aContainer );
 
 			this.verbose( 'module: bindMainEventListeners' );
 

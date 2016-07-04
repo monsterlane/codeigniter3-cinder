@@ -26,9 +26,11 @@ define( [ 'jclass', 'jquery', 'system/js/module', 'system/js/upload' ], function
 		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( aContainer ) {
+		bindMainEventListeners: function bindMainEventListeners( aContainer ) {
 			var container = $( aContainer ),
 				upload = new Upload( this );
+
+			bindMainEventListeners._super.call( this, aContainer );
 
 			this.verbose( 'module: bindMainEventListeners' );
 

@@ -380,9 +380,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 				dependencies.unshift( data.name );
 
-				$( 'li.selected' ).removeClass( 'selected' );
-				$( 'li > a[href$="' + data.url + '"]' ).parent( ).addClass( 'selected' );
-
 				require( dependencies, function( Module ) {
 					self.setModule( new Module( options ) );
 

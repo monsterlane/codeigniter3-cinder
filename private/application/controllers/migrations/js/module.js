@@ -26,9 +26,11 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 		 * @param {DOMelement} aContainer
 		 */
 
-		bindMainEventListeners: function( aContainer ) {
+		bindMainEventListeners: function bindMainEventListeners( aContainer ) {
 			var container = $( aContainer ),
 				self = this;
+
+			bindMainEventListeners._super.call( this, aContainer );
 
 			this.verbose( 'module: bindMainEventListeners' );
 

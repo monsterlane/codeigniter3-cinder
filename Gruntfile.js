@@ -235,10 +235,7 @@ module.exports = function( grunt ) {
 				},
 				files: {
 					src: [
-						'www/assets/fonts/*.eot',
-						'www/assets/fonts/*.ttf',
-						'www/assets/fonts/*.woff',
-						'www/files/cache/rss_*'
+						'public/files/cache/**'
 					]
 				}
 			}
@@ -355,7 +352,8 @@ module.exports = function( grunt ) {
 					'private/application/config/app.php'
 				],
 				overwrite: true,
-				replacements: [{
+				replacements: [
+					{
 						from: /"version": "([0-9.]*)",/,
 						to: function( match ) {
 							var p = match.split( '"' ),
@@ -400,7 +398,8 @@ module.exports = function( grunt ) {
 					'private/application/config/app.php'
 				],
 				overwrite: true,
-				replacements: [{
+				replacements: [
+					{
 						from: /"version": "([0-9.]*)",/,
 						to: function( match ) {
 							var p = match.split( '"' ),
@@ -446,7 +445,8 @@ module.exports = function( grunt ) {
 					'private/application/config/app.php'
 				],
 				overwrite: true,
-				replacements: [{
+				replacements: [
+					{
 						from: /"version": "([0-9.]*)",/,
 						to: function( match ) {
 							var p = match.split( '"' ),

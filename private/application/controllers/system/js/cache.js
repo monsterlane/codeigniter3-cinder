@@ -48,7 +48,10 @@ define( [ 'jclass' ], function( Class ) {
 				data = false;
 
 			if ( json !== null ) {
-				data = JSON.parse( json );
+				try {
+					data = JSON.parse( json );
+				}
+				catch( e ) { }
 			}
 
 			return data;
@@ -65,9 +68,12 @@ define( [ 'jclass' ], function( Class ) {
 			for ( key in this._storage ) {
 				if ( this._storage.hasOwnProperty( key ) === true ) {
 					val = this.get( key );
-					val._key = key;
 
-					data.push( val );
+					if ( val !== false ) {
+						val._key = key;
+
+						data.push( val );
+					}
 				}
 			}
 

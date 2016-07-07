@@ -10,8 +10,9 @@ class MY_Log extends CI_Log {
 	}
 
 	public function write_db( $data = array( ) ) {
+		$ci =& get_instance( );
+
 		if ( $this->_database === true && isset( $ci->db ) === true ) {
-			$ci =& get_instance( );
 			$ci->load->model( 'error' );
 
 			$ci->error->insert( $data );

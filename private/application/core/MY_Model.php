@@ -120,6 +120,10 @@ class MY_Model extends CI_Model {
 		return $data;
 	}
 
+	protected function set_defaults( $data = array( ) ) {
+		return merge_array( $this->get_defaults( ), $data );
+	}
+
 	protected function hook( $key, $data = array( ) ) {
 		if ( array_key_exists( $key, $this->_hooks ) === true ) {
 			foreach ( $this->_hooks[ $key ] as $hook ) {
@@ -128,6 +132,12 @@ class MY_Model extends CI_Model {
 		}
 
 		return $data;
+	}
+
+	protected function extract( $data = array( ) ) {
+		$keys = array_keys( $this->_columns );
+
+		return extract_array( $data, $keys );
 	}
 
 	/* public methods */
@@ -168,8 +178,8 @@ class MY_Model extends CI_Model {
 	public function insert( $data = array( ) ) {
 		$data = $this->hook( 'before.insert', $data );
 
-		$data = merge_array( $this->get_defaults( ), $data );
-		$data = extract_array( $data, $this->_columns );
+		$data = $this->set_defaults( $data );
+		$data = $this->extract( $data );
 
 		$this->db->insert( $this->_table, $data );
 		$data[ 'id' ] = $this->db->insert_id( );
@@ -182,7 +192,7 @@ class MY_Model extends CI_Model {
 	public function update( $data = array( ), $id = null ) {
 		$data = $this->hook( 'before.update', $data );
 
-		$data = extract_array( $data, $this->_columns );
+		$data = $this->extract( $data );
 
 		if ( $id === null && array_key_exists( $this->_primary_key, $data ) === true ) {
 			$id = $data[ $this->_primary_key ];

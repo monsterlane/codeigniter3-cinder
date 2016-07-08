@@ -38,7 +38,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			this.$overlay = this.$templates.find( '> div.overlay' );
 			this._overlay = this.$overlay[ 0 ];
 
-			this.$loading = this.$container.find( '> div.loading' );
+			this.$loading = this.$templates.find( '> div.loading' );
 			this._loading = this.$loading[ 0 ];
 
 			this.setData( 'system.options', options );

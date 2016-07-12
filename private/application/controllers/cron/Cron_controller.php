@@ -29,7 +29,7 @@ class Cron_controller extends MY_Controller {
 	private function _start( ) {
 		$this->_start = time( );
 
-		$this->_message( 'CRON started' );
+		$this->_message( 'CRON job started' );
 
 		if ( $this->_cli === false ) {
 			$this->output->append_output( '<hr/>' );
@@ -43,7 +43,7 @@ class Cron_controller extends MY_Controller {
 			$this->output->append_output( '<hr/>' );
 		}
 
-		$this->_message( 'CRON completed' );
+		$this->_message( 'CRON job completed' );
 	}
 
 	private function _message( $str ) {

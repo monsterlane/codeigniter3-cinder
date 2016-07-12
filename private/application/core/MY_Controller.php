@@ -223,7 +223,12 @@ class MY_Controller extends CI_Controller {
 			}
 			else {
 				foreach ( $data[ 'view' ][ 'css' ] as $k => $style ) {
-					if ( strpos( $style, '/' ) === false ) {
+					if ( strpos( $style, '/' ) !== false ) {
+						$name = substr( $style, strrpos( $style, '/' ) + 1 );
+					}
+					else {
+						$name = $style;
+
 						$style = $this->router->directory . 'css/' . $style;
 					}
 
@@ -239,7 +244,7 @@ class MY_Controller extends CI_Controller {
 						copy( VIEWPATH . $style, $dest . $style );
 					}
 
-					if ( $style === 'system/css/loaded.css' || $style === 'system/css/loading.css' ) {
+					if ( $name !== 'style.css' ) {
 						unset( $data[ 'view' ][ 'css' ][ $k ] );
 					}
 				}

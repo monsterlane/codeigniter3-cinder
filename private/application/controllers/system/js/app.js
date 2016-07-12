@@ -481,7 +481,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				this.history( data.title, data.url, data );
 			}
 
-			if ( this.getData( 'system.options.version' ) !== data.version ) {
+			if ( data.hasOwnProperty( 'version' ) === true && this.getData( 'system.options.version' ) !== data.version ) {
 				this._module.notification({
 					body: 'A new version is available. Please refresh the page to apply the update.'
 				});

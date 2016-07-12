@@ -2,11 +2,11 @@
 
 class Logout_controller extends MY_Controller {
 	/* public methods */
-	
+
 	public function index( ) {
 		$this->session->sess_destroy( );
 
-		$this->redirect( 'main' );
+		$this->redirect( 'login' );
 	}
 }
 

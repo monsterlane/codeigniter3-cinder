@@ -3,6 +3,29 @@
 class MY_Loader extends CI_Loader {
 	/* internal methods */
 
+	private function _flashdata( ) {
+		$ci =& get_instance( );
+
+		$flash = $ci->session->flashdata( );
+		$data = array( );
+
+		foreach ( $flash as $key => $val ) {
+			if ( isset( $_SESSION[ '__ci_vars' ][ $key ], $_SESSION[ $key ] ) === true && $_SESSION[ '__ci_vars' ][ $key ] === 'old' ) {
+				$data[ $key ] = $_SESSION[ $key ];
+			}
+		}
+
+		return $data;
+	}
+
+	private function _logindata( ) {
+		$ci =& get_instance( );
+
+		$ci->session->set_userdata( 'preauth', false );
+
+		return array( );
+	}
+
 	private function _compress( $arr = array( ) ) {
 		if ( is_array( $arr ) === false ) $arr = array( );
 
@@ -28,31 +51,42 @@ class MY_Loader extends CI_Loader {
 
 		if ( $ci->get_option( 'system' ) === true ) {
 			if ( $this->is_loaded( 'session' ) !== false && isset( $_SESSION[ '__ci_vars' ] ) === true ) {
-				$flash = $ci->session->flashdata( );
-				$data = array( );
+				$flash = $this->_flashdata( );
 
-				foreach ( $flash as $key => $val ) {
-					if ( isset( $_SESSION[ '__ci_vars' ][ $key ], $_SESSION[ $key ] ) === true && $_SESSION[ '__ci_vars' ][ $key ] === 'old' ) {
-						$data[ $key ] = $_SESSION[ $key ];
-					}
-				}
-
-				if ( count( $data ) > 0 ) {
-					$ci->set_data( 'module.data.flashdata', $data );
+				if ( empty( $flash ) === false ) {
+					$ci->set_data( 'module.data.flashdata', $flash );
 				}
 			}
 
 			$data = $ci->get_data( );
 
+			$redir = ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) );
+
 			if ( $data[ 'post' ][ 'system' ] !== false ) {
-				if ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) === true ) {
+				if ( $redir === true ) {
 					redirect( $data[ 'module' ][ 'data' ][ 'redirect' ] );
 				}
 				else {
+					if ( $ci->session->userdata( 'authenticated' ) === true ) {
+						$login = $this->_logindata( );
+
+						if ( empty( $login ) === false ) {
+							$data[ 'module' ][ 'data' ][ 'logindata' ] = $this->_logindata( );
+						}
+					}
+
 					$ci->load->view( $data[ 'system' ][ 'data' ][ 'view' ][ 'path' ], $data );
 				}
 			}
 			else {
+				if ( $redir === false && $ci->session->userdata( 'preauth' ) === true && $ci->session->userdata( 'authenticated' ) === true ) {
+					$login = $this->_logindata( );
+
+					if ( empty( $login ) === false ) {
+						$data[ 'module' ][ 'data' ][ 'logindata' ] = $this->_logindata( );
+					}
+				}
+
 				$ci->output->json( $this->_compress( $data[ 'module' ][ 'data' ] ) );
 			}
 		}

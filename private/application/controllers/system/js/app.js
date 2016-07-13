@@ -518,11 +518,19 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				}
 
 				view.render( data.url + '|' + data.view.hash, data.view.data, function( output ) {
+					var login = self.getData( 'module.data.logindata' );
+
 					if ( data.system === true ) {
 						self.getCachedViews( );
 
 						self.bindLinks( self.$container );
 						self.bindForms( self.$container );
+					}
+
+					if ( login !== false ) {
+						self.removeData( 'module.data.logindata' );
+
+						self._module.handleUserLogin( login );
 					}
 
 					self.loadView( el, output );

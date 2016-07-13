@@ -52,6 +52,23 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 		},
 
 		/**
+		 * Method: handleUserLogin
+		 * @param {Object} aData
+		 */
+
+		handleUserLogin: function( aData ) {
+
+		},
+
+		/**
+		 * Method: handleUserLogout
+		 */
+
+		handleUserLogout: function( ) {
+
+		},
+
+		/**
 		 * Method: verbose
 		 * @param {String} aMessage
 		 */

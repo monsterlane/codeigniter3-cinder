@@ -6,7 +6,7 @@ class Logout_controller extends MY_Controller {
 	public function index( ) {
 		$this->session->sess_destroy( );
 
-		$this->redirect( 'login' );
+		$this->redirect( str_replace( '_controller', '', $this->router->login_controller ) );
 	}
 }
 

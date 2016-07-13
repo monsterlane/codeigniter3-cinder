@@ -15,6 +15,8 @@ class Login_controller extends MY_Controller {
 	/* public methods */
 
 	public function index( ) {
+		$this->session->set_userdata( 'preauth', true );
+
 		$this->session->sess_write_close( );
 
 		$this->load->partial( array(

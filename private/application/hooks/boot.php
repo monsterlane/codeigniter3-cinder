@@ -22,7 +22,14 @@ function boot( ) {
 
 		$ci->session->set_flashdata( 'message', 'You have been signed out due to inactivity.' );
 
-		$ci->redirect( str_replace( '_controller', '', $ci->router->login_controller ) );
+		$redir = str_replace( '_controller', '', $ci->router->login_controller );
+
+		if ( $ci->get_option( 'boot' ) === true ) {
+			redirect( $redir );
+		}
+		else {
+			$ci->redirect( $redir );
+		}
 	}
 	else if ( $ci->get_option( 'require_https' ) === true && $https === false ) {
 		$ci->redirect( str_replace( 'http:', 'https:', current_url( ) ) );

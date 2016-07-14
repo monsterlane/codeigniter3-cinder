@@ -119,6 +119,13 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 			window.history.pushState( aData, aTitle, aUrl );
 
+			if ( window.hasOwnProperty( 'dataLayer' ) === true ) {
+				window.dataLayer.push({
+					'event': 'pageview',
+					'virtualUrl': '/' + aUrl
+				});
+			}
+
 			return this;
 		},
 

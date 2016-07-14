@@ -707,9 +707,13 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		 */
 
 		loadView: function( aContainer, aContent ) {
-			var container = $( aContainer );
+			var container = $( aContainer ),
+				frag = document.createDocumentFragment( );
 
-			container.empty( ).html( aContent );
+			frag.appendChild( document.createElement( 'div' ) );
+			frag.firstChild.innerHTML = aContent;
+
+			container.empty( ).append( frag );
 
 			this.bindLinks( container );
 			this.bindForms( container );

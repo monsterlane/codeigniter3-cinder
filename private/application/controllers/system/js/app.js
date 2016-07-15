@@ -112,9 +112,26 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 		 */
 
 		redirect: function( aUrl ) {
-			var a;
+			var host = window.location.host.split( '.' ),
+				subdomain = host[ 0 ],
+				domain = host[ 1 ],
+				re = new RegExp( /^https?:\/\//i ),
+				redir = false,
+				href, parts, a;
 
 			if ( aUrl.indexOf( window.location.protocol ) === -1 ) {
+				redir = true;
+			}
+			else if ( re.test( aUrl ) === true ) {
+				href = aUrl.replace( re, '' );
+				parts = href.split( '.' );
+
+				if ( parts[ 0 ] !== subdomain || parts[ 1 ] !== domain ) {
+					redir = true;
+				}
+			}
+
+			if ( redir === true ) {
 				window.location.href = aUrl;
 			}
 			else {

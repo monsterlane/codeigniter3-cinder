@@ -721,7 +721,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			frag.appendChild( document.createElement( 'div' ) );
 			frag.firstChild.innerHTML = aContent;
 
-			container.empty( ).append( frag );
+			container.empty( ).append( $( frag.firstChild ).contents( ) );
 
 			this.bindLinks( container );
 			this.bindForms( container );

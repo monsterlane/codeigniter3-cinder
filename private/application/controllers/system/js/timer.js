@@ -3,12 +3,12 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 	'use strict';
 
 	/*
-	===============================================================================
-	Class: Timer
-	===============================================================================
-	*/
+	 ===============================================================================
+	 Class: Timer
+	 ===============================================================================
+	 */
 
-    window.requestAnimationFrame = ( function( ) {
+	window.requestAnimationFrame = ( function( ) {
 		return (
 			window.requestAnimationFrame ||
 			window.webkitRequestAnimationFrame ||
@@ -31,10 +31,10 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 			window.performance.oNow ||
 			window.performance.msNow ||
 			function( ) {
-                return new Date( ).getTime( );
-            }
+				return new Date( ).getTime( );
+			}
 		);
-    }( ));
+	}( ));
 
 	var Timer = Class._extend({
 
@@ -70,7 +70,7 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				think: this._options.think
 			};
 
-			this.start( );
+			return this;
 		},
 
 		/**
@@ -111,6 +111,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 
 				this.think( );
 			}
+
+			return this;
 		},
 
 		/**
@@ -123,6 +125,8 @@ define( [ 'jclass', 'jquery' ], function( Class, $ ) {
 				this._running = false;
 				this._callbacks.stop( );
 			}
+
+			return this;
 		},
 
 		/**

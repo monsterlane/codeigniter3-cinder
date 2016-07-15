@@ -16,12 +16,29 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		init: function( aOptions ) {
 			var options = aOptions || { },
-				link, i, len;
+				link, i, len,
+				self = this;
 
 			this._verbose = false;
 			this._module = null;
 			this._loaded = null;
-			this._timer = null;
+
+			this._timer = new Timer({
+				parent: self,
+				start: function( ) { },
+				stop: function( ) { },
+				think: function( ) {
+					if ( window.getComputedStyle( self._loading ).backgroundColor === 'rgb(0, 0, 0)' ) {
+						self._loaded += 1;
+					}
+
+					if ( self._loaded > 0 ) {
+						return false;
+					}
+
+					return true;
+				}
+			});
 
 			this._cache = new Cache( this );
 			this._conduit = [ ];
@@ -254,14 +271,13 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		/**
 		 * Method: unload
+		 * @param {Object} aModule
 		 */
 
-		unload: function( ) {
-			var module = this.getData( 'module.data' ),
+		unload: function( aModule ) {
+			var module = aModule || false,
 				link, fp, ff, el,
 				i, len;
-
-			this._loaded = -1;
 
 			if ( module !== false ) {
 				for ( i = 0, len = module.view.fonts.length; i < len; i++ ) {
@@ -313,6 +329,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				link, i, len,
 				dependencies = [ ],
 				options = { },
+				module = false,
 				redir = false,
 				self = this;
 
@@ -342,7 +359,9 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				if ( link !== false && link.name !== false && data.name !== false ) {
 					redir = true;
 
-					this.unload( );
+					module = $.extend( {}, this.getData( 'module.data' ) );
+
+					console.log( module );
 				}
 			}
 
@@ -393,44 +412,28 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					self._loaded += 1;
 				});
 
-				if ( this._timer instanceof Timer ) {
-					this._timer._callbacks.stop = function( ) {
-						self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for includes' );
+				this._timer._callbacks.stop = function( ) {
+					self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for includes' );
 
-						self.setPendingData( data );
-						self.callback( data );
-					};
+					if ( module !== false ) {
+						self.unload( module );
+					}
 
-					this._timer.start( );
-				}
-				else {
-					this._timer = new Timer({
-						parent: this,
-						think: function( ) {
-							if ( window.getComputedStyle( self._loading ).backgroundColor === 'rgb(0, 0, 0)' ) {
-								self._loaded += 1;
-							}
+					self.setPendingData( data );
+					self.callback( data );
+				};
 
-							if ( self._loaded > 0 ) {
-								return false;
-							}
-
-							return true;
-						},
-						stop: function( ) {
-							self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for includes' );
-
-							self.setPendingData( data );
-							self.callback( data );
-						}
-					});
-				}
+				this._timer.start( );
 			}
 			else if ( this._module !== null ) {
-				if ( this._timer instanceof Timer && this._timer.running( ) === true ) {
+				if ( this._timer.running( ) === true ) {
 					this._timer.stop( );
 				}
 				else {
+					if ( module !== false ) {
+						this.unload( module );
+					}
+
 					this.setPendingData( data );
 					this.callback( data );
 				}

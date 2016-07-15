@@ -360,8 +360,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					redir = true;
 
 					module = $.extend( {}, this.getData( 'module.data' ) );
-
-					console.log( module );
 				}
 			}
 

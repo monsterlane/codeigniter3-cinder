@@ -4,8 +4,13 @@ class Maintenance_controller extends MY_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
+		$this->set_option( 'require_auth', false );
+
 		if ( $this->config->item( 'maintenance' ) === false ) {
 			$this->redirect( str_replace( '_controller', '', $this->router->default_controller ) );
+		}
+		else {
+			$this->output->set_status_header( 503 );
 		}
 	}
 

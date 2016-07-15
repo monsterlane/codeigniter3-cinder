@@ -9,7 +9,7 @@ class Migrations_controller extends MY_Controller {
 		if ( ENVIRONMENT !== 'development' ) {
 			if ( ENVIRONMENT === 'production' ) {
 				if ( $this->config->item( 'maintenance' ) === true ) {
-					if ( $url != 'migrations/maintenance' ) {
+					if ( $url !== 'migrations/maintenance' ) {
 						$this->redirect( 'migrations/maintenance' );
 					}
 				}

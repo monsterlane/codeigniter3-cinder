@@ -63,7 +63,7 @@ define( [ 'jclass', 'jquery', 'system/js/module' ], function( Class, $, Module )
 						if ( response.status === true ) {
 							data = parent.getData( 'module.data.view.data' );
 
-							if ( data.current_id === response.current_id ) {
+							if ( parseInt( data.branch_id, 10 ) === parseInt( response.current_id, 10 ) ) {
 								container.find( '> div.current' ).addClass( 'hidden' );
 							}
 							else {

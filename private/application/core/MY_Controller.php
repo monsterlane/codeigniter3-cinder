@@ -9,25 +9,20 @@ class MY_Controller extends CI_Controller {
 	public function __construct( ) {
 		parent::__construct( );
 
-		$post = clean_array( $this->input->post( ) );
-		if ( array_key_exists( 'system', $post ) === false ) {
-			$post[ 'system' ] = true;
-		}
+		$boot = ( $this->input->post( 'system' ) === 'false' ) ? false : true;
 
 		$this->set_option( 'system', true );
-		$this->set_option( 'boot', $post[ 'system' ] );
+		$this->set_option( 'boot', $boot );
 
 		$this->set_option( 'require_https', $this->config->item( 'require_https' ) );
 		$this->set_option( 'require_auth', $this->config->item( 'require_auth' ) );
 
 		$url = uri_string( );
-
 		if ( $url === '' ) {
 			$url = str_replace( '_controller', '', $this->router->default_controller );
 		}
 
 		$this->_data = new Dot( array(
-			'post' => $post,
 			'system' => array(
 				'options' => array( ),
 				'data' => array( ),
@@ -53,7 +48,7 @@ class MY_Controller extends CI_Controller {
 			'environment' => ENVIRONMENT,
 			'version' => $this->config->item( 'version' ),
 			'verbose' => $this->config->item( 'verbose' ),
-			'support_address' => $this->config->item( 'support_address' ),
+			'support_email' => $this->config->item( 'support_email' ),
 			'support_message' => $this->config->item( 'support_message' ),
 			'default_container' => $this->config->item( 'default_container' ),
 			'validation_container' => $this->config->item( 'validation_container' ),
@@ -92,19 +87,19 @@ class MY_Controller extends CI_Controller {
 		);
 
 		$this->set_view( array(
-			'favicon' => false,
 			'title' => 'CI3-Cinder',
-			'name' => false,
 			'view' => array(
 				'path' => 'system/views/index.html',
 				'css' => array(
+					'system/css/jquery.ui.min.css',
 					'system/css/bootstrap.min.css',
 					'system/css/bootstrap.theme.min.css',
 					'system/css/loading.css',
 					'system/css/loaded.css',
 					'system/css/sprite.css',
 					'system/css/svg.css',
-					'system/css/style.css',
+					'system/css/index.css',
+					'system/css/plugins.css',
 				),
 				'js' => array(
 					'system/js/require.config.js',
@@ -113,7 +108,11 @@ class MY_Controller extends CI_Controller {
 					'system/js/require.domready.min.js',
 					'system/js/require.webfont.js',
 					'system/js/jquery.min.js',
+					'system/js/jquery.ui.min.js',
 					'system/js/jquery.plugins.js',
+					'system/js/jquery.validate.min.js',
+					'system/js/bootstrap.min.js',
+					'system/js/bootstrap.notify.min.js',
 					'system/js/jclass.min.js',
 					'system/js/dust.' . $dust . '.min.js',
 					'system/js/dust.helpers.min.js',
@@ -132,13 +131,12 @@ class MY_Controller extends CI_Controller {
 				),
 				'data' => $data,
 			),
+			'templates' => array(
+				'alert' => 'system/views/alert.html',
+				'confirm' => 'system/views/confirm.html',
+				'dialog' => 'system/views/dialog.html',
+			),
 		), 'system.data' );
-
-		$icon = 'system/img/favicon.ico';
-
-		if ( file_exists( FCPATH . 'files/cache/' . $icon ) === true && is_file( FCPATH . 'files/cache/' . $icon ) === true ) {
-			$this->set_data( 'system.data.favicon', $icon );
-		}
 
 		$data = array(
 			'system' => true,
@@ -171,10 +169,12 @@ class MY_Controller extends CI_Controller {
 	public function set_view( $data = array( ), $key = 'module.data' ) {
 		$module = $this->get_data( $key );
 
-		if ( $key === 'system.data' || is_string( $module[ 'redirect' ] ) === false ) {
+		$redir = ( array_key_exists( 'redirect', $module ) === true && is_string( $module[ 'redirect' ] ) === true );
+
+		if ( $key === 'system.data' || $redir === false ) {
 			$data = merge_array( array(
 				'version' => $this->config->item( 'version' ),
-				'name' => null,
+				'name' => 'system/js/module',
 				'view' => array(
 					'path' => false,
 					'module' => false,
@@ -191,11 +191,10 @@ class MY_Controller extends CI_Controller {
 				)
 			), $data );
 
-			$dest = FCPATH . 'files/cache/';
+			$dest = $this->config->item( 'cache_file_path' );
 
 			if ( empty( $data[ 'view' ][ 'css' ] ) === true ) {
-				$style = ( $this->router->method == 'index' ) ? 'style' : $this->router->method;
-				$style = $this->router->directory . 'css/' . $style . '.css';
+				$style = $this->router->directory . 'css/' . $this->router->method . '.css';
 
 				if ( file_exists( VIEWPATH . $style ) === true && is_file( VIEWPATH . $style ) === true ) {
 					$data[ 'view' ][ 'css' ][ ] = $style;
@@ -211,7 +210,7 @@ class MY_Controller extends CI_Controller {
 						$name = $style;
 					}
 
-					if ( $name !== 'style.css' ) {
+					if ( $name !== 'index.css' ) {
 						unset( $data[ 'view' ][ 'css' ][ $k ] );
 					}
 					else if ( strpos( $style, '/' ) === false ) {
@@ -244,7 +243,7 @@ class MY_Controller extends CI_Controller {
 						copy( VIEWPATH . $style, $dest . $style );
 					}
 
-					if ( $name !== 'style.css' ) {
+					if ( $name !== 'index.css' ) {
 						unset( $data[ 'view' ][ 'css' ][ $k ] );
 					}
 				}
@@ -258,7 +257,7 @@ class MY_Controller extends CI_Controller {
 					if ( file_exists( $dest . $script ) === false ||  filemtime( VIEWPATH . $script ) !== filemtime( $dest . $script ) ) {
 						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
-						if ( file_exists( $dir ) == false ) {
+						if ( file_exists( $dir ) === false ) {
 							mkdir( $dir, 0755, true );
 						}
 
@@ -268,16 +267,15 @@ class MY_Controller extends CI_Controller {
 			}
 
 			if ( $data[ 'name' ] !== false ) {
-				if ( $data[ 'name' ] === null ) {
-					$data[ 'name' ] = ( $this->router->method == 'index' ) ? 'module' : $this->router->method;
-				}
+				if ( $data[ 'name' ] === 'system/js/module' ) {
+					$module = $this->router->directory . 'js/' . $this->router->method;
 
-				if ( strpos( $data[ 'name' ], '/' ) === false ) {
+					if ( file_exists( VIEWPATH . $module . '.js' ) === true && is_file( VIEWPATH . $module . '.js' ) === true ) {
+						$data[ 'name' ] = $module;
+					}
+				}
+				else if ( strpos( $data[ 'name' ], '/' ) === false ) {
 					$data[ 'name' ] = $this->router->directory . 'js/' . $data[ 'name' ];
-				}
-
-				if ( file_exists( VIEWPATH . $data[ 'name' ] . '.js' ) === false ) {
-					$data[ 'name' ] = 'system/js/module';
 				}
 
 				if ( ENVIRONMENT === 'development' ) {
@@ -286,13 +284,20 @@ class MY_Controller extends CI_Controller {
 					if ( file_exists( $dest . $script ) === false || filemtime( VIEWPATH . $script ) !== filemtime( $dest . $script ) ) {
 						$dir = $dest . substr( $script, 0, strrpos( $script, '/' ) );
 
-						if ( file_exists( $dir ) == false ) {
+						if ( file_exists( $dir ) === false ) {
 							mkdir( $dir, 0755, true );
 						}
 
 						copy( VIEWPATH . $script, $dest . $script );
 					}
 				}
+			}
+
+			if ( array_key_exists( 'templates', $data ) === true && is_array( $data[ 'templates' ] ) === true ) {
+				foreach ( $data[ 'templates' ] as &$template ) {
+					$template = file_get_contents( VIEWPATH . $template );
+				}
+				unset( $template );
 			}
 
 			$this->set_data( $key, $data );

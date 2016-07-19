@@ -41,7 +41,7 @@ class Error_controller extends MY_Controller {
 	public function javascript( ) {
 		$this->session->sess_write_close( );
 
-		$data = $this->get_data( 'post' );
+		$data = clean_array( $this->input->post( ) );
 		$data = extract_array( $data, array( 'message', 'filename', 'line' ) );
 		$data[ 'error_type_id' ] = 4;
 

@@ -1,6 +1,8 @@
 <?php if ( !defined( 'BASEPATH' ) ) exit( 'No direct script access allowed' );
 
-function trim_array( $arr ) {
+function trim_array( $arr = array( ) ) {
+	if ( is_array( $arr ) === false ) $arr = array( );
+
 	foreach ( $arr as $k => $v ) {
 		if ( is_string( $v ) === true && strlen( $v ) > 0 ) {
 			$arr[ $k ] = trim( $v );
@@ -54,8 +56,8 @@ function merge_array( ) {
 	return $result;
 }
 
-function clean_array( $arr ) {
-	if ( !is_array( $arr ) ) $arr = array( );
+function clean_array( $arr = array( ) ) {
+	if ( is_array( $arr ) === false ) $arr = array( );
 
 	foreach ( $arr as &$param ) {
 		if ( $param === 'null' || $param === '' ) {
@@ -67,13 +69,19 @@ function clean_array( $arr ) {
 		else if ( $param === 'false' ) {
 			$param = false;
 		}
+		else if ( is_string( $param ) === true ) {
+			$param = trim( $param );
+		}
+		else if ( is_array( $param ) === true ) {
+			$param = trim_array( $param );
+		}
 	}
 	unset( $param );
 
 	return $arr;
 }
 
-function extract_array( $arr, $keys ) {
+function extract_array( $arr = array( ), $keys = array( ) ) {
 	if ( is_array( $arr ) === false ) $arr = array( );
 	$result = array( );
 
@@ -86,7 +94,8 @@ function extract_array( $arr, $keys ) {
 	return $result;
 }
 
-function delegate_array( $arr, $key ) {
+function delegate_array( $arr = array( ), $key ) {
+	if ( is_array( $arr ) === false ) $arr = array( );
 	$results = array( );
 
 	foreach ( $arr as $data ) {
@@ -96,7 +105,10 @@ function delegate_array( $arr, $key ) {
 	return $results;
 }
 
-function diff_array( $old, $new ) {
+function diff_array( $old = array( ), $new = array( ) ) {
+	if ( is_array( $old ) === false ) $old = array( );
+	if ( is_array( $new ) === false ) $new = array( );
+
 	$result = array(
 		'add' => array_diff( $new, $old ),
 		'delete' => array_diff( $old, $new ),

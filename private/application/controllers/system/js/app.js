@@ -1,5 +1,5 @@
 
-define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view' ], function( Class, $, Plugins, Font, Timer, Cache, Conduit, Model, View ) {
+define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'system/js/conduit', 'system/js/model', 'system/js/view', 'system/js/jquery.validate.min' ], function( Class, $, Plugins, Font, Timer, Cache, Conduit, Model, View ) {
 	'use strict';
 
 	/*
@@ -288,13 +288,14 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		/**
 		 * Method: unload
-		 * @param {Object} aModule
 		 */
 
-		unload: function( aModule ) {
-			var module = aModule || false,
+		unload: function( ) {
+			var module = this.getData( 'module.data' ),
 				link, fp, ff, el,
 				i, len;
+
+			this._loaded = -1;
 
 			if ( module !== false ) {
 				for ( i = 0, len = module.view.fonts.length; i < len; i++ ) {
@@ -346,7 +347,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				link, i, len,
 				dependencies = [ ],
 				options = { },
-				module = false,
 				redir = false,
 				self = this;
 
@@ -376,7 +376,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				if ( link !== false && link.name !== false && data.name !== false ) {
 					redir = true;
 
-					module = $.extend( {}, this.getData( 'module.data' ) );
+					this.unload( );
 				}
 			}
 
@@ -389,7 +389,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					dependencies.push( link );
 				}
 
-				if ( data.view.module !== null ) {
+				if ( data.view.module !== null && data.view.module !== false ) {
 					this.verbose( 'app: load ' + data.view.module );
 
 					dependencies.push( data.view.module );
@@ -419,36 +419,27 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 				this.verbose( 'app: load ' + data.name );
 
-				dependencies.unshift( data.name );
-
-				require( dependencies, function( Module ) {
-					self.setModule( new Module( options ) );
-
-					self._loaded += 1;
-				});
-
 				this._timer._callbacks.stop = function( ) {
 					self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for includes' );
-
-					if ( module !== false ) {
-						self.unload( module );
-					}
 
 					self.setPendingData( data );
 					self.callback( data );
 				};
 
-				this._timer.start( );
+				dependencies.unshift( data.name );
+
+				require( dependencies, function( Module ) {
+					self.setModule( new Module( options ) );
+					self._loaded += 1;
+
+					self._timer.start( );
+				});
 			}
 			else if ( this._module !== null ) {
 				if ( this._timer.running( ) === true ) {
 					this._timer.stop( );
 				}
 				else {
-					if ( module !== false ) {
-						this.unload( module );
-					}
-
 					this.setPendingData( data );
 					this.callback( data );
 				}
@@ -914,48 +905,55 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			var options = { },
 				form = $( aForm ),
 				button, url, view,
+				submit = true,
 				self = this;
 
-			button = form.find( 'button[type=submit], input[type=submit]' );
-
-			url = form[ 0 ].action.replace( '//', '' );
-			url = url.substr( url.indexOf( '/' ) );
-
-			options.url = url;
-
-			if ( form[ 0 ].hasAttribute( 'enctype' ) === true && form[ 0 ].getAttribute( 'enctype' ) === 'multipart/form-data' ) {
-				options.data = new FormData( form[ 0 ] );
-				options.processData = false;
-				options.contentType = false;
-				options.cache = false;
-			}
-			else {
-				options.data = form.serialize( );
+			if ( form.data( 'validator' ) !== undefined ) {
+				submit = form.valid( );
 			}
 
-			view = this.getData( 'module.data.view.container' );
+			if ( submit === true ) {
+				button = form.find( 'button[type=submit], input[type=submit]' );
 
-			options.beforeSend = function( ) {
-				self.clearMessage( 'system.options.validation_container' );
+				url = form[ 0 ].action.replace( '//', '' );
+				url = url.substr( url.indexOf( '/' ) );
 
-				if ( view !== self.getData( 'system.options.default_container' ) ) {
-					$( view ).empty( );
+				options.url = url;
+
+				if ( form[ 0 ].hasAttribute( 'enctype' ) === true && form[ 0 ].getAttribute( 'enctype' ) === 'multipart/form-data' ) {
+					options.data = new FormData( form[ 0 ] );
+					options.processData = false;
+					options.contentType = false;
+					options.cache = false;
+				}
+				else {
+					options.data = form.serialize( );
 				}
 
-				button.disable( );
-			};
+				view = this.getData( 'module.data.view.container' );
 
-			options.success = function( response ) {
-				button.enable( );
+				options.beforeSend = function( ) {
+					self.clearMessage( 'system.options.validation_container' );
 
-				self.load( response );
-			};
+					if ( view !== self.getData( 'system.options.default_container' ) ) {
+						$( view ).empty( );
+					}
 
-			options.error = function( ) {
-				button.enable( );
-			};
+					button.disable( );
+				};
 
-			this.getConduit( url ).ajax( options );
+				options.success = function( response ) {
+					button.enable( );
+
+					self.load( response );
+				};
+
+				options.error = function( ) {
+					button.enable( );
+				};
+
+				this.getConduit( url ).ajax( options );
+			}
 		}
 	});
 

@@ -3,6 +3,15 @@
 class MY_Loader extends CI_Loader {
 	/* internal methods */
 
+	private function _logindata( ) {
+		$ci =& get_instance( );
+
+		$ci->session->set_userdata( 'preauth', false );
+
+		return array(
+		);
+	}
+
 	private function _flashdata( ) {
 		$ci =& get_instance( );
 
@@ -16,14 +25,6 @@ class MY_Loader extends CI_Loader {
 		}
 
 		return $data;
-	}
-
-	private function _logindata( ) {
-		$ci =& get_instance( );
-
-		$ci->session->set_userdata( 'preauth', false );
-
-		return array( );
 	}
 
 	private function _compress( $arr = array( ) ) {
@@ -62,7 +63,7 @@ class MY_Loader extends CI_Loader {
 
 			$redir = ( is_string( $data[ 'module' ][ 'data' ][ 'redirect' ] ) );
 
-			if ( $data[ 'post' ][ 'system' ] !== false ) {
+			if ( $ci->get_option( 'boot' ) === true ) {
 				if ( $redir === true ) {
 					redirect( $data[ 'module' ][ 'data' ][ 'redirect' ] );
 				}
@@ -124,20 +125,21 @@ class MY_Loader extends CI_Loader {
 			$data[ 'view' ][ 'path' ] = $view;
 			$data[ 'view' ][ 'hash' ] = filemtime( VIEWPATH . $view );
 
-			$post = $ci->get_data( 'post' );
+			$views = $ci->input->post( 'views' );
 			$skip = false;
 
-			if ( array_key_exists( 'views', $post ) === true && is_array( $post[ 'views' ] ) === true && empty( $post[ 'views' ] ) === false ) {
-				if ( in_array( $view . '|' . $data[ 'view' ][ 'hash' ], $post[ 'views' ] ) === true ) {
+			if ( is_array( $views ) === true && empty( $views ) === false ) {
+				if ( in_array( $view . '|' . $data[ 'view' ][ 'hash' ], $views ) === true ) {
 					$skip = true;
 				}
 
 				if ( $skip === false ) {
-					foreach ( $post[ 'views' ] as $view ) {
-						$parts = explode( '|', $view );
+					foreach ( $views as $v ) {
+						$parts = explode( '|', $v );
 
 						if ( $parts[ 0 ] === $data[ 'view' ][ 'path' ] ) {
 							$data[ 'view' ][ 'invalidate' ] = $parts[ 1 ];
+
 							break;
 						}
 					}

@@ -5,7 +5,7 @@ class MY_Email extends CI_Email {
 		parent::__construct( $config );
 
 		$ci =& get_instance( );
-		$this->from( $ci->config->item( 'mail_from_address' ), $ci->config->item( 'mail_from_name' ) );
+		$this->from( $ci->config->item( 'support_email' ), $ci->config->item( 'support_name' ) );
 	}
 
 	/* public methods */
@@ -14,7 +14,7 @@ class MY_Email extends CI_Email {
 		parent::clear( $clear_attachments );
 
 		$ci =& get_instance( );
-		$this->from( $ci->config->item( 'mail_from_address' ), $ci->config->item( 'mail_from_name' ) );
+		$this->from( $ci->config->item( 'support_email' ), $ci->config->item( 'support_name' ) );
 
 		return $this;
 	}

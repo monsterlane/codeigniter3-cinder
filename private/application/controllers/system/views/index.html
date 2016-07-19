@@ -4,10 +4,8 @@
 	<title><?=$system[ 'data' ][ 'title' ]?></title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php
-	if ( $system[ 'data' ][ 'favicon' ] !== false ) {
-		?><link href="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'favicon' ] )?>" type="image/x-icon" rel="icon" /><?php
-	}
+	<meta name="robots" content="index, follow" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 
 	foreach ( $system[ 'data' ][ 'view' ][ 'css' ] as $style ) {
 		?><link href="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . $style )?>" type="text/css" rel="stylesheet" media="screen" /><?php
@@ -48,6 +46,12 @@
 		<div class="background"></div>
 		<span class="role-icon icon-loader"></span>
 	</div>
+
+	<?php
+	foreach ( $system[ 'data' ][ 'templates' ] as $template ) {
+		echo( $template );
+	}
+	?>
 </div>
 
 <script type="text/javascript" src="<?=base_url( 'files/cache/' . $system[ 'data' ][ 'view' ][ 'data' ][ 'version' ] . 'system/js/require.js.min.js' )?>"></script>

@@ -328,7 +328,6 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				}
 
 				this.verbose( 'app: unload ' + module.name );
-				this.verbose( '~===~' );
 
 				requirejs.undef( module.name );
 			}
@@ -574,6 +573,8 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 			}
 
 			this._cache.available( );
+
+			this.verbose( '~===~' );
 
 			return this;
 		},

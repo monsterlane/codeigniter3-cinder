@@ -32,11 +32,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 						self._loaded += 1;
 					}
 
-					if ( self._loaded > 0 ) {
-						return false;
-					}
-
-					return true;
+					return ( self._loaded < 0 );
 				}
 			});
 
@@ -183,7 +179,7 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		error: function( aError ) {
 			if ( this._module !== null ) {
-				this._module.error( aError );
+				this._module.alert( aError );
 			}
 			else {
 				alert( aError );
@@ -288,10 +284,11 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		/**
 		 * Method: unload
+		 * @param {Object} aModule
 		 */
 
-		unload: function( ) {
-			var module = this.getData( 'module.data' ),
+		unload: function( aModule ) {
+			var module = aModule || false,
 				link, fp, ff, el,
 				i, len;
 
@@ -344,9 +341,10 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 		load: function( aData ) {
 			var data = aData || { },
-				link, i, len,
+				link, el, i, len,
 				dependencies = [ ],
 				options = { },
+				module = false,
 				redir = false,
 				self = this;
 
@@ -376,7 +374,14 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 				if ( link !== false && link.name !== false && data.name !== false ) {
 					redir = true;
 
-					this.unload( );
+					module = $.extend( {}, this.getData( 'module.data' ) );
+
+					el = $( 'link[href*="system/css/loaded.css"]' );
+
+					el.prop( 'disabled', true );
+					el.remove( );
+
+					requirejs.undef( 'system/js/require.css.min!system/css/loaded' );
 				}
 			}
 
@@ -395,15 +400,22 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					dependencies.push( data.view.module );
 				}
 
-				for ( i = 0, len = data.view.css.length; i < len; i++ ) {
-					link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
+				len = data.view.css.length;
 
-					this.verbose( 'app: load ' + link.replace( 'css!', '' ) );
+				if ( len > 0 ) {
+					for ( i = 0; i < len; i++ ) {
+						link = 'css!' + data.view.css[ i ].substr( 0, data.view.css[ i ].indexOf( '.' ) );
 
-					dependencies.push( link );
+						this.verbose( 'app: load ' + link.replace( 'css!', '' ) );
+
+						dependencies.push( link );
+					}
+
+					this.verbose( 'app: load system/css/loaded' );
+
+					dependencies.push( 'css!system/css/loaded' );
 				}
-
-				if ( data.view.css.length === 0 ) {
+				else {
 					this._loaded += 1;
 				}
 			}
@@ -421,6 +433,10 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 
 				this._timer._callbacks.stop = function( ) {
 					self.verbose( 'app: waited ' + self._timer.runtime( ) + 'ms for includes' );
+
+					if ( module !== false ) {
+						self.unload( module );
+					}
 
 					self.setPendingData( data );
 					self.callback( data );
@@ -440,6 +456,10 @@ define( [ 'jclass', 'jquery', 'plugins', 'font', 'timer', 'system/js/cache', 'sy
 					this._timer.stop( );
 				}
 				else {
+					if ( module !== false ) {
+						this.unload( module );
+					}
+
 					this.setPendingData( data );
 					this.callback( data );
 				}
